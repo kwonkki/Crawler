@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -18,14 +17,30 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-
 public class CrawlerUtil {
+	
+	private final String WHITESPACE_UTF8 = "/u00a0";
+	
+	/** 单例模式 **/
+	private CrawlerUtil() {
+
+	}
+
+	private static class CrawlerUtilInstanceHolder {
+		private static CrawlerUtil Crawler_Util = new CrawlerUtil();
+	}
+
+	public static CrawlerUtil getInstance() {
+		return CrawlerUtilInstanceHolder.Crawler_Util;
+	}
 
 	/**
 	 * 控制台打印文件内容
-	 * @param filePath	文件路径
+	 * 
+	 * @param filePath
+	 *            文件路径
 	 */
-	public static void printFile(String filePath) {
+	public void printFile(String filePath) {
 		FileReader fr = null;
 		BufferedReader br = null;
 		String s = null;
@@ -33,7 +48,7 @@ public class CrawlerUtil {
 			fr = new FileReader(new File(filePath));
 			br = new BufferedReader(fr);
 			s = br.readLine();
-			while(s != null) {
+			while (s != null) {
 				System.out.println(s);
 				s = br.readLine();
 			}
@@ -43,22 +58,21 @@ public class CrawlerUtil {
 			free(br);
 		}
 	}
-	
-	
 
 	/**
 	 * 由response获取html字符串
+	 * 
 	 * @param response
 	 * @return
 	 */
-	public static String getHtmlByResponse(CloseableHttpResponse response) {
+	public String getHtmlByResponse(CloseableHttpResponse response) {
 		String html = null;
 		try {
 			// 获得相应实体
 			HttpEntity entity = response.getEntity();
 			InputStream inputStream = entity.getContent();
 			html = getStrByInputStream(inputStream);
-			EntityUtils.consume(entity);	// 清空资源
+			EntityUtils.consume(entity); // 清空资源
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -68,22 +82,23 @@ public class CrawlerUtil {
 		}
 		return html;
 	}
-	
+
 	/**
 	 * 获取InputStream中的信息
+	 * 
 	 * @param inputStream
 	 * @return
 	 */
-	public static String getStrByInputStream(InputStream inputStream) {
+	public String getStrByInputStream(InputStream inputStream) {
 		StringBuffer sb = null;
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(inputStream));
 			sb = new StringBuffer();
 			String line = "";
-			while((line = br.readLine()) != null) {
-				sb.append(line + "\r\n");	// 逐行读取，回车换行
-			}	
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\r\n"); // 逐行读取，回车换行
+			}
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -93,13 +108,14 @@ public class CrawlerUtil {
 		}
 		return sb.toString();
 	}
-	
+
 	/**
 	 * 根据URL获得所有的html信息
+	 * 
 	 * @param url
 	 * @return
 	 */
-	public static String getHtmlByUrl(String url) {
+	public String getHtmlByUrl(String url) {
 		String html = null;
 		// 创建httpClient对象
 		CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -121,13 +137,15 @@ public class CrawlerUtil {
 		return html;
 	}
 
-	
 	/**
 	 * 访问网页，保存为本地文件
-	 * @param url url地址
-	 * @param savePath 保存路径
+	 * 
+	 * @param url
+	 *            url地址
+	 * @param savePath
+	 *            保存路径
 	 */
-	public static void saveHtmlByUrl(String url, String savePath) {
+	public void saveHtmlByUrl(String url, String savePath) {
 		CloseableHttpClient httpClient = HttpClients.createDefault(); // 创建httpClient对象
 		HttpGet httpget = new HttpGet(url); // 以get方式请求该URL
 		CloseableHttpResponse response = null; // 响应
@@ -136,22 +154,24 @@ public class CrawlerUtil {
 			response = httpClient.execute(httpget); // 得到responce对象
 			saveHtmlByHttpResponse(response, savePath);
 		} catch (Exception e) {
-			System.out.println("访问【" + url + "】出现异常!");
+			System.out.println("访问[ " + url + " ]出现异常!");
 			e.printStackTrace();
 		} finally {
 			free(response, httpClient);
 		}
 	}
 
-	private final static String WHITESPACE_UTF8 = "/u00a0";
-	private final static String CHA = "/x9c";
-	
+
+
 	/**
 	 * 由HttpResponse 保存html到本地
-	 * @param response	HttpResponse
-	 * @param savePath	保存路径
+	 * 
+	 * @param response
+	 *            HttpResponse
+	 * @param savePath
+	 *            保存路径
 	 */
-	public static void saveHtmlByHttpResponse(CloseableHttpResponse response, String savePath) {
+	public void saveHtmlByHttpResponse(CloseableHttpResponse response, String savePath) {
 		int resStatu = response.getStatusLine().getStatusCode(); // 返回码
 		if (resStatu == HttpStatus.SC_OK) { // 200正常 其他就不对
 			HttpEntity entity = response.getEntity(); // 获得相应实体
@@ -164,25 +184,11 @@ public class CrawlerUtil {
 					br = new BufferedReader(new InputStreamReader(entity.getContent()));
 					// 写出输入流的内容到输出流，保存到本地
 					bw = new BufferedWriter(new FileWriter(new File(savePath)));
-					
-					String charset = EntityUtils.getContentCharSet(response.getEntity());
-					System.out.println("----------charset --------------" + charset);
-					
-					
+
 					String line = null;
-					while((line = br.readLine()) != null) {
-						//String lineStr = new String(line.getBytes("utf-8"), "utf-8");
-						bw.write(line.replace(WHITESPACE_UTF8, "").replace(CHA, "×") + "\r\n");
+					while ((line = br.readLine()) != null) {
+						bw.write(line.replace(WHITESPACE_UTF8, "") + "\r\n");	// 回车换行
 					}
-					
-					
-					
-/*					int inByte;
-					while ((inByte = br.read()) != -1) {
-						bw.write(inByte);
-					}*/
-					
-					
 					EntityUtils.consume(entity);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -193,23 +199,27 @@ public class CrawlerUtil {
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * 释放资源
-	 * @param response	HttpResponse
-	 * @param httpClient	HttpClient
+	 * 
+	 * @param response
+	 *            HttpResponse
+	 * @param httpClient
+	 *            HttpClient
 	 */
-	public static void free(CloseableHttpResponse response, CloseableHttpClient httpClient) {
+	public void free(CloseableHttpResponse response, CloseableHttpClient httpClient) {
 		free(response);
 		free(httpClient);
 	}
 
 	/**
 	 * 释放资源
-	 * @param httpClient	HttpClient
+	 * 
+	 * @param httpClient
+	 *            HttpClient
 	 */
-	public static void free(CloseableHttpClient httpClient) {
+	public void free(CloseableHttpClient httpClient) {
 		if (httpClient != null) {
 			try {
 				httpClient.close();
@@ -221,9 +231,11 @@ public class CrawlerUtil {
 
 	/**
 	 * 释放资源
-	 * @param response	HttpResponse
+	 * 
+	 * @param response
+	 *            HttpResponse
 	 */
-	public static void free(CloseableHttpResponse response) {
+	public void free(CloseableHttpResponse response) {
 		if (response != null) {
 			try {
 				response.close();
@@ -235,20 +247,22 @@ public class CrawlerUtil {
 
 	/**
 	 * 释放资源
+	 * 
 	 * @param br
 	 * @param bw
 	 */
-	public static void free(BufferedReader br, BufferedWriter bw) {
+	public void free(BufferedReader br, BufferedWriter bw) {
 		free(br);
 		free(bw);
 	}
 
-	
 	/**
 	 * 释放资源
-	 * @param bw	BufferedWriter
+	 * 
+	 * @param bw
+	 *            BufferedWriter
 	 */
-	public static void free(BufferedWriter bw) {
+	public void free(BufferedWriter bw) {
 		try {
 			if (bw != null)
 				bw.close();
@@ -257,12 +271,13 @@ public class CrawlerUtil {
 		}
 	}
 
-	
 	/**
 	 * 释放资源
-	 * @param br	BufferedReader
+	 * 
+	 * @param br
+	 *            BufferedReader
 	 */
-	public static void free(BufferedReader br) {
+	public void free(BufferedReader br) {
 		try {
 			if (br != null)
 				br.close();
@@ -270,16 +285,5 @@ public class CrawlerUtil {
 			e.printStackTrace();
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 }
