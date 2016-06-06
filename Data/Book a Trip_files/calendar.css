@@ -1,0 +1,77 @@
+div.calendar {
+text-align: center;
+background-color: #fff;
+padding: 5px;
+border: solid 1px #777;
+-webkit-box-shadow: 0 10px 6px -6px #777;
+-moz-box-shadow: 0 10px 6px -6px #777;
+box-shadow: 0 10px 6px -6px #777;
+border-radius: 4px;
+}
+
+table.calendar {
+table-layout: fixed;
+border-collapse: separate;
+border-spacing: 6px;
+}
+
+table.calendar td, table.calendar th {
+padding: 5px 5px;
+}
+
+table.calendar td span, table.calendar th span {
+}
+
+td.empty {
+border: solid thin #d3d3d3;
+}
+
+th.week {
+}
+
+td.nav, td.day {
+cursor: pointer;
+font: 1.3em/1.3em Source Sans Pro,HelveticaNeue, Arial;
+border: 1px solid #d3d3d3;
+/*background: #525252;*/
+/*border-color: #4c4c4c #313131 #1f1f1f;*/
+color: #222;
+/*text-shadow: 0 1px 0 #2e2e2e;*/
+/*
+-webkit-box-shadow: 0 1px 1px #afafaf, inset 0 1px 0 #868686;
+-moz-box-shadow: 0 1px 1px #afafaf, inset 0 1px 0 #868686;
+box-shadow: 0 1px 1px #afafaf, inset 0 1px 0 #868686;
+*/
+}
+
+td.selected {
+background: #fce00b;
+border: 1px solid #fce00b;
+/*text-shadow: 0 1px 0 #363636;
+-webkit-box-shadow: 0 1px 1px #b1b1b1, inset 0 1px 0 #838383;
+-moz-box-shadow: 0 1px 1px #b1b1b1, inset 0 1px 0 #838383;
+box-shadow: 0 1px 1px #b1b1b1, inset 0 1px 0 #838383;*/
+}
+
+div.calendar *:focus, div.commentAdd *:focus {
+outline: blue 1px inset;
+}
+.day.disabled {
+    background: #ccc !important;
+}
+.calendar .month {
+    text-transform: uppercase;
+    color: #2574bb;
+    font-weight:bold;
+}
+.calendar .year {
+    text-transform: uppercase;
+    color: #2574bb;
+    font-weight:bold;
+}
+.accCalendar {
+text-decoration:none;
+font: 10px Source Sans Pro,HelveticaNeue, Arial;
+font-weight:bold;
+color:#666666;
+}

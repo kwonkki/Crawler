@@ -7,6 +7,7 @@ import com.crawler.cebu.ParseUtil;
 
 public class ParseUtilTest {
 
+	/**中文测试**/
 	private final static String URL = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
 	private final static String SAVE_PATH = "X:/Codes/JavaCrawler/Data/savedHtmlByUrl.html";
 	

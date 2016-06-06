@@ -38,9 +38,9 @@ public class ParseUtil {
 	}
 	
 	/**
-	 * 从文件解析html，提供相对应的url
-	 * @param filePath 本地html文件路径
-	 * @param baseUrl 文件的原url地址，解析相关的链接
+	 * 浠庢枃浠惰В鏋恏tml锛屾彁渚涚浉瀵瑰簲鐨剈rl
+	 * @param filePath 鏈湴html鏂囦欢璺緞
+	 * @param baseUrl 鏂囦欢鐨勫師url鍦板潃锛岃В鏋愮浉鍏崇殑閾炬帴
 	 */
 	public static void parseByFileWithUrl(String filePath, String baseUrl) {
 		if (filePath == null || filePath.equals("")) {
@@ -105,8 +105,8 @@ System.out.println();
 
 
 	/**
-	 * 从文件解析html
-	 * @param filePath 本地html文件路径
+	 * 浠庢枃浠惰В鏋恏tml
+	 * @param filePath 鏈湴html鏂囦欢璺緞
 	 */
 	public static void parseByFile(String filePath) {
 		if (filePath == null || filePath.equals("")) {

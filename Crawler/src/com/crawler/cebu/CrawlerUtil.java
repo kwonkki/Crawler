@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
@@ -17,11 +18,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+
 public class CrawlerUtil {
 
 	/**
-	 * ¿ØÖÆÌ¨´òÓ¡ÎÄ¼şÄÚÈİ
-	 * @param filePath	ÎÄ¼şÂ·¾¶
+	 * æ§åˆ¶å°æ‰“å°æ–‡ä»¶å†…å®¹
+	 * @param filePath	æ–‡ä»¶è·¯å¾„
 	 */
 	public static void printFile(String filePath) {
 		FileReader fr = null;
@@ -45,57 +47,73 @@ public class CrawlerUtil {
 	
 
 	/**
-	 * ÓÉresponse»ñÈ¡html×Ö·û´®
+	 * ç”±responseè·å–htmlå­—ç¬¦ä¸²
 	 * @param response
 	 * @return
 	 */
 	public static String getHtmlByResponse(CloseableHttpResponse response) {
-		StringBuffer sb = null;
-		BufferedReader br = null;
+		String html = null;
 		try {
-			// »ñµÃÏàÓ¦ÊµÌå
+			// è·å¾—ç›¸åº”å®ä½“
 			HttpEntity entity = response.getEntity();
-			br = new BufferedReader(new InputStreamReader(entity.getContent()));
-			
-			sb = new StringBuffer();
-			String line = "";
-			while((line = br.readLine()) != null) {
-				sb.append(line + "\r\n");	// ÖğĞĞ¶ÁÈ¡£¬»Ø³µ»»ĞĞ
-			}	
-			EntityUtils.consume(entity);	// Çå¿Õ×ÊÔ´
+			InputStream inputStream = entity.getContent();
+			html = getStrByInputStream(inputStream);
+			EntityUtils.consume(entity);	// æ¸…ç©ºèµ„æº
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			free(response);
+		}
+		return html;
+	}
+	
+	/**
+	 * è·å–InputStreamä¸­çš„ä¿¡æ¯
+	 * @param inputStream
+	 * @return
+	 */
+	public static String getStrByInputStream(InputStream inputStream) {
+		StringBuffer sb = null;
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(inputStream));
+			sb = new StringBuffer();
+			String line = "";
+			while((line = br.readLine()) != null) {
+				sb.append(line + "\r\n");	// é€è¡Œè¯»å–ï¼Œå›è½¦æ¢è¡Œ
+			}	
+		} catch (UnsupportedOperationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
 			free(br);
 		}
 		return sb.toString();
 	}
 	
-	
-
 	/**
-	 * ¸ù¾İURL»ñµÃËùÓĞµÄhtmlĞÅÏ¢
+	 * æ ¹æ®URLè·å¾—æ‰€æœ‰çš„htmlä¿¡æ¯
 	 * @param url
 	 * @return
 	 */
 	public static String getHtmlByUrl(String url) {
 		String html = null;
-		// ´´½¨httpClient¶ÔÏó
+		// åˆ›å»ºhttpClientå¯¹è±¡
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 
-		HttpGet httpget = new HttpGet(url);// ÒÔget·½Ê½ÇëÇó¸ÃURL
+		HttpGet httpget = new HttpGet(url);// ä»¥getæ–¹å¼è¯·æ±‚è¯¥URL
 		CloseableHttpResponse response = null;
 		try {
-			response = httpClient.execute(httpget);// µÃµ½responce¶ÔÏó
-			int resStatu = response.getStatusLine().getStatusCode();// ·µ»ØÂë
-			if (resStatu == HttpStatus.SC_OK) {// 200Õı³£ ÆäËû¾Í²»¶Ô
+			response = httpClient.execute(httpget);// å¾—åˆ°responceå¯¹è±¡
+			int resStatu = response.getStatusLine().getStatusCode();// è¿”å›ç 
+			if (resStatu == HttpStatus.SC_OK) {// 200æ­£å¸¸ å…¶ä»–å°±ä¸å¯¹
 				html = getHtmlByResponse(response);
 			}
 		} catch (Exception e) {
-			System.out.println("·ÃÎÊ[ " + url + " ]³öÏÖÒì³£!");
+			System.out.println("è®¿é—®[ " + url + " ]å‡ºç°å¼‚å¸¸!");
 			e.printStackTrace();
 		} finally {
 			free(response, httpClient);
@@ -105,49 +123,66 @@ public class CrawlerUtil {
 
 	
 	/**
-	 * ·ÃÎÊÍøÒ³£¬±£´æÎª±¾µØÎÄ¼ş
-	 * @param url urlµØÖ·
-	 * @param savePath ±£´æÂ·¾¶
+	 * è®¿é—®ç½‘é¡µï¼Œä¿å­˜ä¸ºæœ¬åœ°æ–‡ä»¶
+	 * @param url urlåœ°å€
+	 * @param savePath ä¿å­˜è·¯å¾„
 	 */
 	public static void saveHtmlByUrl(String url, String savePath) {
-		CloseableHttpClient httpClient = HttpClients.createDefault(); // ´´½¨httpClient¶ÔÏó
-		HttpGet httpget = new HttpGet(url); // ÒÔget·½Ê½ÇëÇó¸ÃURL
-		CloseableHttpResponse response = null; // ÏìÓ¦
+		CloseableHttpClient httpClient = HttpClients.createDefault(); // åˆ›å»ºhttpClientå¯¹è±¡
+		HttpGet httpget = new HttpGet(url); // ä»¥getæ–¹å¼è¯·æ±‚è¯¥URL
+		CloseableHttpResponse response = null; // å“åº”
 
 		try {
-			response = httpClient.execute(httpget); // µÃµ½responce¶ÔÏó
+			response = httpClient.execute(httpget); // å¾—åˆ°responceå¯¹è±¡
 			saveHtmlByHttpResponse(response, savePath);
 		} catch (Exception e) {
-			System.out.println("·ÃÎÊ¡¾" + url + "¡¿³öÏÖÒì³£!");
+			System.out.println("è®¿é—®ã€" + url + "ã€‘å‡ºç°å¼‚å¸¸!");
 			e.printStackTrace();
 		} finally {
 			free(response, httpClient);
 		}
 	}
 
+	private final static String WHITESPACE_UTF8 = "/u00a0";
+	private final static String CHA = "/x9c";
 	
 	/**
-	 * ÓÉHttpResponse ±£´æhtmlµ½±¾µØ
+	 * ç”±HttpResponse ä¿å­˜htmlåˆ°æœ¬åœ°
 	 * @param response	HttpResponse
-	 * @param savePath	±£´æÂ·¾¶
+	 * @param savePath	ä¿å­˜è·¯å¾„
 	 */
 	public static void saveHtmlByHttpResponse(CloseableHttpResponse response, String savePath) {
-		int resStatu = response.getStatusLine().getStatusCode(); // ·µ»ØÂë
-		if (resStatu == HttpStatus.SC_OK) { // 200Õı³£ ÆäËû¾Í²»¶Ô
-			HttpEntity entity = response.getEntity(); // »ñµÃÏàÓ¦ÊµÌå
-			BufferedReader br = null; // »º³åÊäÈëÁ÷
-			BufferedWriter bw = null; // »º³åÊä³öÁ÷
+		int resStatu = response.getStatusLine().getStatusCode(); // è¿”å›ç 
+		if (resStatu == HttpStatus.SC_OK) { // 200æ­£å¸¸ å…¶ä»–å°±ä¸å¯¹
+			HttpEntity entity = response.getEntity(); // è·å¾—ç›¸åº”å®ä½“
+			BufferedReader br = null; // ç¼“å†²è¾“å…¥æµ
+			BufferedWriter bw = null; // ç¼“å†²è¾“å‡ºæµ
 			if (entity != null) {
 				try {
-					entity = new BufferedHttpEntity(entity); // »º´æÊµÌå£¬¿ÉÖØÓÃ
-					// »ñÈ¡ÊµÌåÊäÈëÁ÷
+					entity = new BufferedHttpEntity(entity); // ç¼“å­˜å®ä½“ï¼Œå¯é‡ç”¨
+					// è·å–å®ä½“è¾“å…¥æµ
 					br = new BufferedReader(new InputStreamReader(entity.getContent()));
-					// Ğ´³öÊäÈëÁ÷µÄÄÚÈİµ½Êä³öÁ÷£¬±£´æµ½±¾µØ
+					// å†™å‡ºè¾“å…¥æµçš„å†…å®¹åˆ°è¾“å‡ºæµï¼Œä¿å­˜åˆ°æœ¬åœ°
 					bw = new BufferedWriter(new FileWriter(new File(savePath)));
-					int inByte;
+					
+					String charset = EntityUtils.getContentCharSet(response.getEntity());
+					System.out.println("----------charset --------------" + charset);
+					
+					
+					String line = null;
+					while((line = br.readLine()) != null) {
+						//String lineStr = new String(line.getBytes("utf-8"), "utf-8");
+						bw.write(line.replace(WHITESPACE_UTF8, "").replace(CHA, "Ã—") + "\r\n");
+					}
+					
+					
+					
+/*					int inByte;
 					while ((inByte = br.read()) != -1) {
 						bw.write(inByte);
-					}
+					}*/
+					
+					
 					EntityUtils.consume(entity);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -161,7 +196,7 @@ public class CrawlerUtil {
 	
 	
 	/**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 * @param response	HttpResponse
 	 * @param httpClient	HttpClient
 	 */
@@ -171,7 +206,7 @@ public class CrawlerUtil {
 	}
 
 	/**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 * @param httpClient	HttpClient
 	 */
 	public static void free(CloseableHttpClient httpClient) {
@@ -185,7 +220,7 @@ public class CrawlerUtil {
 	}
 
 	/**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 * @param response	HttpResponse
 	 */
 	public static void free(CloseableHttpResponse response) {
@@ -199,7 +234,7 @@ public class CrawlerUtil {
 	}
 
 	/**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 * @param br
 	 * @param bw
 	 */
@@ -210,7 +245,7 @@ public class CrawlerUtil {
 
 	
 	/**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 * @param bw	BufferedWriter
 	 */
 	public static void free(BufferedWriter bw) {
@@ -224,7 +259,7 @@ public class CrawlerUtil {
 
 	
 	/**
-	 * ÊÍ·Å×ÊÔ´
+	 * é‡Šæ”¾èµ„æº
 	 * @param br	BufferedReader
 	 */
 	public static void free(BufferedReader br) {

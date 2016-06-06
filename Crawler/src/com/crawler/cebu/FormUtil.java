@@ -1,47 +1,47 @@
 package com.crawler.cebu;
 
 public class FormUtil {
-	// Ñ¡Ïî£ºµ¥³Ì¡¢Íù·µ¡¢¶à³ÇÊĞ
+	// é€‰é¡¹ï¼šå•ç¨‹ã€å¾€è¿”ã€å¤šåŸå¸‚
 	public static String Name_TravelOptions = "ControlGroupSearchView$AvailabilitySearchInputSearchView$RadioButtonMarketStructure";
 	public static String[] Val_TravelOptions = { "RoundTrip", "OneWay", "OpenJaw" };
 
-	// ³ö·¢µØ
+	// å‡ºå‘åœ°
 	public static String Name_Origin = "ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation1";
 	public static String[] Val_Origin = { };
 	
-	// Ä¿µÄµØ
+	// ç›®çš„åœ°
 	public static String Name_Destination = "ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation1";
 	public static String[] Val_Destination = { };
 	
-	// ÊÇ·ñÏÔÊ¾Calendar£¬readOnly
+	// æ˜¯å¦æ˜¾ç¤ºCalendarï¼ŒreadOnly
 	public static String Name_CalendarDisplay = "date_picker_1_AccCalendar";
 	public static String Val_CalendarDispaly = "";
 	
-	// ³ö·¢ÈÕ
+	// å‡ºå‘æ—¥
 	public static String Name_CalendarDayDeparture = "ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay1";
 	public static String[] Val_CalendarDayDeparture = { };
 	
-	// ³ö·¢ÔÂ
+	// å‡ºå‘æœˆ
 	public static String Name_CalendarMonthDeparture = "ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth1";
 	public static String[] Val_CalendarMonthDeparture = { };
 	
-	// ·µ»ØÈÕ
+	// è¿”å›æ—¥
 	public static String Name_CalendarDayReturn = "ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay2";
 	public static String[] Val_CalendarDayReturn = { };
 	
-	// ·µ»ØÔÂ
+	// è¿”å›æœˆ
 	public static String Name_CalendarMonthReturn = "ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2";
 	public static String[] Val_CalendarMonthReturn = { };
 	
-	// ´óÈËÊıÄ¿£¬Ä¬ÈÏ1
+	// å¤§äººæ•°ç›®ï¼Œé»˜è®¤1
 	public static String Name_Adults = "ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT";
 	public static String[] Val_Adults = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
 	
-	// Ğ¡º¢ÊıÄ¿£¬Ä¬ÈÏ1
+	// å°å­©æ•°ç›®ï¼Œé»˜è®¤1
 	public static String Name_Children = "ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_CHD";
 	public static String[] Val_Children = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
 	
-	// Ìá½»
+	// æäº¤
 	public static String Name_Submit = "ControlGroupSearchView$AvailabilitySearchInputSearchView$ButtonSubmit";
 	public static String Val_Submit = "FIND IT!";
 
