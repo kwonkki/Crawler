@@ -187,7 +187,7 @@ public class CrawlerUtil {
 
 					String line = null;
 					while ((line = br.readLine()) != null) {
-						bw.write(line.replace(WHITESPACE_UTF8, "") + "\r\n");	// 回车换行
+						bw.write(line.replace(WHITESPACE_UTF8, " ") + "\r\n");	// 回车换行
 					}
 					EntityUtils.consume(entity);
 				} catch (IOException e) {

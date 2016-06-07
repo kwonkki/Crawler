@@ -2,15 +2,11 @@ package com.crawler.cebu;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.http.Consts;
-import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -24,12 +20,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.crawler.cebu.test.CrawlerUtilTest;
-
 public class ParseUtil {
 
 	private CrawlerUtil crawlerUtil;
 
+	/** 单例模式 **/
 	private ParseUtil() {
 		this.crawlerUtil = CrawlerUtil.getInstance();
 	}
@@ -42,7 +37,7 @@ public class ParseUtil {
 		return ParseUtilInstanceHolder.Parse_Util;
 	}
 
-	private final static String WHITESPACE_UTF8 = "/u00a0";
+	private final static String WHITESPACE_UTF8 = "/u00a0"; // 空白符的ASCII码
 
 	public void getInfo() {
 		String url = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
@@ -56,7 +51,7 @@ public class ParseUtil {
 			Elements options = target.select("option");
 			System.out.println("options count: " + options.size());
 			for (Element option : options) {
-				System.out.println(option.text().replace(WHITESPACE_UTF8, ""));
+				System.out.println(option.text().replace(WHITESPACE_UTF8, " "));
 			}
 
 			selectStr = "select#ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation1";
@@ -65,7 +60,7 @@ public class ParseUtil {
 			options = target.select("option");
 			System.out.println("options count: " + options.size());
 			for (Element option : options) {
-				System.out.println(option.text().replace(WHITESPACE_UTF8, ""));
+				System.out.println(option.text().replace(WHITESPACE_UTF8, " "));
 			}
 		}
 	}
@@ -336,6 +331,12 @@ public class ParseUtil {
 		}
 	}
 
+	/**
+	 * 从html文件中解析航班信息
+	 * 
+	 * @param filePath
+	 *            文件本地路径
+	 */
 	public void parseFlightInfoByFile(String filePath) {
 		if (filePath == null || filePath.equals("")) {
 			System.out.println("no such file ...");
@@ -345,154 +346,142 @@ public class ParseUtil {
 		File file = new File(filePath);
 		Document doc = null;
 		try {
-			doc = Jsoup.parse(file, "utf-8");
+			doc = Jsoup.parse(file, "utf-8"); // 文件解析
 
+			// 定位到table
 			String selectTable = "table#availabilityTable";
 			Element table = doc.select(selectTable).get(0);
-			
+
 			// 表头
 			Elements tHead = table.select("thead>tr");
 			for (Element headName : tHead)
 				System.out.print(headName.text());
 			System.out.println();
-			
-			// 航班
-			Elements trs= table.select("tbody>tr");
-System.out.println("tr count: " + trs.size());
+
+			// 航班，每一个航班信息存放在tr中
+			Elements trs = table.select("tbody>tr");
+			// System.out.println("tr count: " + trs.size());
 
 			int i = 0;
 			for (Element tr : trs) {
-System.out.println("---------------------------------------------" + (++i));
-				Map<String, String> mapFlightInfo = this.parseFlightInfoInTr(tr);
-				this.printMap(mapFlightInfo);
+				System.out.println("---------------------------------------------" + (++i));
+				Map<String, String> mapFlightInfo = this.parseFlightInfoInTr(tr); // 解析单个tr中的航班
+				this.printMap(mapFlightInfo); // 打印航班map信息
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
-			
 		}
-
 	}
-	
-	
+
+	/**
+	 * 打印map容器信息
+	 * 
+	 * @param map
+	 */
 	private void printMap(Map<String, String> map) {
-		for(Map.Entry<String, String> entry : map.entrySet())
+		for (Map.Entry<String, String> entry : map.entrySet())
 			System.out.println(entry.getKey() + " : " + entry.getValue());
 	}
-	
-	
+
 	/**
 	 * 解析每一个tr中的航班信息
+	 * 
 	 * @param tr
 	 * @return
 	 */
 	private Map<String, String> parseFlightInfoInTr(Element tr) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		if (tr == null) 
+		if (tr == null)
 			return map;
 		Elements tds = tr.select("td");
-		
+
+		// 起始站点
 		String from = tds.get(0).text();
 		String to = tds.get(1).text();
-		
-		String flightCompany = tds.get(2).select("Strong").get(0).text();
-		String flightNumber = tds.get(2).select("span.flightInfoLink").get(0).text();
-//System.out.println("flight company: " + flightCompany);
-//System.out.println("flight number: " + flightNumber);
 
+		// 航班号和详细信息
+		Element tdDetails = tr.select("td.footnote").get(0);
+		String flightCompany = tdDetails.select("Strong").get(0).text();
+		String flightNumber = tdDetails.select("span.flightInfoLink").get(0).text();
+		// System.out.println("flight company: " + flightCompany);
+		// System.out.println("flight number: " + flightNumber);
 		String flight = flightCompany + " " + flightNumber;
-		
-		String flightDetails = tds.get(2).select("p").get(0).text();
-//System.out.println("flight details: " + flightDetails);		
+		String flightDetails = tdDetails.select("p.pAirportName").get(0).text();
+		// System.out.println("flight details: " + flightDetails);
 
-		Element tdFareFly = tds.get(3);
+		// fly 价格、详细信息
+		Element tdFareFly = tr.select("td.fareBundle").get(0);
 		String[] fareFlyInfo = this.parseFareTd(tdFareFly);
-		
-		Element tdFareFlyBag = tds.get(4);
+
+		// fly+bag 价格、详细信息
+		Element tdFareFlyBag = tr.select("td.fareBundle_FBAG").get(0);
 		String[] fareFlyBagInfo = this.parseFareTd(tdFareFlyBag);
-		
-		Element tdFareFlyBagMeal = tds.get(5);
+
+		// fly+bag+meal 价格、详细信息
+		Element tdFareFlyBagMeal = tr.select("td.fareBundle_FBAGMEAL").get(0);
 		String[] fareFlyBagMealInfo = this.parseFareTd(tdFareFlyBagMeal);
-		
+
+		/** 变量信息存入map **/
 		map.put(FormUtil.From, from);
 		map.put(FormUtil.To, to);
-		
+
 		map.put(FormUtil.Flight, flight);
 		map.put(FormUtil.Flight_Details, flightDetails);
-		
+
 		map.put(FormUtil.Price_Fly_Hidden, fareFlyInfo[0]);
 		map.put(FormUtil.Details_Fly_Hidden, fareFlyInfo[1]);
-		
+
 		map.put(FormUtil.Price_Fly, fareFlyInfo[2]);
 		map.put(FormUtil.Details_Fly, fareFlyInfo[3]);
-		
+
 		map.put(FormUtil.Price_Fly_Bag_Hidden, fareFlyBagInfo[0]);
 		map.put(FormUtil.Details_Fly_Bag_Hidden, fareFlyBagInfo[1]);
-		
+
 		map.put(FormUtil.Price_Fly_Bag, fareFlyBagInfo[2]);
 		map.put(FormUtil.Details_Fly_Bag, fareFlyBagInfo[3]);
-		
+
 		map.put(FormUtil.Price_Fly_Bag_Meal_Hidden, fareFlyBagMealInfo[0]);
 		map.put(FormUtil.Details_Fly_Bag_Meal_Hidden, fareFlyBagMealInfo[1]);
-		
+
 		map.put(FormUtil.Price_Fly_Bag_Meal, fareFlyBagMealInfo[2]);
 		map.put(FormUtil.Details_Fly_Bag_Meal, fareFlyBagMealInfo[3]);
-		
+
 		return map;
 	}
-	
+
 	/**
 	 * 解析航班价格及其具体信息所在的td
+	 * 
 	 * @param td
 	 * @return
 	 */
 	private String[] parseFareTd(Element td) {
-		Elements tdFareFlyDivs = td.select(">div");
-//System.out.println("tdFareFlyDivs count : " + tdFareFlyDivs.size());
+		/**
+		 * 数组中分别存放 String flyPriceHidden = ""; // 隐藏价格 String
+		 * flyPriceHiddenDetails = ""; // 隐藏细节 String flyPrice = ""; // 显示价格
+		 * String flyPriceDetails = ""; // 显示细节
+		 */
+		String[] strings = { "", "", "", "" };
+		if (td == null)
+			return strings;
 
-		String flyPriceHidden = tdFareFlyDivs.get(1).select("span.ADTprice").get(0).text();
-		Elements lis = tdFareFlyDivs.get(1).select("li");
-		StringBuffer sb = new StringBuffer(100);
-		for(int i = 0; i < 7; i++) 
-			sb.append(lis.get(i).text() + " ");
-		String flyPriceHiddenDetails = sb.toString(); 
-//System.out.println(flyPriceHidden + " , " + flyPriceHiddenDetails);
+		Elements tdFareFlyDivs = td.select(">div.farePrices");
+		String tmpFlyPrice = "";
+		String tmpFlyPriceDetails = "";
+		for (int i = 0; i < tdFareFlyDivs.size(); i++) {
+			// 价格
+			tmpFlyPrice = tdFareFlyDivs.get(i).select("span.ADTprice").get(0).text();
+			strings[0 + i] = tmpFlyPrice;
 
-		String flyPrice = tdFareFlyDivs.get(3).select("span.ADTprice").get(0).text();
-		Elements lis2 = tdFareFlyDivs.get(3).select("li");
-		StringBuffer sb2 = new StringBuffer(100);
-		for(int i = 0; i < 7; i++) 
-			sb2.append(lis2.get(i).text() + " ");
-		String flyPriceDetails = sb2.toString(); 
-		
-		String[] strings = {flyPriceHidden, flyPriceHiddenDetails, flyPrice, flyPriceDetails};
+			// 细节信息
+			Elements lis = tdFareFlyDivs.get(i).select("li");
+			StringBuffer sb = new StringBuffer(100);
+			for (int j = 0; j < 7; j++) // 只需要前7个li标签的信息
+				sb.append(lis.get(j).text() + " ");
+			tmpFlyPriceDetails = sb.toString();
+			strings[1 + i] = tmpFlyPriceDetails;
+		}
 		return strings;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
