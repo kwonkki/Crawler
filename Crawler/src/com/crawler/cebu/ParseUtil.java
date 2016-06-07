@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -355,12 +358,14 @@ public class ParseUtil {
 			
 			// 航班
 			Elements trs= table.select("tbody>tr");
-			for (Element tr : trs)
-				System.out.println(tr.text());
-			System.out.println();
-			
-			
-			
+System.out.println("tr count: " + trs.size());
+
+			int i = 0;
+			for (Element tr : trs) {
+System.out.println("---------------------------------------------" + (++i));
+				Map<String, String> mapFlightInfo = this.parseFlightInfoInTr(tr);
+				this.printMap(mapFlightInfo);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -368,5 +373,126 @@ public class ParseUtil {
 		}
 
 	}
+	
+	
+	private void printMap(Map<String, String> map) {
+		for(Map.Entry<String, String> entry : map.entrySet())
+			System.out.println(entry.getKey() + " : " + entry.getValue());
+	}
+	
+	
+	/**
+	 * 解析每一个tr中的航班信息
+	 * @param tr
+	 * @return
+	 */
+	private Map<String, String> parseFlightInfoInTr(Element tr) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		if (tr == null) 
+			return map;
+		Elements tds = tr.select("td");
+		
+		String from = tds.get(0).text();
+		String to = tds.get(1).text();
+		
+		String flightCompany = tds.get(2).select("Strong").get(0).text();
+		String flightNumber = tds.get(2).select("span.flightInfoLink").get(0).text();
+//System.out.println("flight company: " + flightCompany);
+//System.out.println("flight number: " + flightNumber);
+
+		String flight = flightCompany + " " + flightNumber;
+		
+		String flightDetails = tds.get(2).select("p").get(0).text();
+//System.out.println("flight details: " + flightDetails);		
+
+		Element tdFareFly = tds.get(3);
+		String[] fareFlyInfo = this.parseFareTd(tdFareFly);
+		
+		Element tdFareFlyBag = tds.get(4);
+		String[] fareFlyBagInfo = this.parseFareTd(tdFareFlyBag);
+		
+		Element tdFareFlyBagMeal = tds.get(5);
+		String[] fareFlyBagMealInfo = this.parseFareTd(tdFareFlyBagMeal);
+		
+		map.put(FormUtil.From, from);
+		map.put(FormUtil.To, to);
+		
+		map.put(FormUtil.Flight, flight);
+		map.put(FormUtil.Flight_Details, flightDetails);
+		
+		map.put(FormUtil.Price_Fly_Hidden, fareFlyInfo[0]);
+		map.put(FormUtil.Details_Fly_Hidden, fareFlyInfo[1]);
+		
+		map.put(FormUtil.Price_Fly, fareFlyInfo[2]);
+		map.put(FormUtil.Details_Fly, fareFlyInfo[3]);
+		
+		map.put(FormUtil.Price_Fly_Bag_Hidden, fareFlyBagInfo[0]);
+		map.put(FormUtil.Details_Fly_Bag_Hidden, fareFlyBagInfo[1]);
+		
+		map.put(FormUtil.Price_Fly_Bag, fareFlyBagInfo[2]);
+		map.put(FormUtil.Details_Fly_Bag, fareFlyBagInfo[3]);
+		
+		map.put(FormUtil.Price_Fly_Bag_Meal_Hidden, fareFlyBagMealInfo[0]);
+		map.put(FormUtil.Details_Fly_Bag_Meal_Hidden, fareFlyBagMealInfo[1]);
+		
+		map.put(FormUtil.Price_Fly_Bag_Meal, fareFlyBagMealInfo[2]);
+		map.put(FormUtil.Details_Fly_Bag_Meal, fareFlyBagMealInfo[3]);
+		
+		return map;
+	}
+	
+	/**
+	 * 解析航班价格及其具体信息所在的td
+	 * @param td
+	 * @return
+	 */
+	private String[] parseFareTd(Element td) {
+		Elements tdFareFlyDivs = td.select(">div");
+//System.out.println("tdFareFlyDivs count : " + tdFareFlyDivs.size());
+
+		String flyPriceHidden = tdFareFlyDivs.get(1).select("span.ADTprice").get(0).text();
+		Elements lis = tdFareFlyDivs.get(1).select("li");
+		StringBuffer sb = new StringBuffer(100);
+		for(int i = 0; i < 7; i++) 
+			sb.append(lis.get(i).text() + " ");
+		String flyPriceHiddenDetails = sb.toString(); 
+//System.out.println(flyPriceHidden + " , " + flyPriceHiddenDetails);
+
+		String flyPrice = tdFareFlyDivs.get(3).select("span.ADTprice").get(0).text();
+		Elements lis2 = tdFareFlyDivs.get(3).select("li");
+		StringBuffer sb2 = new StringBuffer(100);
+		for(int i = 0; i < 7; i++) 
+			sb2.append(lis2.get(i).text() + " ");
+		String flyPriceDetails = sb2.toString(); 
+		
+		String[] strings = {flyPriceHidden, flyPriceHiddenDetails, flyPrice, flyPriceDetails};
+		return strings;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
