@@ -12,6 +12,9 @@ public class ParseUtilTest {
 	private final static String URL = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
 	private final static String PostUrl = "https://book.cebupacificair.com/Search.aspx";
 	private final static String SAVE_PATH_Response = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response.html";
+	private final static String SAVE_PATH = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/test_savedHtmlByUrl.html";
+	private final static String SAVE_PATH_IniFile = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/Book a Trip.html";
+	
 	private static ParseUtil parseUtil = ParseUtil.getInstance();
 	private static CrawlerUtil crawlerUtil = CrawlerUtil.getInstance();
 	
@@ -24,7 +27,7 @@ public class ParseUtilTest {
 	
 	@Test
 	public void test_parseByFile() {
-		parseUtil.parseByFile(SAVE_PATH_Response);
+		parseUtil.parseTimeByFile(SAVE_PATH);
 		System.out.println("done");
 	}
 
@@ -36,9 +39,15 @@ public class ParseUtilTest {
 	
 	@Test
 	public void test_parseFlightInfoByFile() {
-		parseUtil.parseFlightInfoByFile(SAVE_PATH_Response);
+		parseUtil.parseFlightByFile(SAVE_PATH_Response);
 		System.out.println("done");
 	}
 	
+	
+	@Test 
+	public void test_parseOriginStationsByFile() {
+		parseUtil.printMap(parseUtil.parseStationsByFile(SAVE_PATH_IniFile));
+		System.out.println("done");
+	}
 	
 }

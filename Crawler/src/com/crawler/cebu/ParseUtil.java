@@ -140,7 +140,7 @@ public class ParseUtil {
 	 * @param filePath
 	 *            本地html文件路径
 	 */
-	public void parseByFile(String filePath) {
+	public void parseTimeByFile(String filePath) {
 		if (filePath == null || filePath.equals("")) {
 			System.out.println("no such file ...");
 			return;
@@ -337,7 +337,7 @@ public class ParseUtil {
 	 * @param filePath
 	 *            文件本地路径
 	 */
-	public void parseFlightInfoByFile(String filePath) {
+	public void parseFlightByFile(String filePath) {
 		if (filePath == null || filePath.equals("")) {
 			System.out.println("no such file ...");
 			return;
@@ -378,7 +378,7 @@ public class ParseUtil {
 	 * 
 	 * @param map
 	 */
-	private void printMap(Map<String, String> map) {
+	public void printMap(Map<String, String> map) {
 		for (Map.Entry<String, String> entry : map.entrySet())
 			System.out.println(entry.getKey() + " : " + entry.getValue());
 	}
@@ -483,5 +483,57 @@ public class ParseUtil {
 		}
 		return strings;
 	}
+	
+	/**
+	 * 获取站点信息，起始和终点站点列表完全一样
+	 * @param filePath
+	 * @return
+	 */
+	public Map<String, String> parseStationsByFile(String filePath) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		if (filePath == null || filePath.equals("")) {
+			System.out.println("no such file ...");
+			return map;
+		}
+		
+		System.out.println(filePath);
+		File file = new File(filePath);
+		Document doc = null;
+		try {
+			doc = Jsoup.parse(file, "utf-8");
+			// 定位到站点div
+			Element cityPairDiv = doc.select("div#marketCityPair_1").get(0);
+			Elements options = cityPairDiv.select("option");
+			for(Element option : options) {
+				String key = option.val();
+				String value = option.text();
+				if (!key.equals("") && !value.equals("")) 	// 去除空串
+					map.put(key, value);
+			}
+		} catch (IOException e) {
+			System.out.println("parse exeception ...");
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
