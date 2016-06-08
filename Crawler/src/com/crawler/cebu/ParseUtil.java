@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,7 +38,7 @@ public class ParseUtil {
 		return ParseUtilInstanceHolder.Parse_Util;
 	}
 
-	//private final static String WHITESPACE_UTF8 = "/u00a0"; // 空白符的ASCII码
+	private final static String WHITESPACE_UTF8 = "/u00a0"; // 空白符的ASCII码
 
 	/**
 	 * 从本地html文件中读取信息
@@ -356,9 +359,66 @@ public class ParseUtil {
 			return map;
 		Elements tds = tr.select("td");
 
-		// 起始站点
-		String from = tds.get(0).text();
-		String to = tds.get(1).text();
+		// 起始站点，可能存在转机情况下的换乘站点
+		String from = "";
+		String to = "";
+		// 存在两个td，则出现换乘转机
+		boolean isTransferHappen = (tds.get(0).select(">b").size() > 1) ? true : false;
+		
+		if (isTransferHappen) {
+			Elements spansInTd1 = tds.get(0).select(">span");
+			String from1NextDayArrival = "";
+			String to1NextDayArrival = "";
+			int spanCount = spansInTd1.size();
+			if (spanCount == 1) 
+				from1NextDayArrival = spansInTd1.first().text();
+			else if (spanCount == 2) {
+				from1NextDayArrival = spansInTd1.first().text();
+				to1NextDayArrival = spansInTd1.last().text();
+			}
+			
+			String textTd1 = tds.get(0).text()
+					.replace(from1NextDayArrival, "").replace(to1NextDayArrival, "");
+			int lastIndexOfNum = -1;
+			for(int i = textTd1.length() - 1; i >=0; i--) {
+				char ch = textTd1.charAt(i);
+				if (ch >= '0' && ch <= '9') {
+					lastIndexOfNum = i;
+					break;
+				}
+			}
+			String from1 = textTd1.substring(0, lastIndexOfNum - 3);
+			String to1 = textTd1.substring(lastIndexOfNum - 3, textTd1.length()); 
+			
+			Elements spansInTd2 = tds.get(1).select(">span");
+			String from2NextDayArrival = "";
+			String to2NextDayArrival = "";
+			if (spansInTd2.size() == 1) 
+				from2NextDayArrival = spansInTd2.first().text();
+			else if (spansInTd2.size() == 2) {
+				from2NextDayArrival = spansInTd2.first().text();
+				to2NextDayArrival = spansInTd2.last().text();
+			}
+				
+			String textTd2 = tds.get(1).text()
+					.replace(from2NextDayArrival, "").replace(to2NextDayArrival, "");
+			lastIndexOfNum = -1;
+			for(int i = textTd2.length() - 1; i >=0; i--) {
+				char ch = textTd2.charAt(i);
+				if (ch >= '0' && ch <= '9') {
+					lastIndexOfNum = i;
+					break;
+				}
+			}
+			String from2 = textTd2.substring(0, lastIndexOfNum - 3);
+			String to2 = textTd2.substring(lastIndexOfNum - 3, textTd2.length()); 
+			
+			from = from1 + " " + from1NextDayArrival + " " + from2 + " " + from2NextDayArrival;
+			to = to1 + " " + to1NextDayArrival + " " + to2 + " " + to2NextDayArrival;
+		} else {
+			from = tds.get(0).text();
+			to = tds.get(1).text();
+		}
 
 		// 航班号和详细信息
 		Element tdDetails = tr.select("td.footnote").get(0);

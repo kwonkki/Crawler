@@ -54,7 +54,7 @@ public class CrawlerUtilTest {
 		formParams.setTravelOption(TravelOption.OneWay)
 			.setOrgStation(OrgStation.HKG)
 			.setDestStation(DestStation.MNL)
-			.setDepartureTime("2016-06-25")
+			.setDepartureTime("2016-06-20")
 			.setAdultNum(1)
 			.setChildNum(0)
 			.build();

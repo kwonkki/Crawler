@@ -106,7 +106,7 @@ public class CrawlerUtil {
 			sb = new StringBuffer();
 			String line = "";
 			while ((line = br.readLine()) != null) {
-				sb.append(line + "\r\n"); // 逐行读取，回车换行
+				sb.append(line.replace(WHITESPACE_UTF8, " ") + "\r\n"); // 逐行读取，回车换行
 			}
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
