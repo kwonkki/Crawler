@@ -19,6 +19,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import com.crawler.cebu.FormUtil.*;
 
 public class ParseUtil {
 
@@ -331,6 +332,93 @@ public class ParseUtil {
 		}
 	}
 
+	
+	
+	public void savePostResponseHtmlByParams(String postUrl, String savePath) {
+		FormParams formParams = new FormParams();
+		formParams.setTravelOption(TravelOption.OneWay)
+			.setOrgStation(OrgStation.HKG)
+			.setDestStation(DestStation.MNL)
+			.setDepartureTime("2016-06-20")
+			.setAdultNum(1)
+			.setChildNum(0)
+			.build();
+		
+
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+
+		HttpPost httpPost = new HttpPost(postUrl);
+		httpPost.setHeader("Host", "book.cebupacificair.com");
+		httpPost.setHeader("User-agent",
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.7 Safari/537.36");
+		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		httpPost.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
+		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
+		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		httpPost.setHeader("Referer", "https://book.cebupacificair.com/Search.aspx?culture=en-us");
+
+		httpPost.setEntity(formEntity);
+
+		/*
+		 * try { System.out.println(
+		 * "--------------------------------- executing request entity ------------------------------------"
+		 * );
+		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
+		 * ().getContent())); } catch (UnsupportedOperationException |
+		 * IOException e1) { e1.printStackTrace(); }
+		 * 
+		 * System.out.println(
+		 * "--------------------------------- request headers ------------------------------------"
+		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
+		 * headers1) System.out.println(header1.getName() + " : " +
+		 * header1.getValue());
+		 */
+
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			response = httpClient.execute(httpPost);
+
+			/*
+			 * System.out.println(crawlerUtil.getStrByInputStream(response.
+			 * getEntity().getContent()));
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response headers ------------------------------------"
+			 * ); Header[] headers = response.getAllHeaders(); for(Header header
+			 * : headers) System.out.println(header.getName() + " : " +
+			 * header.getValue());
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response header location ------------------------------------"
+			 * ); Header[] locationHeaders = response.getHeaders("Location");
+			 * System.out.println("location header length : " +
+			 * locationHeaders.length); if(locationHeaders.length == 0)
+			 * System.out.println("header location length is 0 ..."); else
+			 * System.out.println(locationHeaders[0].getName() + " : " +
+			 * locationHeaders[0].getValue());
+			 * 
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response string ------------------------------------"
+			 * ); System.out.println(response.toString());
+			 */
+
+			System.out.println("response code : " + response.getStatusLine().getStatusCode());
+			crawlerUtil.saveHtmlByHttpResponse(response, savePath);
+
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			crawlerUtil.free(response, httpClient);
+		}
+	}
+
+	
 	/**
 	 * 从html文件中解析航班信息
 	 * 
@@ -381,6 +469,29 @@ public class ParseUtil {
 	public void printMap(Map<String, String> map) {
 		for (Map.Entry<String, String> entry : map.entrySet())
 			System.out.println(entry.getKey() + " : " + entry.getValue());
+		
+		System.out.println("--------------------");
+		int i = 0;
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			System.out.print(entry.getKey() + ", ");
+			if(++i == 10) {
+				i = 0;
+				System.out.println();
+			}
+				
+		}
+		
+		System.out.println("--------------------");
+		i = 0;
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			System.out.print(entry.getValue() + ", ");
+			if(++i == 10) {
+				i = 0;
+				System.out.println();
+			}
+				
+		}
+			
 	}
 
 	/**
