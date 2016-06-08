@@ -8,13 +8,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.LaxRedirectStrategy;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 public class CrawlerUtil {
@@ -55,7 +64,7 @@ public class CrawlerUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			free(br);
+			this.free(br);
 		}
 	}
 
@@ -71,14 +80,14 @@ public class CrawlerUtil {
 			// 获得相应实体
 			HttpEntity entity = response.getEntity();
 			InputStream inputStream = entity.getContent();
-			html = getStrByInputStream(inputStream);
+			html = this.getStrByInputStream(inputStream);
 			EntityUtils.consume(entity); // 清空资源
 		} catch (UnsupportedOperationException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			free(response);
+			this.free(response);
 		}
 		return html;
 	}
@@ -104,7 +113,7 @@ public class CrawlerUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			free(br);
+			this.free(br);
 		}
 		return sb.toString();
 	}
@@ -126,13 +135,13 @@ public class CrawlerUtil {
 			response = httpClient.execute(httpget);// 得到responce对象
 			int resStatu = response.getStatusLine().getStatusCode();// 返回码
 			if (resStatu == HttpStatus.SC_OK) {// 200正常 其他就不对
-				html = getHtmlByResponse(response);
+				html = this.getHtmlByResponse(response);
 			}
 		} catch (Exception e) {
 			System.out.println("访问[ " + url + " ]出现异常!");
 			e.printStackTrace();
 		} finally {
-			free(response, httpClient);
+			this.free(response, httpClient);
 		}
 		return html;
 	}
@@ -152,12 +161,12 @@ public class CrawlerUtil {
 
 		try {
 			response = httpClient.execute(httpget); // 得到responce对象
-			saveHtmlByHttpResponse(response, savePath);
+			this.saveHtmlByResponse(response, savePath);
 		} catch (Exception e) {
 			System.out.println("访问[ " + url + " ]出现异常!");
 			e.printStackTrace();
 		} finally {
-			free(response, httpClient);
+			this.free(response, httpClient);
 		}
 	}
 
@@ -171,7 +180,7 @@ public class CrawlerUtil {
 	 * @param savePath
 	 *            保存路径
 	 */
-	public void saveHtmlByHttpResponse(CloseableHttpResponse response, String savePath) {
+	public void saveHtmlByResponse(CloseableHttpResponse response, String savePath) {
 		int resStatu = response.getStatusLine().getStatusCode(); // 返回码
 		if (resStatu == HttpStatus.SC_OK) { // 200正常 其他就不对
 			HttpEntity entity = response.getEntity(); // 获得相应实体
@@ -193,12 +202,262 @@ public class CrawlerUtil {
 				} catch (IOException e) {
 					e.printStackTrace();
 				} finally {
-					free(response);
-					free(br, bw);
+					this.free(response);
+					this.free(br, bw);
 				}
 			}
 		}
 	}
+	
+	// 测试函数，固定参数
+	public void savePostResponseHtml(String postUrl, String savePath) {
+		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
+		formParams.add(new BasicNameValuePair("__EVENTTARGET", ""));
+		formParams.add(new BasicNameValuePair("__EVENTARGUMENT", ""));
+		formParams.add(new BasicNameValuePair("__VIEWSTATE", "/wEPDwUBMGRkZ0I3jKvfnhKfx57f3Wjr7p2WhvU="));
+		formParams.add(new BasicNameValuePair("pageToken", ""));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$RadioButtonMarketStructure", "OneWay"));
+		formParams.add(new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation1",
+				"HKG"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketOrigin1", "HKG"));
+		formParams.add(new BasicNameValuePair("name_originStationContainercategory", "HongKong (HKG)"));
+		formParams.add(new BasicNameValuePair("originStationContainercategory", "HKG"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation1", "MNL"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketDestination1", "MNL"));
+		formParams.add(new BasicNameValuePair("name_destinationStationContainercategory", "Manila (MNL)"));
+		formParams.add(new BasicNameValuePair("destinationStationContainercategory", "MNL"));
+		formParams.add(new BasicNameValuePair("date_picker_1", "2016-06-20"));
+		formParams.add(new BasicNameValuePair("date_picker_1_AccCalendar", "2016-06-20"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay1", "20"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth1", "2016-06"));
+		formParams.add(
+				new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation2", ""));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketOrigin2", ""));
+		formParams.add(new BasicNameValuePair("name_originStationContainercategory", "From"));
+		formParams.add(new BasicNameValuePair("originStationContainercategory", ""));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation2", ""));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketDestination2", ""));
+		formParams.add(new BasicNameValuePair("name_destinationStationContainercategory", "To"));
+		formParams.add(new BasicNameValuePair("destinationStationContainercategory", ""));
+		formParams.add(new BasicNameValuePair("date_picker_2", "2016-06-20"));
+		formParams.add(new BasicNameValuePair("date_picker_2_AccCalendar", "2016-06-20"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay2", "20"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2", "2016-06"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", "1"));
+		formParams.add(new BasicNameValuePair(
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_CHD", "0"));
+		formParams.add(
+				new BasicNameValuePair("ControlGroupSearchView$AvailabilitySearchInputSearchView$promoCodeID", ""));
+		formParams.add(new BasicNameValuePair("ControlGroupSearchView$AvailabilitySearchInputSearchView$ButtonSubmit",
+				"FIND IT!"));
+		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$TextBoxUserID", "EMAIL"));
+		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$PasswordFieldPassword", ""));
+		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxConfirmation", ""));
+		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxHiddenUsername", ""));
+
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams, Consts.UTF_8);
+
+		HttpPost httpPost = new HttpPost(postUrl);
+		this.setHttpPostHeader(httpPost);
+		httpPost.setEntity(formEntity);
+
+		/*
+		 * try { System.out.println(
+		 * "--------------------------------- executing request entity ------------------------------------"
+		 * );
+		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
+		 * ().getContent())); } catch (UnsupportedOperationException |
+		 * IOException e1) { e1.printStackTrace(); }
+		 * 
+		 * System.out.println(
+		 * "--------------------------------- request headers ------------------------------------"
+		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
+		 * headers1) System.out.println(header1.getName() + " : " +
+		 * header1.getValue());
+		 */
+
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			response = httpClient.execute(httpPost);
+
+			/*
+			 * System.out.println(crawlerUtil.getStrByInputStream(response.
+			 * getEntity().getContent()));
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response headers ------------------------------------"
+			 * ); Header[] headers = response.getAllHeaders(); for(Header header
+			 * : headers) System.out.println(header.getName() + " : " +
+			 * header.getValue());
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response header location ------------------------------------"
+			 * ); Header[] locationHeaders = response.getHeaders("Location");
+			 * System.out.println("location header length : " +
+			 * locationHeaders.length); if(locationHeaders.length == 0)
+			 * System.out.println("header location length is 0 ..."); else
+			 * System.out.println(locationHeaders[0].getName() + " : " +
+			 * locationHeaders[0].getValue());
+			 * 
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response string ------------------------------------"
+			 * ); System.out.println(response.toString());
+			 */
+
+			System.out.println("response code : " + response.getStatusLine().getStatusCode());
+			this.saveHtmlByResponse(response, savePath);
+
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			this.free(response, httpClient);
+		}
+	}
+
+	/**
+	 * 设置HttpPost的请求头信息
+	 */
+	private void setHttpPostHeader(HttpPost httpPost) {
+		httpPost.setHeader("Host", "book.cebupacificair.com");
+		httpPost.setHeader("User-agent",
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.7 Safari/537.36");
+		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+		httpPost.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
+		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
+		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+		httpPost.setHeader("Referer", "https://book.cebupacificair.com/Search.aspx?culture=en-us");
+	}
+	
+	/**
+	 * 保存post提交之后重定向的网页到本地文件
+	 * @param postUrl	post提交url
+	 * @param formParams	post表单参数
+	 * @param savePath	保存路径
+	 */
+	public void savePostResponseHtmlByParams(String postUrl, FormParams formParams, String savePath) {
+		// 获取FormParams中的参数
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+		// 设置HttpPost文件头
+		HttpPost httpPost = new HttpPost(postUrl);
+		this.setHttpPostHeader(httpPost);
+		// 设置实体
+		httpPost.setEntity(formEntity);
+
+		/*
+		 * try { System.out.println(
+		 * "--------------------------------- executing request entity ------------------------------------"
+		 * );
+		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
+		 * ().getContent())); } catch (UnsupportedOperationException |
+		 * IOException e1) { e1.printStackTrace(); }
+		 * 
+		 * System.out.println(
+		 * "--------------------------------- request headers ------------------------------------"
+		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
+		 * headers1) System.out.println(header1.getName() + " : " +
+		 * header1.getValue());
+		 */
+
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			response = httpClient.execute(httpPost);
+
+			/*
+			 * System.out.println(crawlerUtil.getStrByInputStream(response.
+			 * getEntity().getContent()));
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response headers ------------------------------------"
+			 * ); Header[] headers = response.getAllHeaders(); for(Header header
+			 * : headers) System.out.println(header.getName() + " : " +
+			 * header.getValue());
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response header location ------------------------------------"
+			 * ); Header[] locationHeaders = response.getHeaders("Location");
+			 * System.out.println("location header length : " +
+			 * locationHeaders.length); if(locationHeaders.length == 0)
+			 * System.out.println("header location length is 0 ..."); else
+			 * System.out.println(locationHeaders[0].getName() + " : " +
+			 * locationHeaders[0].getValue());
+			 * 
+			 * 
+			 * System.out.println(
+			 * "--------------------------------- response string ------------------------------------"
+			 * ); System.out.println(response.toString());
+			 */
+
+			System.out.println("response code : " + response.getStatusLine().getStatusCode());	// 状态码
+			this.saveHtmlByResponse(response, savePath);	// 保存到本地文件
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			this.free(response, httpClient);
+		}
+	}
+
+	/**
+	 * 保存post提交之后重定向的网页到本地文件
+	 * @param postUrl	post提交url
+	 * @param formParams	post表单参数
+	 */
+	public String getPostResponseHtmlByParams(String postUrl, FormParams formParams) {
+		// 获取FormParams中的参数
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+		// 设置HttpPost文件头
+		HttpPost httpPost = new HttpPost(postUrl);
+		this.setHttpPostHeader(httpPost);
+		// 设置实体
+		httpPost.setEntity(formEntity);
+
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+		String html = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			response = httpClient.execute(httpPost);
+			// 获取response中的信息
+			html = this.getHtmlByResponse(response);
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			this.free(response, httpClient);
+		}
+		return html;
+	}
+
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * 释放资源

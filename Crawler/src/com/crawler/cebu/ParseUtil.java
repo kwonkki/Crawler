@@ -1,33 +1,30 @@
 package com.crawler.cebu;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import org.apache.http.Consts;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.apache.http.message.BasicNameValuePair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import com.crawler.cebu.FormUtil.*;
+
+/**
+ * 利用jsoup，html解析工具类
+ * 1、解析html字符串中的始发到站时间列表、始发站和终点站列表、post表单提交之后的航班查询信息
+ * 2、解析本地html文件中的始发到站时间列表、始发站和终点站列表、post表单提交之后的航班查询信息
+ * @author lihaijun
+ *
+ */
 
 public class ParseUtil {
 
-	private CrawlerUtil crawlerUtil;
-
 	/** 单例模式 **/
 	private ParseUtil() {
-		this.crawlerUtil = CrawlerUtil.getInstance();
+
 	}
 
 	private static class ParseUtilInstanceHolder {
@@ -38,33 +35,170 @@ public class ParseUtil {
 		return ParseUtilInstanceHolder.Parse_Util;
 	}
 
-	private final static String WHITESPACE_UTF8 = "/u00a0"; // 空白符的ASCII码
+	//private final static String WHITESPACE_UTF8 = "/u00a0"; // 空白符的ASCII码
 
-	public void getInfo() {
-		String url = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
-		String html = crawlerUtil.getHtmlByUrl(url);
-		if (html != null && !"".equals(html)) {
-			System.out.println(html);
-			Document doc = Jsoup.parse(html);
-			String selectStr = "select#ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation1";
-			Element target = doc.select(selectStr).get(0);
-			System.out.println(target.text());
-			Elements options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.println(option.text().replace(WHITESPACE_UTF8, " "));
+	/**
+	 * 从本地html文件中读取信息
+	 * @param filePath	本地文件路径
+	 * @return
+	 */
+	private String readHtmlFromFile(String filePath) {
+		if (filePath == null || filePath.equals("")) {
+			System.out.println("no such file ...");
+			return "";
+		}
+
+		File file = new File(filePath);
+		StringBuffer sb = null;
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			sb = new StringBuffer();
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\r\n"); // 逐行读取，回车换行
 			}
-
-			selectStr = "select#ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation1";
-			target = doc.select(selectStr).get(0);
-			System.out.println(target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.println(option.text().replace(WHITESPACE_UTF8, " "));
+		} catch (UnsupportedOperationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
+		return sb.toString();
 	}
+	
+	
+	/**
+	 * 从html字符串解析时间信息
+	 * @param html html字符串
+	 * @return	
+	 */
+	public Map<String, ArrayList<String>> parseTime(String html) {
+		// 出发日、出发年月、回程日、回程年月4个list组成的map
+		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
+		if (html == null || html.equals(""))
+			return map;
+
+		Document doc = null;
+		doc = Jsoup.parse(html);
+		
+		String prefix = "select#";
+		// 出发日
+		String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
+		Element target = doc.select(selectDayDeparture).get(0);
+		Elements options = target.select("option");
+		ArrayList<String> listDayDeparture = new ArrayList<String>();
+		for (Element option : options) {
+			listDayDeparture.add(option.text());
+		}
+		// 出发年月
+		String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
+		target = doc.select(selectMonthDeparture).get(0);
+		options = target.select("option");
+		ArrayList<String> listMonthDeparture = new ArrayList<String>();
+		for (Element option : options) {
+			listMonthDeparture.add(option.text());
+		}
+		// 返程日
+		String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
+		target = doc.select(selectDayReturn).get(0);
+		options = target.select("option");
+		ArrayList<String> listDayReturn = new ArrayList<String>();
+		for (Element option : options) {
+			listDayReturn.add(option.text());
+		}
+		// 返程年月
+		String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
+		target = doc.select(selectMonthReturn).get(0);
+		options = target.select("option");
+		ArrayList<String> listMonthReturn = new ArrayList<String>();
+		for (Element option : options) {
+			listMonthReturn.add(option.text());
+		}
+
+		map.put(FormUtil.Name_CalendarDayDeparture, listDayDeparture);
+		map.put(FormUtil.Name_CalendarMonthDeparture, listMonthDeparture);
+		map.put(FormUtil.Name_CalendarDayReturn, listDayReturn);
+		map.put(FormUtil.Name_CalendarMonthReturn, listMonthReturn);
+		return map;
+	}
+
+	/**
+	 * 从doc中解析时间信息
+	 * @param doc
+	 * @return
+	 */
+	private Map<String, ArrayList<String>> parseTimeByDoc(Document doc) {
+		// 出发日、出发年月、回程日、回程年月4个list组成的map
+		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
+		if(doc == null)
+			return map;
+		
+		String prefix = "select#";
+		// 出发日
+		String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
+		Element target = doc.select(selectDayDeparture).get(0);
+		Elements options = target.select("option");
+		ArrayList<String> listDayDeparture = new ArrayList<String>();
+		for (Element option : options) {
+			listDayDeparture.add(option.text());
+		}
+		// 出发年月
+		String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
+		target = doc.select(selectMonthDeparture).get(0);
+		options = target.select("option");
+		ArrayList<String> listMonthDeparture = new ArrayList<String>();
+		for (Element option : options) {
+			listMonthDeparture.add(option.text());
+		}
+		// 返程日
+		String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
+		target = doc.select(selectDayReturn).get(0);
+		options = target.select("option");
+		ArrayList<String> listDayReturn = new ArrayList<String>();
+		for (Element option : options) {
+			listDayReturn.add(option.text());
+		}
+		// 返程年月
+		String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
+		target = doc.select(selectMonthReturn).get(0);
+		options = target.select("option");
+		ArrayList<String> listMonthReturn = new ArrayList<String>();
+		for (Element option : options) {
+			listMonthReturn.add(option.text());
+		}
+
+		map.put(FormUtil.Name_CalendarDayDeparture, listDayDeparture);
+		map.put(FormUtil.Name_CalendarMonthDeparture, listMonthDeparture);
+		map.put(FormUtil.Name_CalendarDayReturn, listDayReturn);
+		map.put(FormUtil.Name_CalendarMonthReturn, listMonthReturn);
+		return map;
+	}
+
+	/**
+	 * 从html字符串解析时间信息
+	 * @param html html字符串
+	 * @param baseUrl html来源的url地址，用于解析html字符串中的其他路径相关信息
+	 * @return	
+	 */
+	public Map<String, ArrayList<String>> parseTimeWithUrl(String html, String baseUrl) {
+		// 出发日、出发年月、回程日、回程年月4个list组成的map
+		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
+		if (html == null || html.equals(""))
+			return map;
+
+		Document doc = null;
+		doc = Jsoup.parse(html, baseUrl);
+		map = this.parseTimeByDoc(doc);
+		return map;
+	}
+
 
 	/**
 	 * 从文件解析html，提供相对应的url
@@ -74,65 +208,9 @@ public class ParseUtil {
 	 * @param baseUrl
 	 *            文件的原url地址，解析相关的链接
 	 */
-	public void parseByFileWithUrl(String filePath, String baseUrl) {
-		if (filePath == null || filePath.equals("")) {
-			System.out.println("no such file ...");
-			return;
-		}
-
-		File file = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(file, "utf-8", baseUrl);
-			String prefix = "select#";
-
-			System.out.println("--------------------- day departure ---------------------");
-			String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
-			Element target = doc.select(selectDayDeparture).get(0);
-			System.out.println("target text: " + target.text());
-			Elements options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-
-			System.out.println("--------------------- month departure ---------------------");
-			String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
-			target = doc.select(selectMonthDeparture).get(0);
-			System.out.println("target text: " + target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-
-			System.out.println("--------------------- day return ---------------------");
-			String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
-			target = doc.select(selectDayReturn).get(0);
-			System.out.println("target text: " + target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-
-			System.out.println("--------------------- month departure ---------------------");
-			String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
-			target = doc.select(selectMonthReturn).get(0);
-			System.out.println("target text: " + target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-		} catch (IOException e) {
-			System.out.println("parse exeception ...");
-			e.printStackTrace();
-		}
+	public Map<String, ArrayList<String>> parseTimeByFileWithUrl(String filePath, String baseUrl) {
+		String html = this.readHtmlFromFile(filePath);
+		return this.parseTimeWithUrl(html, baseUrl);
 	}
 
 	/**
@@ -141,326 +219,98 @@ public class ParseUtil {
 	 * @param filePath
 	 *            本地html文件路径
 	 */
-	public void parseTimeByFile(String filePath) {
-		if (filePath == null || filePath.equals("")) {
-			System.out.println("no such file ...");
-			return;
-		}
+	public Map<String, ArrayList<String>> parseTimeByFile(String filePath) {
+		String html = this.readHtmlFromFile(filePath);
+		return this.parseTime(html);
+	}
 
-		File file = new File(filePath);
+	/**
+	 * 由html string解析航班信息
+	 * @param html html字符串
+	 * @return	
+	 */
+	public ArrayList<Map<String, String>> parseFlight(String html) {
+		ArrayList<Map<String, String>> flightList = new ArrayList<Map<String, String>>();
+		if (html == null || html.equals(""))
+			return flightList;
+
 		Document doc = null;
-		try {
-			doc = Jsoup.parse(file, "utf-8");
-			String prefix = "select#";
-
-			System.out.println("--------------------- day departure ---------------------");
-			String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
-			Element target = doc.select(selectDayDeparture).get(0);
-			System.out.println("target text: " + target.text());
-			Elements options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-
-			System.out.println("--------------------- month departure ---------------------");
-			String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
-			target = doc.select(selectMonthDeparture).get(0);
-			System.out.println("target text: " + target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-
-			System.out.println("--------------------- day return ---------------------");
-			String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
-			target = doc.select(selectDayReturn).get(0);
-			System.out.println("target text: " + target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-
-			System.out.println("--------------------- month departure ---------------------");
-			String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
-			target = doc.select(selectMonthReturn).get(0);
-			System.out.println("target text: " + target.text());
-			options = target.select("option");
-			System.out.println("options count: " + options.size());
-			for (Element option : options) {
-				System.out.print("\"" + option.text() + "\", ");
-			}
-			System.out.println();
-		} catch (IOException e) {
-			System.out.println("parse exeception ...");
-			e.printStackTrace();
-		}
+		doc = Jsoup.parse(html); // 文件解析
+		return this.parseFlightByDoc(doc);
 	}
 
-	public void savePostResponseHtml(String postUrl, String savePath) {
-		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-		formParams.add(new BasicNameValuePair("__EVENTTARGET", ""));
-		formParams.add(new BasicNameValuePair("__EVENTARGUMENT", ""));
-		formParams.add(new BasicNameValuePair("__VIEWSTATE", "/wEPDwUBMGRkZ0I3jKvfnhKfx57f3Wjr7p2WhvU="));
-		formParams.add(new BasicNameValuePair("pageToken", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$RadioButtonMarketStructure", "OneWay"));
-		formParams.add(new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation1",
-				"HKG"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketOrigin1", "HKG"));
-		formParams.add(new BasicNameValuePair("name_originStationContainercategory", "HongKong (HKG)"));
-		formParams.add(new BasicNameValuePair("originStationContainercategory", "HKG"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation1", "MNL"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketDestination1", "MNL"));
-		formParams.add(new BasicNameValuePair("name_destinationStationContainercategory", "Manila (MNL)"));
-		formParams.add(new BasicNameValuePair("destinationStationContainercategory", "MNL"));
-		formParams.add(new BasicNameValuePair("date_picker_1", "2016-06-20"));
-		formParams.add(new BasicNameValuePair("date_picker_1_AccCalendar", "2016-06-20"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay1", "20"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth1", "2016-06"));
-		formParams.add(
-				new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation2", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketOrigin2", ""));
-		formParams.add(new BasicNameValuePair("name_originStationContainercategory", "From"));
-		formParams.add(new BasicNameValuePair("originStationContainercategory", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation2", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketDestination2", ""));
-		formParams.add(new BasicNameValuePair("name_destinationStationContainercategory", "To"));
-		formParams.add(new BasicNameValuePair("destinationStationContainercategory", ""));
-		formParams.add(new BasicNameValuePair("date_picker_2", "2016-06-20"));
-		formParams.add(new BasicNameValuePair("date_picker_2_AccCalendar", "2016-06-20"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay2", "20"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2", "2016-06"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", "1"));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_CHD", "0"));
-		formParams.add(
-				new BasicNameValuePair("ControlGroupSearchView$AvailabilitySearchInputSearchView$promoCodeID", ""));
-		formParams.add(new BasicNameValuePair("ControlGroupSearchView$AvailabilitySearchInputSearchView$ButtonSubmit",
-				"FIND IT!"));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$TextBoxUserID", "EMAIL"));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$PasswordFieldPassword", ""));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxConfirmation", ""));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxHiddenUsername", ""));
+	/**
+	 * 从html string 获取航班信息
+	 * 提供String来源的url，解析路径相关信息
+	 * @param html
+	 * @param baseUrl
+	 * @return
+	 */
+	public ArrayList<Map<String, String>> parseFlightWithUrl(String html, String baseUrl) {
+		ArrayList<Map<String, String>> flightList = new ArrayList<Map<String, String>>();
+		if (html == null || html.equals(""))
+			return flightList;
 
-		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams, Consts.UTF_8);
-
-		HttpPost httpPost = new HttpPost(postUrl);
-		httpPost.setHeader("Host", "book.cebupacificair.com");
-		httpPost.setHeader("User-agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.7 Safari/537.36");
-		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		httpPost.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
-		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
-		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-		httpPost.setHeader("Referer", "https://book.cebupacificair.com/Search.aspx?culture=en-us");
-
-		httpPost.setEntity(formEntity);
-
-		/*
-		 * try { System.out.println(
-		 * "--------------------------------- executing request entity ------------------------------------"
-		 * );
-		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
-		 * ().getContent())); } catch (UnsupportedOperationException |
-		 * IOException e1) { e1.printStackTrace(); }
-		 * 
-		 * System.out.println(
-		 * "--------------------------------- request headers ------------------------------------"
-		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
-		 * headers1) System.out.println(header1.getName() + " : " +
-		 * header1.getValue());
-		 */
-
-		CloseableHttpClient httpClient = null;
-		CloseableHttpResponse response = null;
-
-		try {
-			// 处理post之后的重定向
-			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-			response = httpClient.execute(httpPost);
-
-			/*
-			 * System.out.println(crawlerUtil.getStrByInputStream(response.
-			 * getEntity().getContent()));
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response headers ------------------------------------"
-			 * ); Header[] headers = response.getAllHeaders(); for(Header header
-			 * : headers) System.out.println(header.getName() + " : " +
-			 * header.getValue());
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response header location ------------------------------------"
-			 * ); Header[] locationHeaders = response.getHeaders("Location");
-			 * System.out.println("location header length : " +
-			 * locationHeaders.length); if(locationHeaders.length == 0)
-			 * System.out.println("header location length is 0 ..."); else
-			 * System.out.println(locationHeaders[0].getName() + " : " +
-			 * locationHeaders[0].getValue());
-			 * 
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response string ------------------------------------"
-			 * ); System.out.println(response.toString());
-			 */
-
-			System.out.println("response code : " + response.getStatusLine().getStatusCode());
-			crawlerUtil.saveHtmlByHttpResponse(response, savePath);
-
-		} catch (Exception e) {
-			System.out.println("访问[ " + postUrl + " ]出现异常!");
-			e.printStackTrace();
-		} finally {
-			crawlerUtil.free(response, httpClient);
-		}
+		Document doc = null;
+		doc = Jsoup.parse(html, baseUrl); // 文件解析
+		return this.parseFlightByDoc(doc);
 	}
 
-	
-	
-	public void savePostResponseHtmlByParams(String postUrl, String savePath) {
-		FormParams formParams = new FormParams();
-		formParams.setTravelOption(TravelOption.OneWay)
-			.setOrgStation(OrgStation.HKG)
-			.setDestStation(DestStation.MNL)
-			.setDepartureTime("2016-06-20")
-			.setAdultNum(1)
-			.setChildNum(0)
-			.build();
+	/**
+	 * 由doc解析航班信息
+	 * @param doc doc对象
+	 * @return 航班列表，每个航班是一个map，包含键值对属性信息
+	 */
+	private ArrayList<Map<String, String>> parseFlightByDoc(Document doc) {
+		ArrayList<Map<String, String>> flightList = new ArrayList<Map<String, String>>();
+		if (doc == null)
+			return flightList;
 		
+		// 定位到table
+		String selectTable = "table#availabilityTable";
+		Element table = doc.select(selectTable).get(0);
 
-		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+		// 表头
+		Elements tHead = table.select("thead>tr");
+		for (Element headName : tHead)
+			System.out.print(headName.text());
+		System.out.println();
 
-		HttpPost httpPost = new HttpPost(postUrl);
-		httpPost.setHeader("Host", "book.cebupacificair.com");
-		httpPost.setHeader("User-agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.7 Safari/537.36");
-		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-		httpPost.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
-		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
-		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-		httpPost.setHeader("Referer", "https://book.cebupacificair.com/Search.aspx?culture=en-us");
+		// 航班，每一个航班信息存放在tr中
+		Elements trs = table.select("tbody>tr");
 
-		httpPost.setEntity(formEntity);
-
-		/*
-		 * try { System.out.println(
-		 * "--------------------------------- executing request entity ------------------------------------"
-		 * );
-		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
-		 * ().getContent())); } catch (UnsupportedOperationException |
-		 * IOException e1) { e1.printStackTrace(); }
-		 * 
-		 * System.out.println(
-		 * "--------------------------------- request headers ------------------------------------"
-		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
-		 * headers1) System.out.println(header1.getName() + " : " +
-		 * header1.getValue());
-		 */
-
-		CloseableHttpClient httpClient = null;
-		CloseableHttpResponse response = null;
-
-		try {
-			// 处理post之后的重定向
-			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-			response = httpClient.execute(httpPost);
-
-			/*
-			 * System.out.println(crawlerUtil.getStrByInputStream(response.
-			 * getEntity().getContent()));
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response headers ------------------------------------"
-			 * ); Header[] headers = response.getAllHeaders(); for(Header header
-			 * : headers) System.out.println(header.getName() + " : " +
-			 * header.getValue());
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response header location ------------------------------------"
-			 * ); Header[] locationHeaders = response.getHeaders("Location");
-			 * System.out.println("location header length : " +
-			 * locationHeaders.length); if(locationHeaders.length == 0)
-			 * System.out.println("header location length is 0 ..."); else
-			 * System.out.println(locationHeaders[0].getName() + " : " +
-			 * locationHeaders[0].getValue());
-			 * 
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response string ------------------------------------"
-			 * ); System.out.println(response.toString());
-			 */
-
-			System.out.println("response code : " + response.getStatusLine().getStatusCode());
-			crawlerUtil.saveHtmlByHttpResponse(response, savePath);
-
-		} catch (Exception e) {
-			System.out.println("访问[ " + postUrl + " ]出现异常!");
-			e.printStackTrace();
-		} finally {
-			crawlerUtil.free(response, httpClient);
+		for (Element tr : trs) {
+			//System.out.println("---------------------------------------------" + (++i));
+			Map<String, String> mapFlightInfo = this.parseFlightInfoInTr(tr); // 解析单个tr中的航班
+			flightList.add(mapFlightInfo); // 打印航班map信息
 		}
+		return flightList;
 	}
 
-	
 	/**
 	 * 从html文件中解析航班信息
 	 * 
 	 * @param filePath
 	 *            文件本地路径
 	 */
-	public void parseFlightByFile(String filePath) {
-		if (filePath == null || filePath.equals("")) {
-			System.out.println("no such file ...");
-			return;
-		}
-
-		File file = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(file, "utf-8"); // 文件解析
-
-			// 定位到table
-			String selectTable = "table#availabilityTable";
-			Element table = doc.select(selectTable).get(0);
-
-			// 表头
-			Elements tHead = table.select("thead>tr");
-			for (Element headName : tHead)
-				System.out.print(headName.text());
-			System.out.println();
-
-			// 航班，每一个航班信息存放在tr中
-			Elements trs = table.select("tbody>tr");
-			// System.out.println("tr count: " + trs.size());
-
-			int i = 0;
-			for (Element tr : trs) {
-				System.out.println("---------------------------------------------" + (++i));
-				Map<String, String> mapFlightInfo = this.parseFlightInfoInTr(tr); // 解析单个tr中的航班
-				this.printMap(mapFlightInfo); // 打印航班map信息
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public ArrayList<Map<String, String>> parseFlightByFile(String filePath) {
+		String html = this.readHtmlFromFile(filePath);
+		return this.parseFlight(html);
 	}
-
+	
+	/**
+	 * 从本地文件解析航班信息
+	 * 提供文件来源的url，解析路径相关信息
+	 * @param filePath	本地文件路径
+	 * @param baseUrl	来源url
+	 * @return
+	 */
+	public ArrayList<Map<String, String>> parseFlightByFileWithUrl(String filePath, String baseUrl) {
+		String html = this.readHtmlFromFile(filePath);
+		return this.parseFlightWithUrl(html, baseUrl);
+	}
+		
+		
 	/**
 	 * 打印map容器信息
 	 * 
@@ -469,36 +319,36 @@ public class ParseUtil {
 	public void printMap(Map<String, String> map) {
 		for (Map.Entry<String, String> entry : map.entrySet())
 			System.out.println(entry.getKey() + " : " + entry.getValue());
-		
+
 		System.out.println("--------------------");
 		int i = 0;
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			System.out.print(entry.getKey() + ", ");
-			if(++i == 10) {
+			if (++i == 10) {
 				i = 0;
 				System.out.println();
 			}
-				
+
 		}
-		
+
 		System.out.println("--------------------");
 		i = 0;
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			System.out.print(entry.getValue() + ", ");
-			if(++i == 10) {
+			if (++i == 10) {
 				i = 0;
 				System.out.println();
 			}
-				
+
 		}
-			
+
 	}
 
 	/**
 	 * 解析每一个tr中的航班信息
 	 * 
 	 * @param tr
-	 * @return
+	 * @return 每一个航班是一个map，包含对应的键值对属性信息
 	 */
 	private Map<String, String> parseFlightInfoInTr(Element tr) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
@@ -514,11 +364,8 @@ public class ParseUtil {
 		Element tdDetails = tr.select("td.footnote").get(0);
 		String flightCompany = tdDetails.select("Strong").get(0).text();
 		String flightNumber = tdDetails.select("span.flightInfoLink").get(0).text();
-		// System.out.println("flight company: " + flightCompany);
-		// System.out.println("flight number: " + flightNumber);
 		String flight = flightCompany + " " + flightNumber;
 		String flightDetails = tdDetails.select("p.pAirportName").get(0).text();
-		// System.out.println("flight details: " + flightDetails);
 
 		// fly 价格、详细信息
 		Element tdFareFly = tr.select("td.fareBundle").get(0);
@@ -568,8 +415,10 @@ public class ParseUtil {
 	 */
 	private String[] parseFareTd(Element td) {
 		/**
-		 * 数组中分别存放 String flyPriceHidden = ""; // 隐藏价格 String
-		 * flyPriceHiddenDetails = ""; // 隐藏细节 String flyPrice = ""; // 显示价格
+		 * 数组中分别存放
+		 * String flyPriceHidden = ""; // 隐藏价格 String
+		 * flyPriceHiddenDetails = ""; // 隐藏细节 
+		 * String flyPrice = ""; // 显示价格
 		 * String flyPriceDetails = ""; // 显示细节
 		 */
 		String[] strings = { "", "", "", "" };
@@ -594,57 +443,80 @@ public class ParseUtil {
 		}
 		return strings;
 	}
+
+	/**
+	 * 从html string获取站点信息，起始和终点站点列表完全一样
+	 * @param html
+	 *            html字符串
+	 * @return
+	 */
+	public Map<String, String> parseStation(String html) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		if (html == null || html.equals(""))
+			return map;
+
+		Document doc = Jsoup.parse(html);;
+		return this.parseStationByDoc(doc);
+	}
+
+
+	/**
+	 * 由Doc解析Station信息
+	 * @param doc	Document对象
+	 * @return map对象，Station的缩写和全称
+	 */
+	private Map<String, String> parseStationByDoc(Document doc) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		// 定位到站点div
+		Element cityPairDiv = doc.select("div#marketCityPair_1").get(0);
+		Elements options = cityPairDiv.select("option");
+		for (Element option : options) {
+			String key = option.val();
+			String value = option.text();
+			if (!key.equals("") && !value.equals("")) // 去除空串
+				map.put(key, value);
+		}
+		return map;
+	}
 	
+	/**
+	 * 从html string获取站点信息，起始和终点站点列表完全一样
+	 * 提供String来源的url，解析路径相关信息
+	 * @param html
+	 * @param baseUrl
+	 * @return
+	 */
+	public Map<String, String> parseStationWithUrl(String html, String baseUrl) { 
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		if (html == null || html.equals(""))
+			return map;
+
+		Document doc = null;
+		doc = Jsoup.parse(html, baseUrl);
+		return this.parseStationByDoc(doc);
+		
+	}
+
 	/**
 	 * 获取站点信息，起始和终点站点列表完全一样
 	 * @param filePath
 	 * @return
 	 */
 	public Map<String, String> parseStationsByFile(String filePath) {
-		Map<String, String> map = new LinkedHashMap<String, String>();
-		if (filePath == null || filePath.equals("")) {
-			System.out.println("no such file ...");
-			return map;
-		}
-		
-		System.out.println(filePath);
-		File file = new File(filePath);
-		Document doc = null;
-		try {
-			doc = Jsoup.parse(file, "utf-8");
-			// 定位到站点div
-			Element cityPairDiv = doc.select("div#marketCityPair_1").get(0);
-			Elements options = cityPairDiv.select("option");
-			for(Element option : options) {
-				String key = option.val();
-				String value = option.text();
-				if (!key.equals("") && !value.equals("")) 	// 去除空串
-					map.put(key, value);
-			}
-		} catch (IOException e) {
-			System.out.println("parse exeception ...");
-			e.printStackTrace();
-		}
-		return map;
+		String html = this.readHtmlFromFile(filePath);
+		return this.parseStation(html);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 获取站点信息，起始和终点站点列表完全一样
+	 * 提供String来源的url，解析路径相关信息
+	 * @param filePath
+	 * @param baseUrl
+	 * @return
+	 */
+	public Map<String, String> parseStationsByFileWithUrl(String filePath, String baseUrl) {
+		String html = this.readHtmlFromFile(filePath);
+		return this.parseStationWithUrl(html, baseUrl);
+	}
 
 }

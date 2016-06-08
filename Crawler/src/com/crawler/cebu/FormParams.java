@@ -169,9 +169,9 @@ public class FormParams {
 		formParams.add(new BasicNameValuePair("date_picker_2", returnTime));
 		formParams.add(new BasicNameValuePair("date_picker_2_AccCalendar", returnTime));
 		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay2", returnTime_Day));
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay2", returnTime_Day));	// return time day
 		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2", returnTime_YearMonth));
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2", returnTime_YearMonth));	// return time year, month
 		formParams.add(new BasicNameValuePair(
 				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", adultNum));
 		formParams.add(new BasicNameValuePair(
