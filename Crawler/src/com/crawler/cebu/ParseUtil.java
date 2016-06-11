@@ -274,11 +274,14 @@ public class ParseUtil {
 		Element table = doc.select(selectTable).get(0);
 
 		// 表头
+		StringBuffer sb = new StringBuffer(80);
 		Elements tHead = table.select("thead>tr");
 		for (Element headName : tHead)
-			System.out.print(headName.text());
-		System.out.println();
-
+			sb.append(headName.text());
+		Map<String, String> mapTableHead = new LinkedHashMap<String, String>();
+		mapTableHead.put(FormUtil.TableHead, sb.toString());
+		flightList.add(mapTableHead);
+		
 		// 航班，每一个航班信息存放在tr中
 		Elements trs = table.select("tbody>tr");
 
@@ -491,7 +494,7 @@ public class ParseUtil {
 		for (int i = 0; i < tdFareFlyDivs.size(); i++) {
 			// 价格
 			tmpFlyPrice = tdFareFlyDivs.get(i).select("span.ADTprice").get(0).text();
-			strings[0 + i] = tmpFlyPrice;
+			strings[0 + i * 2] = tmpFlyPrice;
 
 			// 细节信息
 			Elements lis = tdFareFlyDivs.get(i).select("li");
@@ -499,7 +502,7 @@ public class ParseUtil {
 			for (int j = 0; j < 7; j++) // 只需要前7个li标签的信息
 				sb.append(lis.get(j).text() + " ");
 			tmpFlyPriceDetails = sb.toString();
-			strings[1 + i] = tmpFlyPriceDetails;
+			strings[1 + i * 2] = tmpFlyPriceDetails;
 		}
 		return strings;
 	}

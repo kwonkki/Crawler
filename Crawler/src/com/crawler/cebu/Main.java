@@ -69,18 +69,18 @@ public class Main {
 		System.out.println("---------------------- url ---------------------");
 		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams);
 		ArrayList<Map<String, String>> flightList = parseUtil.parseFlight(html);
-		System.out.println(flightList);
+		MyUtil.printFlightInfo(flightList);
 		
 		System.out.println("---------------------- file ---------------------");
 		flightList = parseUtil.parseFlightByFile(SAVE_PATH_Response);
-		System.out.println(flightList);
+		MyUtil.printFlightInfo(flightList);
 	}
 	
 	// 获取航班信息
 	// 往返
 	@Test
 	public void getFlightInfoRound() {
-		// 构建表单变量
+/*		// 构建表单变量
 		FormParams formParams = new FormParams();
 		formParams.setTravelOption(TravelOption.RoundTrip)
 			.setOrgStation(OrgStation.HKG)
@@ -94,10 +94,12 @@ public class Main {
 		System.out.println("---------------------- url ---------------------");
 		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams);
 		ArrayList<Map<String, String>> flightList = parseUtil.parseFlight(html);
-		System.out.println(flightList);
+		MyUtil.printFlightInfo(flightList);*/
 		
 		System.out.println("---------------------- file ---------------------");
-		flightList = parseUtil.parseFlightByFile(SAVE_PATH_Response);
-		System.out.println(flightList);
+		ArrayList<Map<String, String>> flightList = parseUtil.parseFlightByFile(SAVE_PATH_Response);
+		MyUtil.printFlightInfo(flightList);
 	}
+	
+
 }

@@ -50,6 +50,7 @@ public class FormUtil {
 	
 	
 	/*********************** 航班相关常量字符串 *********************************/
+	public static final String TableHead = "TableHead";
 	public static final String From = "From";
 	public static final String To = "To";
 	public static final String Flight = "Flight";
