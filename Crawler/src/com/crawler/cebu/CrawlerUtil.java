@@ -8,16 +8,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -210,7 +219,15 @@ public class CrawlerUtil {
 	}
 	
 	// 测试函数，固定参数
-	public void savePostResponseHtml(String postUrl, String savePath) {
+	/**
+	 * @param postUrl
+	 * @param savePath
+	 */
+	/**
+	 * @param postUrl
+	 * @param savePath
+	 */
+	public void savePostResponseHtmlConst(String postUrl, String savePath) {
 		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
 		formParams.add(new BasicNameValuePair("__EVENTTARGET", ""));
 		formParams.add(new BasicNameValuePair("__EVENTARGUMENT", ""));
@@ -255,7 +272,7 @@ public class CrawlerUtil {
 		formParams.add(new BasicNameValuePair(
 				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2", "2016-06"));
 		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", "1"));
+				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", "2"));
 		formParams.add(new BasicNameValuePair(
 				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_CHD", "0"));
 		formParams.add(
@@ -273,57 +290,25 @@ public class CrawlerUtil {
 		this.setHttpPostHeader(httpPost);
 		httpPost.setEntity(formEntity);
 
-		/*
-		 * try { System.out.println(
-		 * "--------------------------------- executing request entity ------------------------------------"
-		 * );
-		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
-		 * ().getContent())); } catch (UnsupportedOperationException |
-		 * IOException e1) { e1.printStackTrace(); }
-		 * 
-		 * System.out.println(
-		 * "--------------------------------- request headers ------------------------------------"
-		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
-		 * headers1) System.out.println(header1.getName() + " : " +
-		 * header1.getValue());
-		 */
-
 		CloseableHttpClient httpClient = null;
 		CloseableHttpResponse response = null;
 
 		try {
 			// 处理post之后的重定向
 			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-			response = httpClient.execute(httpPost);
-
+			
+			HttpClientContext context = HttpClientContext.create();
+			response = httpClient.execute(httpPost, context);
+			CookieStore cookieStore = context.getCookieStore();
 			/*
-			 * System.out.println(crawlerUtil.getStrByInputStream(response.
-			 * getEntity().getContent()));
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response headers ------------------------------------"
-			 * ); Header[] headers = response.getAllHeaders(); for(Header header
-			 * : headers) System.out.println(header.getName() + " : " +
-			 * header.getValue());
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response header location ------------------------------------"
-			 * ); Header[] locationHeaders = response.getHeaders("Location");
-			 * System.out.println("location header length : " +
-			 * locationHeaders.length); if(locationHeaders.length == 0)
-			 * System.out.println("header location length is 0 ..."); else
-			 * System.out.println(locationHeaders[0].getName() + " : " +
-			 * locationHeaders[0].getValue());
-			 * 
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response string ------------------------------------"
-			 * ); System.out.println(response.toString());
-			 */
-
-			System.out.println("response code : " + response.getStatusLine().getStatusCode());
+			List<Cookie> cookies = cookieStore.getCookies();
+			for(Cookie cookie : cookies) {
+				System.out.println(cookie.getName() + "=" + cookie.getValue());
+			}*/
 			this.saveHtmlByResponse(response, savePath);
-
+			
+			String radioValue = "0~Z~~ZRP~6020~~1~X|5J~ 109~ ~~HKG~06/20/2016 08:25~MNL~06/20/2016 10:35~";
+			this.saveHtmlByRadio(cookieStore, radioValue, savePath.replace(".html", "_getUri.html"));
 		} catch (Exception e) {
 			System.out.println("访问[ " + postUrl + " ]出现异常!");
 			e.printStackTrace();
@@ -332,6 +317,89 @@ public class CrawlerUtil {
 		}
 	}
 
+	
+	/**
+	 * 根据radio选项获取对应的动态生成的html，不许传递cookie记录会话状态
+	 * @param cookieStore	传递CookieStore
+	 * @param radioValue radio的value值
+	 * @return 返回get方法调用后的response的html字符串
+	 */
+	public String getHtmlByRadio(CookieStore cookieStore, String radioValue) {
+		// 设置参数
+		List<NameValuePair> getParams = new ArrayList<NameValuePair>();
+		getParams.add(new BasicNameValuePair("flightKeys", radioValue));
+		getParams.add(new BasicNameValuePair("fMarkets", "1"));
+		getParams.add(new BasicNameValuePair("keyDelimeter", ","));
+		// 构建uri
+		URIBuilder uriBuilder = new URIBuilder();
+		uriBuilder.setScheme("https")
+			.setHost("book.cebupacificair.com")
+			.setPath("/TaxAndFeeInclusiveDisplayAjax-resource.aspx")
+			.setParameters(getParams)
+			.setCharset(Consts.UTF_8);
+		
+		URI uri = null;;
+		String html = "";
+		try {
+			uri = uriBuilder.build();
+		} catch (URISyntaxException e1) {
+			e1.printStackTrace();
+		}
+		HttpGet httpGet = new HttpGet(uri);
+		this.setHttpGetHeader(httpGet);		// 设置请求头
+		
+		// 自定义httpclient，设置cookieStore
+		CloseableHttpClient httpClientWithCookie = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+		CloseableHttpResponse response = null;
+		try {
+			response = httpClientWithCookie.execute(httpGet);
+			html = this.getHtmlByResponse(response);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return html;
+	}
+	
+	
+	/**
+	 * 保存根据radio选项获取对应的动态生成的html到本地文件，需要传递cookie记录会话状态
+	 * @param cookieStore	传递CookieStore
+	 * @param radioValue radio的value值
+	 */
+	public void saveHtmlByRadio(CookieStore cookieStore, String radioValue, String savePath) {
+		// 设置参数
+		List<NameValuePair> getParams = new ArrayList<NameValuePair>();
+		getParams.add(new BasicNameValuePair("flightKeys", radioValue));
+		getParams.add(new BasicNameValuePair("fMarkets", "1"));
+		getParams.add(new BasicNameValuePair("keyDelimeter", ","));
+		// 构建uri
+		URIBuilder uriBuilder = new URIBuilder();
+		uriBuilder.setScheme("https")
+			.setHost("book.cebupacificair.com")
+			.setPath("/TaxAndFeeInclusiveDisplayAjax-resource.aspx")
+			.setParameters(getParams)
+			.setCharset(Consts.UTF_8);
+		
+		URI uri = null;;
+		try {
+			uri = uriBuilder.build();
+		} catch (URISyntaxException e1) {
+			e1.printStackTrace();
+		}
+		HttpGet httpGet = new HttpGet(uri);
+		this.setHttpGetHeader(httpGet);		// 设置请求头
+		
+		// 自定义httpclient，设置cookieStore
+		CloseableHttpClient httpClientWithCookie = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+		CloseableHttpResponse response = null;
+		try {
+			response = httpClientWithCookie.execute(httpGet);
+			this.saveHtmlByResponse(response, savePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 设置HttpPost的请求头信息
 	 */
@@ -344,6 +412,20 @@ public class CrawlerUtil {
 		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
 		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
 		httpPost.setHeader("Referer", "https://book.cebupacificair.com/Search.aspx?culture=en-us");
+	}
+	
+	/**
+	 * 设置HttpGet的请求头信息
+	 */
+	private void setHttpGetHeader(HttpGet httpGet) {
+		httpGet.setHeader("Host", "book.cebupacificair.com");
+		httpGet.setHeader("User-agent",
+				"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
+		httpGet.setHeader("Accept", "*/*");
+		httpGet.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3");
+		httpGet.setHeader("Accept-Encoding", "gzip, deflate, br");
+		httpGet.setHeader("X-Requested-With", "XMLHttpRequest");
+		httpGet.setHeader("Referer", "https://book.cebupacificair.com/Select.aspx");
 	}
 	
 	/**
@@ -361,21 +443,6 @@ public class CrawlerUtil {
 		// 设置实体
 		httpPost.setEntity(formEntity);
 
-		/*
-		 * try { System.out.println(
-		 * "--------------------------------- executing request entity ------------------------------------"
-		 * );
-		 * System.out.println(crawlerUtil.getStrByInputStream(httpPost.getEntity
-		 * ().getContent())); } catch (UnsupportedOperationException |
-		 * IOException e1) { e1.printStackTrace(); }
-		 * 
-		 * System.out.println(
-		 * "--------------------------------- request headers ------------------------------------"
-		 * ); Header[] headers1 = httpPost.getAllHeaders(); for(Header header1 :
-		 * headers1) System.out.println(header1.getName() + " : " +
-		 * header1.getValue());
-		 */
-
 		CloseableHttpClient httpClient = null;
 		CloseableHttpResponse response = null;
 
@@ -383,31 +450,6 @@ public class CrawlerUtil {
 			// 处理post之后的重定向
 			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
 			response = httpClient.execute(httpPost);
-
-			/*
-			 * System.out.println(crawlerUtil.getStrByInputStream(response.
-			 * getEntity().getContent()));
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response headers ------------------------------------"
-			 * ); Header[] headers = response.getAllHeaders(); for(Header header
-			 * : headers) System.out.println(header.getName() + " : " +
-			 * header.getValue());
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response header location ------------------------------------"
-			 * ); Header[] locationHeaders = response.getHeaders("Location");
-			 * System.out.println("location header length : " +
-			 * locationHeaders.length); if(locationHeaders.length == 0)
-			 * System.out.println("header location length is 0 ..."); else
-			 * System.out.println(locationHeaders[0].getName() + " : " +
-			 * locationHeaders[0].getValue());
-			 * 
-			 * 
-			 * System.out.println(
-			 * "--------------------------------- response string ------------------------------------"
-			 * ); System.out.println(response.toString());
-			 */
 
 			System.out.println("response code : " + response.getStatusLine().getStatusCode());	// 状态码
 			this.saveHtmlByResponse(response, savePath);	// 保存到本地文件
@@ -420,7 +462,7 @@ public class CrawlerUtil {
 	}
 
 	/**
-	 * 保存post提交之后重定向的网页到本地文件
+	 * 获取post提交之后重定向的网页字符串
 	 * @param postUrl	post提交url
 	 * @param formParams	post表单参数
 	 */
@@ -451,13 +493,46 @@ public class CrawlerUtil {
 		}
 		return html;
 	}
+	
+	/**
+	 * 获取post提交之后重定向的网页字符串，传出CookieStore参数
+	 * @param postUrl	提交post的url
+	 * @param formParams	表单变量
+	 * @param cookieStores	传出CokieStore数组，数组传址方式
+	 * @return
+	 */
+	public String getPostResponseHtmlByParams(String postUrl, FormParams formParams, CookieStore[] cookieStores) {
+		// 获取FormParams中的参数
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+		// 设置HttpPost文件头
+		HttpPost httpPost = new HttpPost(postUrl);
+		this.setHttpPostHeader(httpPost);
+		// 设置实体
+		httpPost.setEntity(formEntity);
 
-	
-	
-	
-	
-	
-	
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+		String html = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			HttpClientContext context = HttpClientContext.create();
+			response = httpClient.execute(httpPost, context);
+			
+			// 设置cookie
+			cookieStores[0] = context.getCookieStore();
+			
+			// 获取response中的信息
+			html = this.getHtmlByResponse(response);
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			this.free(response, httpClient);
+		}
+		return html;
+	}
 
 	/**
 	 * 释放资源

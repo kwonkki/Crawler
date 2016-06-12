@@ -42,6 +42,15 @@ public class ParseUtilTest {
 		System.out.println("done");
 	}
 	
+	
+	@Test
+	public void test_parseFlightByRadioValue() {
+		String radioValue = "0~Z~~ZRP~6020~~1~X|5J~ 109~ ~~HKG~06/20/2016 08:25~MNL~06/20/2016 10:35~";
+		parseUtil.parseFlightByRadioValue(radioValue);
+		System.out.println("done"); 
+		
+		
+	}
 
 	
 }

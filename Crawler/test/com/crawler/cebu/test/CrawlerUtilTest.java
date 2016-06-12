@@ -1,6 +1,11 @@
 package com.crawler.cebu.test;
 
 
+import java.util.List;
+
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.cookie.Cookie;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,9 +48,11 @@ public class CrawlerUtilTest {
 	
 	@Test
 	public void test_savePostResponseHtml() {
-		crawlerUtil.savePostResponseHtml(PostUrl, SAVE_PATH_Response);
+		crawlerUtil.savePostResponseHtmlConst(PostUrl, SAVE_PATH_Response);
 		System.out.println("done");
 	}
+	
+	
 	
 	@Test
 	public void test_savePostResponseHtmlByParams() {
@@ -59,6 +66,15 @@ public class CrawlerUtilTest {
 			.setChildNum(0)
 			.build();
 		crawlerUtil.savePostResponseHtmlByParams(PostUrl, formParams, SAVE_PATH_Response_Params);
+		
+		HttpClientContext context = HttpClientContext.create();
+		CookieStore[] cookieStores = {context.getCookieStore()};
+		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams, cookieStores);
+		List<Cookie> cookies = cookieStores[0].getCookies();
+		for(Cookie cookie : cookies) {
+			System.out.println(cookie.getName() + "=" + cookie.getValue());
+		}
+		System.out.println(html);
 		System.out.println("done");
 	}
 	

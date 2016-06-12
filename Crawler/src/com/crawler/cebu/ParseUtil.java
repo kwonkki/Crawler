@@ -581,5 +581,74 @@ public class ParseUtil {
 		String html = this.readHtmlFromFile(filePath);
 		return this.parseStationWithUrl(html, baseUrl);
 	}
+	
+	
+	/**
+	 * 解析航班查询页面中的航班radio的value值，忽略需要转机的航班
+	 * @param html 查询结果页面html
+	 * @return radio value list
+	 */
+	public ArrayList<String> parseFlightRadioValues(String html) {
+		ArrayList<String> radioValueList = new ArrayList<String>(5);
+		if (html == null || html.equals(""))
+			return radioValueList;
+
+		Document doc = null;
+		doc = Jsoup.parse(html); // 文件解析
+		
+		// 定位到table
+		String selectTable = "table#availabilityTable";
+		Element table = doc.select(selectTable).get(0);
+
+		// 航班，每一个航班信息存放在tr中
+		Elements trs = table.select("tbody>tr");
+
+		for (Element tr : trs) {
+			String radioValue = this.parseRadioValueInTr(tr);
+			if(radioValue != null && !radioValue.equals(""))
+				radioValueList.add(radioValue);
+		}
+		return radioValueList;
+	}
+	
+	
+	/**
+	 * 解析tr元素中的radio的value值
+	 * @param tr
+	 * @return 
+	 */
+	private String parseRadioValueInTr(Element tr) {
+		if (tr == null)
+			return null;
+		Elements tds = tr.select("td");
+		
+		// 存在两个td，则出现换乘转机
+		boolean isTransferHappen = (tds.get(0).select(">b").size() > 1) ? true : false;
+		
+		// 忽略换乘的情况
+		if (isTransferHappen) 
+			return "";
+		
+		// radio元素的value值
+		Element tdFareFly = tr.select(">td.fareBundle").first()
+				.select(">div.radioButtonFareContainer").last()
+				.select(">input").first();
+		return tdFareFly.attr("value");
+	}
+	
+	
+	public void parseFlightByRadioValue(String radioValue) {
+		// 0~Z~~ZRP~6020~~1~X|5J~ 109~ ~~HKG~06/20/2016 08:25~MNL~06/20/2016 10:35~
+		String rgxCarrier = "|.+~";
+		Pattern pattern = Pattern.compile(rgxCarrier);
+		Matcher matcher = pattern.matcher(radioValue);
+		while(matcher.find()) {
+			System.out.println(matcher.group(0));
+		}
+	}
+	
+	
+	
+	
 
 }

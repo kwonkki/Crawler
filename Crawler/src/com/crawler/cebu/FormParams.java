@@ -19,7 +19,7 @@ public class FormParams {
 	private DestStation destStation;
 	private String departureTime;
 	private String returnTime = "";
-	private String adultNum = "1";
+	private String adultNum = "2";
 	private String childNum = "0";
 	
 	private List<NameValuePair> formParams;
