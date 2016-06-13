@@ -62,7 +62,7 @@ public class CrawlerUtilTest {
 			.setOrgStation(OrgStation.HKG)
 			.setDestStation(DestStation.MNL)
 			.setDepartureTime("2016-06-20")
-			.setAdultNum(1)
+			.setAdultNum(2)
 			.setChildNum(0)
 			.build();
 		crawlerUtil.savePostResponseHtmlByParams(PostUrl, formParams, SAVE_PATH_Response_Params);
@@ -86,7 +86,7 @@ public class CrawlerUtilTest {
 			.setOrgStation(OrgStation.HKG)
 			.setDestStation(DestStation.MNL)
 			.setDepartureTime("2016-06-25")
-			.setAdultNum(1)
+			.setAdultNum(2)
 			.setChildNum(0)
 			.build();
 		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams);

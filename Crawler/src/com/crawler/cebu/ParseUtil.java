@@ -237,8 +237,7 @@ public class ParseUtil {
 		if (html == null || html.equals(""))
 			return flightList;
 
-		Document doc = null;
-		doc = Jsoup.parse(html); // 文件解析
+		Document doc = Jsoup.parse(html); // 文件解析
 		return this.parseFlightByDoc(doc);
 	}
 
@@ -636,15 +635,128 @@ public class ParseUtil {
 		return tdFareFly.attr("value");
 	}
 	
-	
+	/**
+	 * 从radio的value值中解析航班信息
+	 * carrier, number, flightNumber, depAirport, arrAirport, depTime, arrTime;
+	 * @param radioValue
+	 */
 	public void parseFlightByRadioValue(String radioValue) {
+		String carrier, number, flightNumber, depAirport, arrAirport, depTime, arrTime;
+		String year, month, day, hour, minute;
+		carrier = number = flightNumber = depAirport = arrAirport = depTime = arrTime = "";
+		year = month = day = hour = minute = "";
 		// 0~Z~~ZRP~6020~~1~X|5J~ 109~ ~~HKG~06/20/2016 08:25~MNL~06/20/2016 10:35~
-		String rgxCarrier = "|.+~";
+		
+		// carrier
+		String rgxCarrier = "[|](?<carrier>..)[~]";
 		Pattern pattern = Pattern.compile(rgxCarrier);
 		Matcher matcher = pattern.matcher(radioValue);
 		while(matcher.find()) {
-			System.out.println(matcher.group(0));
+			carrier = matcher.group("carrier");
+			break;
 		}
+		
+		// number
+		String rgxNumber = "[~]\\s(?<number>\\d+)[~]";
+		pattern = Pattern.compile(rgxNumber);
+		matcher = pattern.matcher(radioValue);
+		while(matcher.find()) {
+			number = matcher.group("number");
+			break;
+		}
+		flightNumber = carrier + " " + number;	// whole flightNumber
+		
+		// airport
+		String rgxAirport = "[~](?<airport>[A-Z]{3})[~]";
+		pattern = Pattern.compile(rgxAirport);
+		matcher = pattern.matcher(radioValue);
+		int i = 0;
+		while(matcher.find()) {
+			i++;
+			if (i == 2)
+				depAirport = matcher.group("airport");	// depAirport
+			else if (i == 3)
+				arrAirport = matcher.group("airport");	// arrAirport
+		}
+		
+		// time
+		String rgxTime = "(?<month>\\d{2})/(?<day>\\d{2})/(?<year>\\d{4})\\s(?<hour>\\d{2}):(?<minute>\\d{2})";
+		pattern = Pattern.compile(rgxTime);
+		matcher = pattern.matcher(radioValue);
+		i = 0;
+		while(matcher.find()) {
+			i++;
+			year = matcher.group("year");
+			month = matcher.group("month");
+			day = matcher.group("day");
+			hour = matcher.group("hour");
+			minute = matcher.group("minute");
+			if (i == 1)
+				depTime = year + month + day + hour + minute;	// depTime
+			else if (i == 2)
+				arrTime = year + month + day + hour + minute;	// arrTime
+		}
+		
+		// 构建Flight对象，adultPrice,adultTax默认为空
+		Flight flight = new Flight();
+		flight.setCarrier(carrier);
+		flight.setFlightNumber(flightNumber);;
+		flight.setDepAirport(depAirport);
+		flight.setArrAirport(arrAirport);
+		flight.setDepTime(depTime);
+		flight.setArrTime(arrTime);
+		System.out.println(flight);
+	}
+	
+	/**
+	 * 从html字符串中解析航班价格信息
+	 * @param html
+	 */
+	public void parsePriceByRadioHtml(String html) {
+		if (html == null || html.equals(""))
+			return;
+		
+		String currency, adultPrice, adultTax;
+		currency = adultPrice = adultTax = "";
+		
+		Document doc = Jsoup.parse(html); // 文件解析
+		
+		// adult人数
+		Element adultCountSpan = doc.select("span.paxCount").first();
+		int adultCount = Integer.valueOf(adultCountSpan.text());
+System.out.println(adultCount);
+		
+		// 货币单位
+		Element currencySpan = doc.select("span#overallTotalCurrencyCode").first();
+		currency = currencySpan.text();
+System.out.println(currency);
+		
+		// adult price
+		Element adultPriceSpan = doc.select("span.baseFarePrice").first();
+		adultPrice = adultPriceSpan.text().replace(",", "");
+System.out.println(adultPrice);
+		
+		// adult tax , 注意除以人数，得到单价
+		Element adultTaxSpan = doc.select("span#taxesFaresTotal").first();
+		String adultTaxTotal = adultTaxSpan.text().replace(",", "");
+		adultTax = String.valueOf(Double.valueOf(adultTaxTotal) / adultCount);
+System.out.println(adultTax);		
+		
+		Flight flight = new Flight();
+		flight.setCurrency(currency);
+		flight.setAdultPrice(adultPrice);
+		flight.setAdultTax(adultTax);
+		System.out.println(flight);
+		
+	}
+	
+	/**
+	 * 从本地文件中解析航班价格信息
+	 * @param filePath
+	 */
+	public void parsePriceByRadioFile(String filePath) {
+		String html = this.readHtmlFromFile(filePath);
+		this.parsePriceByRadioHtml(html);
 	}
 	
 	

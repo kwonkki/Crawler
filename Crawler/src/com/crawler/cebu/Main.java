@@ -19,6 +19,7 @@ public class Main {
 	private final static String SAVE_PATH_Response_Params = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response_params.html";
 	private final static String SAVE_PATH_Response = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response.html";
 	private final static String SAVE_PATH_Response_Radio = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response_radio.html";
+	private final static String SAVE_PATH_Response_Radio_1 = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response_radio_1.html";
 	private final static String SAVE_PATH = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/test_savedHtmlByUrl.html";
 	private final static String SAVE_PATH_IniFile = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/Book a Trip.html";
 	
@@ -152,7 +153,6 @@ public class Main {
 		
 		ArrayList<String> radioValues = parseUtil.parseFlightRadioValues(html);
 		
-		ArrayList<String> htmlList = new ArrayList<String>(5);
 		int size = radioValues.size();
 		for(int i = 0; i < size; i++) {
 			crawlerUtil.saveHtmlByRadio(cookieStore, radioValues.get(i), 
@@ -160,5 +160,6 @@ public class Main {
 		}
 		System.out.println("done");
 	}
+	
 
 }
