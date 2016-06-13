@@ -32,6 +32,10 @@ public class HtmlParser extends Parser{
 		return ParseUtilInstanceHolder.Parse_Util;
 	}
 
+	private boolean check(String html) {
+		return (html != null && !html.equals("")) ? true : false;
+	}
+	
 	/**
 	 * 从html字符串解析下拉列表中的时间信息
 	 * @param html html字符串
@@ -40,7 +44,7 @@ public class HtmlParser extends Parser{
 	public Map<String, ArrayList<String>> parseTime(String html) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
 		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return map;
 
 		Document doc = Jsoup.parse(html);
@@ -56,7 +60,7 @@ public class HtmlParser extends Parser{
 	public Map<String, ArrayList<String>> parseTimeWithUrl(String html, String baseUrl) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
 		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return map;
 
 		Document doc = Jsoup.parse(html, baseUrl);
@@ -71,29 +75,69 @@ public class HtmlParser extends Parser{
 	 */
 	private ArrayList<Ticket> parseTicket(String html) {
 		ArrayList<Ticket> ticketList = new ArrayList<Ticket>();
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return ticketList;
 
 		Document doc = Jsoup.parse(html); // 文件解析
 		return super.parseTicketByDoc(doc);
 	}
 	
+	
+	/**
+	 * 解析html字符串中的航班的radio value信息（不包括转机）
+	 * 包含始发站、终点站、出发时间、到达时间等
+	 * @param html
+	 * @return
+	 */
+	public ArrayList<String> parseRadioValue(String html) {
+		ArrayList<String> radioValueList = new ArrayList<String>(5);
+		if (!check(html))
+			return radioValueList;
+
+		Document doc = Jsoup.parse(html); // 文件解析
+		return super.parseRadioValue(doc);
+	}
+	
+	/**
+	 * 解析html字符串中的航班的radio value信息（不包括转机）
+	 * 包含始发站、终点站、出发时间、到达时间等
+	 * @param html
+	 * @param baseUrl html来源的url
+	 * @return
+	 */
+	public ArrayList<String> parseRadioValueWithUrl(String html, String baseUrl) {
+		ArrayList<String> radioValueList = new ArrayList<String>(5);
+		if (!check(html))
+			return radioValueList;
+
+		Document doc = Jsoup.parse(html, baseUrl); // 文件解析
+		return super.parseRadioValue(doc);
+	}
+	
+	/**
+	 * 根据post提交之后的response html 和 radio value产生的html解析完整的ticket信息
+	 * @param html post提交之后的response html
+	 * @param radioValueGeneratedHtmls 所有radio value产生的html列表
+	 * @return
+	 */
 	public ArrayList<Ticket> parseTicket(String html, ArrayList<String> radioValueGeneratedHtmls) {
-		if (html == null || html.equals("") || radioValueGeneratedHtmls == null || radioValueGeneratedHtmls.size() <= 0)
+		if (!check(html) || radioValueGeneratedHtmls == null || radioValueGeneratedHtmls.size() <= 0)
 			return null;
 		int count = radioValueGeneratedHtmls.size();
+		// 解析response html中radio value包含的部分信息
 		ArrayList<Ticket> tmpTickets = new ArrayList<Ticket>();
 		tmpTickets = this.parseTicket(html);
-		
+		// 解析radio value产生的价格信息
 		ArrayList<TicketPrice> prices = new ArrayList<TicketPrice>();
 		for(String tmpHtml : radioValueGeneratedHtmls)
 			prices.add(this.parsePriceByRadioHtml(tmpHtml));
-		
+		// 数目不一致
 		if(tmpTickets.size() != prices.size()) {
 			System.out.println("ticket size not equals price size");
 			return null;
 		}
 		
+		// 合并成完整信息
 		ArrayList<Ticket> tickets = new ArrayList<Ticket>(count);
 		for(int i = 0; i < count; i++) {
 			Ticket ticket = tmpTickets.get(i);
@@ -110,8 +154,15 @@ public class HtmlParser extends Parser{
 		return tickets;
 	}
 	
+	/**
+	 * 根据post提交之后的response html 和 radio value产生的html解析完整的ticket信息
+	 * @param html post提交之后的response html
+	 * @param radioValueGeneratedHtmls 所有radio value产生的html列表
+	 * @param baseUrl html来源的url
+	 * @return
+	 */
 	public ArrayList<Ticket> parseTicketWithUrl(String html, ArrayList<String> radioValueGeneratedHtml, String baseUrl) {
-		if (html == null || html.equals("") || radioValueGeneratedHtml == null || radioValueGeneratedHtml.size() <= 0)
+		if (!check(html) || radioValueGeneratedHtml == null || radioValueGeneratedHtml.size() <= 0)
 			return null;
 		int count = radioValueGeneratedHtml.size();
 		ArrayList<Ticket> tmpTickets = new ArrayList<Ticket>(count);
@@ -143,7 +194,7 @@ public class HtmlParser extends Parser{
 	 */
 	private ArrayList<Ticket> parseTicketWithUrl(String html, String baseUrl) {
 		ArrayList<Ticket> ticketList = new ArrayList<Ticket>();
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return ticketList;
 
 		Document doc = Jsoup.parse(html, baseUrl); // 文件解析
@@ -158,7 +209,7 @@ public class HtmlParser extends Parser{
 	 */
 	public Map<String, String> parseStation(String html) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return map;
 
 		Document doc = Jsoup.parse(html);;
@@ -175,7 +226,7 @@ public class HtmlParser extends Parser{
 	 */
 	public Map<String, String> parseStationWithUrl(String html, String baseUrl) { 
 		Map<String, String> map = new LinkedHashMap<String, String>();
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return map;
 
 		Document doc = Jsoup.parse(html, baseUrl);
@@ -187,7 +238,7 @@ public class HtmlParser extends Parser{
 	 * @param html
 	 */
 	private TicketPrice parsePriceByRadioHtml(String html) {
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return null;
 
 		Document doc = Jsoup.parse(html); // 文件解析
@@ -199,7 +250,7 @@ public class HtmlParser extends Parser{
 	 * @param html
 	 */
 	private TicketPrice parsePriceByRadioHtmlWithUrl(String html, String baseUrl) {
-		if (html == null || html.equals(""))
+		if (!check(html))
 			return null;
 
 		Document doc = Jsoup.parse(html, baseUrl); // 文件解析

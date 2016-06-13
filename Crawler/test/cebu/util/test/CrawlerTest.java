@@ -7,11 +7,12 @@ import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.cookie.Cookie;
 import org.junit.Before;
 import org.junit.Test;
-import com.crawler.cebu.FormUtil.DestStation;
-import com.crawler.cebu.FormUtil.OrgStation;
-import com.crawler.cebu.FormUtil.TravelOption;
+
 import cebu.model.FormParams;
 import cebu.util.Crawler;
+import cebu.util.FormUtil.DestStation;
+import cebu.util.FormUtil.OrgStation;
+import cebu.util.FormUtil.TravelOption;
 
 public class CrawlerTest {
 	private final static String URL = "https://book.cebupacificair.com/Search.aspx?culture=en-us";

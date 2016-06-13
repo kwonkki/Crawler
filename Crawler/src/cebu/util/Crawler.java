@@ -318,6 +318,18 @@ public class Crawler {
 		return html;
 	}
 	
+	public ArrayList<String> getHtmlByRadio(CookieStore cookieStore, ArrayList<String> radioValues) {
+		ArrayList<String> radioValueGeneratedHtmls = new ArrayList<String>();
+		if(radioValues == null ||  radioValues.size() <= 0)
+			return radioValueGeneratedHtmls;
+		
+		for(String radioValue : radioValues) {
+			String html = this.getHtmlByRadio(cookieStore, radioValue);
+System.out.println("radio html:" + html);
+			radioValueGeneratedHtmls.add(html);
+		}
+		return radioValueGeneratedHtmls;
+	}
 	
 	/**
 	 * 保存根据radio选项获取对应的动态生成的html到本地文件，需要传递cookie记录会话状态

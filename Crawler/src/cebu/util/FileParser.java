@@ -32,6 +32,11 @@ public class FileParser extends Parser{
 		return ParseUtilInstanceHolder.Parse_Util;
 	}
 
+	/**
+	 * 检查文件是否为空或者是否存在
+	 * @param file
+	 * @return
+	 */
 	private boolean check(File file) {
 		return (file != null && file.exists()) ? true : false;
 	}
@@ -70,6 +75,11 @@ public class FileParser extends Parser{
 		return sb.toString();
 	}
 	
+	/**
+	 * 从本地文件解析站点信息
+	 * @param file
+	 * @return
+	 */
 	public Map<String, String> parseStation(File file) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		if (!check(file))
@@ -79,6 +89,12 @@ public class FileParser extends Parser{
 		return htmlParser.parseStation(html);
 	}
 	
+	/**
+	 * 从本地文件解析站点信息
+	 * @param file
+	 * @param baseUrl 本地文件来源的url
+	 * @return
+	 */
 	public Map<String, String> parseStationWithUrl(File file, String baseUrl) { 
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		if (!check(file))
@@ -88,6 +104,11 @@ public class FileParser extends Parser{
 		return htmlParser.parseStationWithUrl(html, baseUrl);
 	}
 	
+	/**
+	 * 从本地文件解析下拉列表的时间信息
+	 * @param file
+	 * @return
+	 */
 	public Map<String, ArrayList<String>> parseTime(File file) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
 		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
@@ -98,6 +119,12 @@ public class FileParser extends Parser{
 		return htmlParser.parseTime(html);
 	}
 	
+	/**
+	 * 从本地文件解析下拉列表的时间信息
+	 * @param file
+	 * @param baseUrl 本地文件来源url
+	 * @return
+	 */
 	public Map<String, ArrayList<String>> parseTimeWithUrl(File file, String baseUrl) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
 		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
@@ -109,6 +136,12 @@ public class FileParser extends Parser{
 	}
 	
 	
+	/**
+	 * 从本地文件解析航班信息
+	 * @param file post提交表单后的html文件
+	 * @param priceFiles 所有需要的radio value 产生的html文件，包含价格信息
+	 * @return
+	 */
 	public ArrayList<Ticket> parseTicket(File file, ArrayList<File> priceFiles) {
 		if (!check(file) || priceFiles == null || priceFiles.size() <= 0)
 			return null;
@@ -121,6 +154,13 @@ public class FileParser extends Parser{
 		return htmlParser.parseTicket(html, radioValueGeneratedHtmls);
 	}
 	
+	/**
+	 * 从本地文件解析航班信息
+	 * @param file post提交表单后的html文件
+	 * @param priceFiles 所有需要的radio value 产生的html文件，包含价格信息
+	 * @param baseUrl html文件来源的url
+	 * @return
+	 */
 	public ArrayList<Ticket> parseTicketWithUrl(File file, ArrayList<File> priceFiles, String baseUrl) {
 		if (!check(file) || priceFiles == null || priceFiles.size() <= 0)
 			return null;

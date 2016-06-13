@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import com.crawler.cebu.FormUtil;
+
 import cebu.model.Ticket;
 import cebu.model.TicketPrice;
 
@@ -88,7 +88,7 @@ public abstract class Parser {
 			return ticketList;
 
 		// 获取ticket的radio values
-		ArrayList<String> ticketRadioValues = this.parseRadioValues(doc);
+		ArrayList<String> ticketRadioValues = this.parseRadioValue(doc);
 
 		// 解析radio values的信息，不包括价格和税，需要进一步接卸radio点击之后生成的html
 		for (String radioValue : ticketRadioValues) {
@@ -206,7 +206,7 @@ public abstract class Parser {
 	 *            查询结果页面html
 	 * @return radio value list
 	 */
-	private ArrayList<String> parseRadioValues(Document doc) {
+	protected ArrayList<String> parseRadioValue(Document doc) {
 		ArrayList<String> radioValueList = new ArrayList<String>(5);
 		if (doc == null)
 			return radioValueList;

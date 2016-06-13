@@ -1,4 +1,4 @@
-package com.crawler.cebu;
+package cebu.main;
 
 
 public class Tmp {

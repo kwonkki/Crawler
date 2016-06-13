@@ -6,10 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import com.crawler.cebu.FormUtil;
-import com.crawler.cebu.FormUtil.DestStation;
-import com.crawler.cebu.FormUtil.OrgStation;
-import com.crawler.cebu.FormUtil.TravelOption;
+
+import cebu.util.FormUtil;
+import cebu.util.FormUtil.DestStation;
+import cebu.util.FormUtil.OrgStation;
+import cebu.util.FormUtil.TravelOption;
 
 /**
  * 表单变量类，用于传递post请求参数
