@@ -13,6 +13,10 @@ import com.crawler.cebu.FormUtil.DestStation;
 import com.crawler.cebu.FormUtil.OrgStation;
 import com.crawler.cebu.FormUtil.TravelOption;
 
+import cebu.model.FormParams;
+import cebu.util.Crawler;
+import cebu.util.HtmlParser;
+
 public class Main {
 	private final static String URL = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
 	private final static String PostUrl = "https://book.cebupacificair.com/Search.aspx";
@@ -23,8 +27,8 @@ public class Main {
 	private final static String SAVE_PATH = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/test_savedHtmlByUrl.html";
 	private final static String SAVE_PATH_IniFile = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/Book a Trip.html";
 	
-	private static CrawlerUtil crawlerUtil = CrawlerUtil.getInstance();
-	private static ParseUtil parseUtil = ParseUtil.getInstance();
+	private static Crawler crawlerUtil = Crawler.getInstance();
+	private static HtmlParser parseUtil = HtmlParser.getInstance();
 	
 	public static void main(String[] args) {
 		//Main main = new Main();
@@ -39,7 +43,7 @@ public class Main {
 		System.out.println(map);
 		
 		System.out.println("---------------------- file ---------------------");
-		map = parseUtil.parseTimeByFile(SAVE_PATH);
+		map = parseUtil.parseTime(SAVE_PATH);
 		System.out.println(map);
 	}
 	
@@ -54,14 +58,14 @@ public class Main {
 		System.out.println(map);	// 输出为空
 		
 		System.out.println("---------------------- file ---------------------");
-		map = parseUtil.parseStationsByFile(SAVE_PATH_IniFile);
+		map = parseUtil.parseStation(SAVE_PATH_IniFile);
 		System.out.println(map);	// 输出站点信息
 	}
 	
 	// 获取航班信息
 	// 单程
 	@Test
-	public void getFlightInfoOneWay() {
+	public void getTicketInfoOneWay() {
 		// 构建表单变量
 		FormParams formParams = new FormParams();
 		formParams.setTravelOption(TravelOption.OneWay)
@@ -74,18 +78,18 @@ public class Main {
 		
 		System.out.println("---------------------- url ---------------------");
 		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams);
-		ArrayList<Map<String, String>> flightList = parseUtil.parseFlight(html);
-		MyUtil.printFlightInfo(flightList);
+		ArrayList<Map<String, String>> TicketList = parseUtil.parseTicket(html);
+		ToolUtil.printTicketInfo(TicketList);
 		
 		System.out.println("---------------------- file ---------------------");
-		flightList = parseUtil.parseFlightByFile(SAVE_PATH_Response);
-		MyUtil.printFlightInfo(flightList);
+		TicketList = parseUtil.parseTicket(SAVE_PATH_Response);
+		ToolUtil.printTicketInfo(TicketList);
 	}
 	
 	// 获取航班信息
 	// 往返
 	@Test
-	public void getFlightInfoRound() {
+	public void getTicketInfoRound() {
 /*		// 构建表单变量
 		FormParams formParams = new FormParams();
 		formParams.setTravelOption(TravelOption.RoundTrip)
@@ -99,17 +103,17 @@ public class Main {
 		
 		System.out.println("---------------------- url ---------------------");
 		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams);
-		ArrayList<Map<String, String>> flightList = parseUtil.parseFlight(html);
-		MyUtil.printFlightInfo(flightList);*/
+		ArrayList<Map<String, String>> TicketList = parseUtil.parseTicket(html);
+		ToolUtil.printTicketInfo(TicketList);*/
 		
 		System.out.println("---------------------- file ---------------------");
-		ArrayList<Map<String, String>> flightList = parseUtil.parseFlightByFile(SAVE_PATH_Response);
-		MyUtil.printFlightInfo(flightList);
+		ArrayList<Map<String, String>> TicketList = parseUtil.parseTicket(SAVE_PATH_Response);
+		ToolUtil.printTicketInfo(TicketList);
 	}
 	
 	
 	@Test 
-	public void getFlightRadioValues() {
+	public void getTicketRadioValues() {
 		// 构建表单变量
 		FormParams formParams = new FormParams();
 		formParams.setTravelOption(TravelOption.OneWay)
@@ -122,13 +126,13 @@ public class Main {
 		
 		String html = crawlerUtil.getPostResponseHtmlByParams(PostUrl, formParams);
 		
-		ArrayList<String> list = parseUtil.parseFlightRadioValues(html);
+		ArrayList<String> list = parseUtil.parseTicketRadioValues(html);
 		System.out.println(list);
 	}
 	
 	
 	@Test
-	public void getFlightRadioValuesInfo() {
+	public void getTicketRadioValuesInfo() {
 		// 构建表单变量
 		FormParams formParams = new FormParams();
 		formParams.setTravelOption(TravelOption.OneWay)
@@ -151,7 +155,7 @@ public class Main {
 			System.out.println(cookie.getName() + "=" + cookie.getValue());
 		}
 		
-		ArrayList<String> radioValues = parseUtil.parseFlightRadioValues(html);
+		ArrayList<String> radioValues = parseUtil.parseTicketRadioValues(html);
 		
 		int size = radioValues.size();
 		for(int i = 0; i < size; i++) {
