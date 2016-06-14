@@ -11,12 +11,13 @@ public class Ticket {
 	private String currency;
 	private int adultprice;
 	private int adulttax;
+	private String createtime;	// 当前时间 精确到秒
+	private int seats = 2;	// 2
 	
 	private String flytime;	// 飞行时间？
 	private int childprice;
 	private int childtax;
-	private String createtime;	// 当前时间 精确到秒
-	private int seats = 2;	// 2
+	
 	
 	
 	public String getCurrency() {
