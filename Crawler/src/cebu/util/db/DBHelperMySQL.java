@@ -35,7 +35,7 @@ public class DBHelperMySQL {
 	private static final String PASSWORD = "root@123";
 	
 	
-	private static final Logger logger = LoggerFactory.getLogger("dbLog");
+	private static final Logger logger = LoggerFactory.getLogger(DBHelperMySQL.class);
 	
 	public DBHelperMySQL() {
 		

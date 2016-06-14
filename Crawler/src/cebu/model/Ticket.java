@@ -152,6 +152,8 @@ public class Ticket {
 				", deptime=" + this.getdepTime() +
 				", arrtime=" + this.getarrTime() +
 				", createtime=" + this.getcreateTime() +
+				", adultPrice=" + this.getadultPrice() +
+				", audltTax=" + this.getadultTax() +
 				", seats=" + this.getSeats();
 		return info;
 	}

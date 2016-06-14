@@ -40,6 +40,7 @@ public class FileParser_cp {
 		return ParseUtilInstanceHolder.Parse_Util;
 	}
 
+	@SuppressWarnings("unused")
 	private final static String WHITESPACE_UTF8 = "/u00a0"; // 空白符的ASCII码
 
 	/**

@@ -20,23 +20,24 @@ import cebu.util.FormUtil.TravelOption;
 
 public class FormParams {
 
-	private TravelOption travelOption;
-	private OrgStation orgStation;
-	private DestStation destStation;
-	private String departureTime;
+	private TravelOption travelOption;	// 单程、往返、中转
+	private OrgStation orgStation;	// 始发站，枚举
+	private DestStation destStation;	// 终点站，枚举
+	private String departureTime; 	
 	private String returnTime = "";
 	private String adultNum = "2";
 	private String childNum = "0";
 	
-	private List<NameValuePair> formParams;
+	private List<NameValuePair> formParams;		// 用于post表单提交的真正的参数
 	private Pattern pattern;
 	
-	private String departureTime_Day;
-	private String departureTime_YearMonth;
-	private String returnTime_Day;
-	private String returnTime_YearMonth;
+	private String departureTime_Day;	// 出发时间，天
+	private String departureTime_YearMonth;	// 出发时间，年月
+	private String returnTime_Day;	// 返回时间，天
+	private String returnTime_YearMonth;	// 返回时间，年月
 	
 	public FormParams() {
+		// 日期格式验证
 		String regexTime = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
 		formParams = new ArrayList<NameValuePair>();
 		pattern = Pattern.compile(regexTime);
@@ -135,6 +136,9 @@ public class FormParams {
 		return this;
 	}
 
+	/**
+	 * 构建真正的表单变量
+	 */
 	public void build() {
 		formParams.add(new BasicNameValuePair("__EVENTTARGET", ""));
 		formParams.add(new BasicNameValuePair("__EVENTARGUMENT", ""));

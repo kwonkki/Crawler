@@ -1,9 +1,16 @@
 package cebu.model;
 
+/**
+ * 价格类
+ * @author Administrator
+ *
+ */
 public class TicketPrice {
-	private String currency;
-	private int adultPrice;
-	private int adultTax;
+	
+	private String currency;	// 货币单位
+	private int adultPrice;		// 成人价格
+	private int adultTax;		// 成人税
+	
 	public String getCurrency() {
 		return currency;
 	}

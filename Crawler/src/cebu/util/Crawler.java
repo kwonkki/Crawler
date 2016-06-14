@@ -176,6 +176,24 @@ public class Crawler {
 		}
 	}
 	
+	/**
+	 * 将html字符串保存到本地文件
+	 * @param html html字符串
+	 * @param savePath	本地保存路径
+	 */
+	public void saveHtmlToFile(String html, String savePath) {
+		BufferedWriter bw = null; // 缓冲输出流
+		// 写出输入流的内容到输出流，保存到本地
+		try {
+			bw = new BufferedWriter(new FileWriter(new File(savePath)));
+			bw.write(html.replace(WHITESPACE_UTF8, " ") + "\r\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			this.free(bw);
+		}
+	}
+	
 	// 测试函数，固定参数
 	/**
 	 * @param postUrl
@@ -325,7 +343,7 @@ public class Crawler {
 		
 		for(String radioValue : radioValues) {
 			String html = this.getHtmlByRadio(cookieStore, radioValue);
-System.out.println("radio html:" + html);
+//System.out.println("radio html:" + html);
 			radioValueGeneratedHtmls.add(html);
 		}
 		return radioValueGeneratedHtmls;
