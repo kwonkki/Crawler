@@ -37,8 +37,8 @@ public class Main {
 	private static HtmlParser htmlParser = HtmlParser.getInstance();
 	
 	public static void main(String[] args) {
-		@SuppressWarnings("unused")
 		Main main = new Main();
+		main.get_save_ByAllFormParams();
 		
 	}
 
@@ -70,6 +70,60 @@ public class Main {
 		System.out.println(map);	// 输出站点信息
 	}
 	
+	
+	@Test
+	public void get_save_ByAllFormParams() {
+		ArrayList<FormParams> allFormParams = buildAllFormParams();
+		System.out.println("allFormParams count: " + allFormParams.size());
+		int allCount = 0;
+		int ticketCount = 0;
+		for(FormParams formParams : allFormParams) {
+			//System.out.println(formParams);
+			ticketCount += this.get_save_TicketOneWayByParams(formParams);
+			System.out.println("current count: " + (++allCount) + ", ticket count: " + ticketCount);
+		}
+	}
+	
+	/**
+	 * 构建所有可能的变量
+	 * 单程，固定时间，共88*88=7744 - 88(重复的）个，共7656个
+	 * @return
+	 */
+	public ArrayList<FormParams> buildAllFormParams() {
+		ArrayList<FormParams> allFormParams = new ArrayList<FormParams>();
+		
+		// 构建表单变量
+		TravelOption travelOption = TravelOption.OneWay;
+		String depTime = "2016-06-20";
+		int adultNum = 2;
+		int childNum = 0;
+		
+		for(OrgStation orgStation : OrgStation.values()) {
+			for(DestStation destStation : DestStation.values()) {
+				// 始发和终点相同的跳过
+				if (orgStation.name().equals(destStation.name())) {
+					// System.out.println("equals");
+					continue;
+				}
+					
+				FormParams formParams = new FormParams();
+				formParams.setTravelOption(travelOption)
+					.setOrgStation(orgStation)
+					.setDestStation(destStation)
+					.setDepartureTime(depTime)
+					.setAdultNum(adultNum)
+					.setChildNum(childNum)
+					.build();
+				
+				allFormParams.add(formParams);
+			}
+		}
+		
+		return allFormParams;
+	}
+	
+	
+	
 	/**
 	 * 获取信息同时保存相关html文件
 	 * 单程
@@ -78,8 +132,8 @@ public class Main {
 	public void get_save_TicketOneWay() {
 		// 构建表单变量
 		TravelOption travelOption = TravelOption.OneWay;
-		OrgStation orgStation = OrgStation.HKG;
-		DestStation destStation = DestStation.MNL;
+		OrgStation orgStation = OrgStation.PER;
+		DestStation destStation = DestStation.SYD;
 		String depTime = "2016-06-20";
 		int adultNum = 2;
 		int childNum = 0;
@@ -93,13 +147,24 @@ public class Main {
 			.setChildNum(childNum)
 			.build();
 		
+		System.out.println(formParams);
+		
+		// 获取和保存信息
+		get_save_TicketOneWayByParams(formParams);
+	}
+	
+	/**
+	 * 根据表单参数，获取信息同时保存相关html文件
+	 * 单程
+	 */
+	public int get_save_TicketOneWayByParams(FormParams formParams) {
 		/** 文件保存路径  **/
 		// post response
 		String savePathPost = Prefix_Save_File 
-				+ travelOption + "_" 
-				+ orgStation + "_"
-				+ destStation + "_"
-				+ depTime + Suffix_Save_File;
+				+ formParams.getTravelOption() + "_" 
+				+ formParams.getOrgStation() + "_"
+				+ formParams.getDestStation() + "_"
+				+ formParams.getDepartureTime() + Suffix_Save_File;
 		// radio value html
 		String savePathRadioBase = savePathPost.replace(Suffix_Save_File, "_radio" + Suffix_Save_File);
 		
@@ -108,8 +173,14 @@ public class Main {
 		String html = crawler.getPostResponseHtmlByParams(PostUrl, formParams, cookieStores);
 		crawler.saveHtmlToFile(html, savePathPost);	// 保存文件
 		
+//System.out.println(html);
+		
 		// 获取提交表单之后的response html中的航班的radio value信息
 		ArrayList<String> radioValues = htmlParser.parseRadioValue(html);
+		// 为空，该html中没有radio value信息，即该航线没有航班
+		if(radioValues == null || radioValues.size() <= 0)
+			return 0;
+		
 		
 		// 依次提交每个radio value信息，get方式获取对应的html，包含航班的价格信息
 		ArrayList<String> radioValueGeneratedHtmls = crawler.getHtmlByRadio(cookieStores[0], radioValues);
@@ -123,11 +194,10 @@ public class Main {
 		// 根据html 和radio value html 解析完整的航班信息
 		ArrayList<Ticket> tickets = htmlParser.parseTicket(html, radioValueGeneratedHtmls);
 		
-		System.out.println(tickets);
+		// System.out.println(tickets);
 		
 		// 插入数据库
-		TicketService.insert(tickets);
+		return TicketService.insert(tickets);
 	}
-	
 
 }

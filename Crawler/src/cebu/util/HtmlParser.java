@@ -90,7 +90,7 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	public ArrayList<String> parseRadioValue(String html) {
-		ArrayList<String> radioValueList = new ArrayList<String>(5);
+		ArrayList<String> radioValueList = new ArrayList<String>();
 		if (!check(html))
 			return radioValueList;
 
@@ -106,7 +106,7 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	public ArrayList<String> parseRadioValueWithUrl(String html, String baseUrl) {
-		ArrayList<String> radioValueList = new ArrayList<String>(5);
+		ArrayList<String> radioValueList = new ArrayList<String>();
 		if (!check(html))
 			return radioValueList;
 

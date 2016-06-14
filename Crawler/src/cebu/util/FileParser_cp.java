@@ -97,7 +97,7 @@ public class FileParser_cp {
 		String prefix = "select#";
 		// 出发日
 		String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
-		Element target = doc.select(selectDayDeparture).get(0);
+		Element target = doc.select(selectDayDeparture).first();
 		Elements options = target.select("option");
 		ArrayList<String> listDayDeparture = new ArrayList<String>();
 		for (Element option : options) {
@@ -105,7 +105,7 @@ public class FileParser_cp {
 		}
 		// 出发年月
 		String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
-		target = doc.select(selectMonthDeparture).get(0);
+		target = doc.select(selectMonthDeparture).first();
 		options = target.select("option");
 		ArrayList<String> listMonthDeparture = new ArrayList<String>();
 		for (Element option : options) {
@@ -113,7 +113,7 @@ public class FileParser_cp {
 		}
 		// 返程日
 		String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
-		target = doc.select(selectDayReturn).get(0);
+		target = doc.select(selectDayReturn).first();
 		options = target.select("option");
 		ArrayList<String> listDayReturn = new ArrayList<String>();
 		for (Element option : options) {
@@ -121,7 +121,7 @@ public class FileParser_cp {
 		}
 		// 返程年月
 		String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
-		target = doc.select(selectMonthReturn).get(0);
+		target = doc.select(selectMonthReturn).first();
 		options = target.select("option");
 		ArrayList<String> listMonthReturn = new ArrayList<String>();
 		for (Element option : options) {
@@ -149,7 +149,7 @@ public class FileParser_cp {
 		String prefix = "select#";
 		// 出发日
 		String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
-		Element target = doc.select(selectDayDeparture).get(0);
+		Element target = doc.select(selectDayDeparture).first();
 		Elements options = target.select("option");
 		ArrayList<String> listDayDeparture = new ArrayList<String>();
 		for (Element option : options) {
@@ -157,7 +157,7 @@ public class FileParser_cp {
 		}
 		// 出发年月
 		String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
-		target = doc.select(selectMonthDeparture).get(0);
+		target = doc.select(selectMonthDeparture).first();
 		options = target.select("option");
 		ArrayList<String> listMonthDeparture = new ArrayList<String>();
 		for (Element option : options) {
@@ -165,7 +165,7 @@ public class FileParser_cp {
 		}
 		// 返程日
 		String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
-		target = doc.select(selectDayReturn).get(0);
+		target = doc.select(selectDayReturn).first();
 		options = target.select("option");
 		ArrayList<String> listDayReturn = new ArrayList<String>();
 		for (Element option : options) {
@@ -173,7 +173,7 @@ public class FileParser_cp {
 		}
 		// 返程年月
 		String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
-		target = doc.select(selectMonthReturn).get(0);
+		target = doc.select(selectMonthReturn).first();
 		options = target.select("option");
 		ArrayList<String> listMonthReturn = new ArrayList<String>();
 		for (Element option : options) {
@@ -273,7 +273,7 @@ public class FileParser_cp {
 		
 		// 定位到table
 		String selectTable = "table#availabilityTable";
-		Element table = doc.select(selectTable).get(0);
+		Element table = doc.select(selectTable).first();
 
 		// 表头
 		StringBuffer sb = new StringBuffer(80);
@@ -368,10 +368,10 @@ public class FileParser_cp {
 		String from = "";
 		String to = "";
 		// 存在两个td，则出现换乘转机
-		boolean isTransferHappen = (tds.get(0).select(">b").size() > 1) ? true : false;
+		boolean isTransferHappen = (tds.first().select(">b").size() > 1) ? true : false;
 		
 		if (isTransferHappen) {
-			Elements spansInTd1 = tds.get(0).select(">span");
+			Elements spansInTd1 = tds.first().select(">span");
 			String from1NextDayArrival = "";
 			String to1NextDayArrival = "";
 			int spanCount = spansInTd1.size();
@@ -382,7 +382,7 @@ public class FileParser_cp {
 				to1NextDayArrival = spansInTd1.last().text();
 			}
 			
-			String textTd1 = tds.get(0).text()
+			String textTd1 = tds.first().text()
 					.replace(from1NextDayArrival, "").replace(to1NextDayArrival, "");
 			int lastIndexOfNum = -1;
 			for(int i = textTd1.length() - 1; i >=0; i--) {
@@ -421,27 +421,27 @@ public class FileParser_cp {
 			from = from1 + " " + from1NextDayArrival + " " + from2 + " " + from2NextDayArrival;
 			to = to1 + " " + to1NextDayArrival + " " + to2 + " " + to2NextDayArrival;
 		} else {
-			from = tds.get(0).text();
+			from = tds.first().text();
 			to = tds.get(1).text();
 		}
 
 		// 航班号和详细信息
-		Element tdDetails = tr.select("td.footnote").get(0);
-		String flightCompany = tdDetails.select("Strong").get(0).text();
-		String flightNumber = tdDetails.select("span.flightInfoLink").get(0).text();
+		Element tdDetails = tr.select("td.footnote").first();
+		String flightCompany = tdDetails.select("Strong").first().text();
+		String flightNumber = tdDetails.select("span.flightInfoLink").first().text();
 		String flight = flightCompany + " " + flightNumber;
-		String flightDetails = tdDetails.select("p.pAirportName").get(0).text();
+		String flightDetails = tdDetails.select("p.pAirportName").first().text();
 
 		// fly 价格、详细信息
-		Element tdFareFly = tr.select("td.fareBundle").get(0);
+		Element tdFareFly = tr.select("td.fareBundle").first();
 		String[] fareFlyInfo = this.parseFareTd(tdFareFly);
 
 		// fly+bag 价格、详细信息
-		Element tdFareFlyBag = tr.select("td.fareBundle_FBAG").get(0);
+		Element tdFareFlyBag = tr.select("td.fareBundle_FBAG").first();
 		String[] fareFlyBagInfo = this.parseFareTd(tdFareFlyBag);
 
 		// fly+bag+meal 价格、详细信息
-		Element tdFareFlyBagMeal = tr.select("td.fareBundle_FBAGMEAL").get(0);
+		Element tdFareFlyBagMeal = tr.select("td.fareBundle_FBAGMEAL").first();
 		String[] fareFlyBagMealInfo = this.parseFareTd(tdFareFlyBagMeal);
 
 		/** 变量信息存入map **/
@@ -495,7 +495,7 @@ public class FileParser_cp {
 		String tmpFlyPriceDetails = "";
 		for (int i = 0; i < tdFareFlyDivs.size(); i++) {
 			// 价格
-			tmpFlyPrice = tdFareFlyDivs.get(i).select("span.ADTprice").get(0).text();
+			tmpFlyPrice = tdFareFlyDivs.get(i).select("span.ADTprice").first().text();
 			strings[0 + i * 2] = tmpFlyPrice;
 
 			// 细节信息
@@ -533,7 +533,7 @@ public class FileParser_cp {
 	private Map<String, String> parseStationByDoc(Document doc) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		// 定位到站点div
-		Element cityPairDiv = doc.select("div#marketCityPair_1").get(0);
+		Element cityPairDiv = doc.select("div#marketCityPair_1").first();
 		Elements options = cityPairDiv.select("option");
 		for (Element option : options) {
 			String key = option.val();
@@ -600,7 +600,7 @@ public class FileParser_cp {
 		
 		// 定位到table
 		String selectTable = "table#availabilityTable";
-		Element table = doc.select(selectTable).get(0);
+		Element table = doc.select(selectTable).first();
 
 		// 航班，每一个航班信息存放在tr中
 		Elements trs = table.select("tbody>tr");
@@ -625,7 +625,7 @@ public class FileParser_cp {
 		Elements tds = tr.select("td");
 		
 		// 存在两个td，则出现换乘转机
-		boolean isTransferHappen = (tds.get(0).select(">b").size() > 1) ? true : false;
+		boolean isTransferHappen = (tds.first().select(">b").size() > 1) ? true : false;
 		
 		// 忽略换乘的情况
 		if (isTransferHappen) 

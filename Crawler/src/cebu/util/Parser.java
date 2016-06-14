@@ -37,7 +37,7 @@ public abstract class Parser {
 		String prefix = "select#";
 		// 出发日
 		String selectDayDeparture = prefix + FormUtil.Name_CalendarDayDeparture.replace('$', '_');
-		Element target = doc.select(selectDayDeparture).get(0);
+		Element target = doc.select(selectDayDeparture).first();
 		Elements options = target.select("option");
 		ArrayList<String> listDayDeparture = new ArrayList<String>();
 		for (Element option : options) {
@@ -45,7 +45,7 @@ public abstract class Parser {
 		}
 		// 出发年月
 		String selectMonthDeparture = prefix + FormUtil.Name_CalendarMonthDeparture.replace('$', '_');
-		target = doc.select(selectMonthDeparture).get(0);
+		target = doc.select(selectMonthDeparture).first();
 		options = target.select("option");
 		ArrayList<String> listMonthDeparture = new ArrayList<String>();
 		for (Element option : options) {
@@ -53,7 +53,7 @@ public abstract class Parser {
 		}
 		// 返程日
 		String selectDayReturn = prefix + FormUtil.Name_CalendarDayReturn.replace('$', '_');
-		target = doc.select(selectDayReturn).get(0);
+		target = doc.select(selectDayReturn).first();
 		options = target.select("option");
 		ArrayList<String> listDayReturn = new ArrayList<String>();
 		for (Element option : options) {
@@ -61,7 +61,7 @@ public abstract class Parser {
 		}
 		// 返程年月
 		String selectMonthReturn = prefix + FormUtil.Name_CalendarMonthReturn.replace('$', '_');
-		target = doc.select(selectMonthReturn).get(0);
+		target = doc.select(selectMonthReturn).first();
 		options = target.select("option");
 		ArrayList<String> listMonthReturn = new ArrayList<String>();
 		for (Element option : options) {
@@ -110,7 +110,7 @@ public abstract class Parser {
 	protected Map<String, String> parseStationByDoc(Document doc) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
 		// 定位到站点div
-		Element cityPairDiv = doc.select("div#marketCityPair_1").get(0);
+		Element cityPairDiv = doc.select("div#marketCityPair_1").first();
 		Elements options = cityPairDiv.select("option");
 		for (Element option : options) {
 			String key = option.val();
@@ -207,14 +207,18 @@ public abstract class Parser {
 	 * @return radio value list
 	 */
 	protected ArrayList<String> parseRadioValue(Document doc) {
-		ArrayList<String> radioValueList = new ArrayList<String>(5);
+		ArrayList<String> radioValueList = new ArrayList<String>();
 		if (doc == null)
 			return radioValueList;
 
 		// 定位到table
 		String selectTable = "table#availabilityTable";
-		Element table = doc.select(selectTable).get(0);
-
+		Element table = doc.select(selectTable).first();
+		
+		if (table == null) {
+			return radioValueList;
+		}
+		
 		// 航班，每一个航班信息存放在tr中
 		Elements trs = table.select("tbody>tr");
 
@@ -238,7 +242,7 @@ public abstract class Parser {
 		Elements tds = tr.select("td");
 
 		// 存在两个td，则出现换乘转机
-		boolean isTransferHappen = (tds.get(0).select(">b").size() > 1) ? true : false;
+		boolean isTransferHappen = (tds.first().select(">b").size() > 1) ? true : false;
 
 		// 忽略换乘的情况
 		if (isTransferHappen)

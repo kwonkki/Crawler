@@ -196,4 +196,16 @@ public class FormParams {
 		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxHiddenUsername", ""));
 	}
 	
+	@Override
+	public String toString() {
+		String info = "travelOption=" + this.getTravelOption() + ", "
+				+ "orgStation=" + this.getOrgStation() + ", "
+				+ "destStation=" + this.getDestStation() + ", "	
+				+ "departureTime=" + this.getDepartureTime() + ", "
+				+ "returnTime=" + this.getReturnTime() + ", "
+				+ "adultNum=" + this.getAdultNum() + ", "
+				+ "childNum=" + this.getChildNum();
+		return info;
+	}
+	
 }
