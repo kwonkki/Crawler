@@ -38,11 +38,11 @@ public class DaoTemplate {
 		Object obj = null;
 		try {
 			conn = JdbcUtil.getConnection();
-System.out.println("------------");
 			ps = conn.prepareStatement(sql);
 			for (int i = 0, stop = args.length; i < stop; i++) {
 				ps.setObject(i+1, args[i]);
 			}
+System.out.println("select sql: " + ps.toString());
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				obj = rowMapper.mapRow(rs);

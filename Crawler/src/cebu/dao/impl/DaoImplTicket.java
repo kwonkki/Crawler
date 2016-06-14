@@ -38,11 +38,10 @@ public class DaoImplTicket extends DaoTemplate implements IDaoTicket{
 		if (this.query(ticket) != null)
 			this.update(ticket);
 		
-		String sql = "insert into ? (cabin, carrier, flightNumber, depAirport, arrAirport, " +
-				"depTime, arrTime, adultPrict, adultTax, seats, createTime) values " +
+		String sql = "insert into " + this.tableName + " (cabin, carrier, flightNumber, depAirport, arrAirport, " +
+				"depTime, arrTime, adultPrice, adultTax, seats, createTime) values " +
 				"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		Object[] args = new Object[] {
-				tableName,
 				ticket.getCabin(),
 				ticket.getCarrier(),
 				ticket.getflightNumber(),
@@ -69,11 +68,10 @@ public class DaoImplTicket extends DaoTemplate implements IDaoTicket{
 
 	@Override
 	public ArrayList<Ticket> query(Ticket ticket) {
-		String sql = "select * from ? where flightNumber = ? and depTime = ? and arrTime = ?";
+		String sql = "select * from " + this.tableName + " where flightNumber = ? and depTime = ? and arrTime = ?";
 		Object[] args = new Object[] {
-				tableName, 
 				ticket.getflightNumber(), 
-				ticket.getdepAirport(), 
+				ticket.getdepTime(), 
 				ticket.getarrTime()
 		};
 		
@@ -87,10 +85,9 @@ public class DaoImplTicket extends DaoTemplate implements IDaoTicket{
 
 	@Override
 	public int update(Ticket ticket) {
-		String sql = "update ? set cabin = ?, carrier = ?, adultPrice = ?, adultTax = ? " + 
+		String sql = "update " + this.tableName + " set cabin = ?, carrier = ?, adultPrice = ?, adultTax = ? " + 
 				"where flightNumber = ? and depTime = ? and arrTime = ? and createTime = ?";
 		Object[] args = new Object[] {
-				tableName, 
 				ticket.getCabin(), 
 				ticket.getCarrier(),
 				ticket.getadultPrice(), 
@@ -102,7 +99,5 @@ public class DaoImplTicket extends DaoTemplate implements IDaoTicket{
 		};
 		return super.update(sql, args);
 	}
-
-	
 	
 }
