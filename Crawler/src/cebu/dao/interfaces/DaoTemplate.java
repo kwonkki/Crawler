@@ -21,6 +21,7 @@ public class DaoTemplate {
 				Object object = args[i];
 					ps.setObject(i+1, object);
 			}
+System.out.println("update sql: " + ps.toString());
 			count = ps.executeUpdate();
 		} catch (SQLException e) {
 			JdbcUtil.logError("更新数据库出错： ", e);

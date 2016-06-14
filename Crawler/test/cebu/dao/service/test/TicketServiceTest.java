@@ -56,4 +56,25 @@ public class TicketServiceTest {
 		
 		System.out.println("done");
 	}
+	
+	@Test
+	public void test_update() {
+		Ticket ticket = new Ticket();
+		ticket.setCabin("U");
+		ticket.setCarrier("5j");
+		ticket.setflightNumber("109");
+		ticket.setdepAirport("HKGGGGG");
+		ticket.setarrAirport("MNLLLLL");
+		ticket.setdepTime("201601201330");
+		ticket.setarrTime("201601201540");
+		ticket.setadultPrice(480);
+		ticket.setadultTax(330);
+		ticket.setSeats(2);
+		ticket.setcreateTime("20160101124000");
+		
+		TicketService ticketService = new TicketService();
+		System.out.println(ticketService.update(ticket));
+		
+		System.out.println("done");
+	}
 }

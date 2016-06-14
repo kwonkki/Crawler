@@ -85,17 +85,21 @@ public class DaoImplTicket extends DaoTemplate implements IDaoTicket{
 
 	@Override
 	public int update(Ticket ticket) {
-		String sql = "update " + this.tableName + " set cabin = ?, carrier = ?, adultPrice = ?, adultTax = ? " + 
-				"where flightNumber = ? and depTime = ? and arrTime = ? and createTime = ?";
+		String sql = " update " + this.tableName + " set cabin = ?, carrier = ?, adultPrice = ?, adultTax = ?, createTime = ?, " + 
+				" depAirport = ?, arrAirport = ? " +
+				" where flightNumber = ? and depTime = ? and arrTime = ?";
 		Object[] args = new Object[] {
 				ticket.getCabin(), 
 				ticket.getCarrier(),
 				ticket.getadultPrice(), 
 				ticket.getchildTax(), 
+				ticket.getcreateTime(),
+				ticket.getdepAirport(),
+				ticket.getarrAirport(),
+				
 				ticket.getflightNumber(),
 				ticket.getdepTime(),
-				ticket.getarrTime(),
-				ticket.getcreateTime()
+				ticket.getarrTime()
 		};
 		return super.update(sql, args);
 	}
