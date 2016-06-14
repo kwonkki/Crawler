@@ -16,7 +16,7 @@ public class JdbcUtil {
 	// 使用Apache的框架，提供数据源，实现了DataSource接口
 	private static DataSource myDataSource = null;
 	
-	private static final Logger logger = LoggerFactory.getLogger("dbLog");
+	private static final Logger logger = LoggerFactory.getLogger(JdbcUtil.class);
 	
 	private static class DBUtilInstanceHolder {
 		private static JdbcUtil DB_Util = new JdbcUtil();
@@ -46,7 +46,7 @@ public class JdbcUtil {
 			prop.load(is);
 			myDataSource = BasicDataSourceFactory.createDataSource(prop);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logError("获取数据源失败", e);
 		} 
 	}
 	
@@ -69,7 +69,7 @@ public class JdbcUtil {
 			// conn = DriverManager.getConnection(URL, USER, PASSWORD);
 			conn = myDataSource.getConnection();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logError("获取connection失败", e);
 		}
 		return conn;
 	}

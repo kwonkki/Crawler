@@ -38,6 +38,7 @@ public class DaoTemplate {
 		Object obj = null;
 		try {
 			conn = JdbcUtil.getConnection();
+System.out.println("------------");
 			ps = conn.prepareStatement(sql);
 			for (int i = 0, stop = args.length; i < stop; i++) {
 				ps.setObject(i+1, args[i]);
@@ -50,7 +51,7 @@ public class DaoTemplate {
 		} catch (SQLException e) {
 			JdbcUtil.logError("查询出错： ", e);
 		} finally {
-			JdbcUtil.free(rs, ps, conn);
+			//JdbcUtil.free(rs, ps, conn);
 		}
 		return objects;
 	}
