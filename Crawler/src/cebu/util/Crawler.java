@@ -43,7 +43,7 @@ public class Crawler {
 	 * @param response
 	 * @return
 	 */
-	private String getHtmlByResponse(CloseableHttpResponse response) {
+	public String getHtmlByResponse(CloseableHttpResponse response) {
 		String html = null;
 		try {
 			// 获得相应实体
@@ -67,7 +67,7 @@ public class Crawler {
 	 * @param inputStream
 	 * @return
 	 */
-	private String getStrByInputStream(InputStream inputStream) {
+	public String getStrByInputStream(InputStream inputStream) {
 		StringBuffer sb = null;
 		BufferedReader br = null;
 		try {
