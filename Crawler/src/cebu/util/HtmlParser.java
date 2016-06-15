@@ -3,7 +3,6 @@ package cebu.util;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -43,9 +42,8 @@ public class HtmlParser extends Parser{
 	 */
 	public Map<String, ArrayList<String>> parseTime(String html) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
-		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
 		if (!check(html))
-			return map;
+			return null;
 
 		Document doc = Jsoup.parse(html);
 		return super.parseTimeByDoc(doc);
@@ -59,13 +57,11 @@ public class HtmlParser extends Parser{
 	 */
 	public Map<String, ArrayList<String>> parseTimeWithUrl(String html, String baseUrl) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
-		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
 		if (!check(html))
-			return map;
+			return null;
 
 		Document doc = Jsoup.parse(html, baseUrl);
-		map = super.parseTimeByDoc(doc);
-		return map;
+		return super.parseTimeByDoc(doc);
 	}
 
 	/**
@@ -90,9 +86,8 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	public ArrayList<String> parseRadioValue(String html) {
-		ArrayList<String> radioValueList = new ArrayList<String>();
 		if (!check(html))
-			return radioValueList;
+			return null;
 
 		Document doc = Jsoup.parse(html); // 文件解析
 		return super.parseRadioValue(doc);
@@ -106,9 +101,8 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	public ArrayList<String> parseRadioValueWithUrl(String html, String baseUrl) {
-		ArrayList<String> radioValueList = new ArrayList<String>();
 		if (!check(html))
-			return radioValueList;
+			return null;
 
 		Document doc = Jsoup.parse(html, baseUrl); // 文件解析
 		return super.parseRadioValue(doc);
@@ -123,6 +117,7 @@ public class HtmlParser extends Parser{
 	public ArrayList<Ticket> parseTicket(String html, ArrayList<String> radioValueGeneratedHtmls) {
 		if (!check(html) || radioValueGeneratedHtmls == null || radioValueGeneratedHtmls.size() <= 0)
 			return null;
+		
 		int count = radioValueGeneratedHtmls.size();
 		// 解析response html中radio value包含的部分信息
 		ArrayList<Ticket> tmpTickets = new ArrayList<Ticket>();
@@ -164,6 +159,7 @@ public class HtmlParser extends Parser{
 	public ArrayList<Ticket> parseTicketWithUrl(String html, ArrayList<String> radioValueGeneratedHtml, String baseUrl) {
 		if (!check(html) || radioValueGeneratedHtml == null || radioValueGeneratedHtml.size() <= 0)
 			return null;
+		
 		int count = radioValueGeneratedHtml.size();
 		ArrayList<Ticket> tmpTickets = new ArrayList<Ticket>(count);
 		tmpTickets = this.parseTicketWithUrl(html, baseUrl);
@@ -193,9 +189,8 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	private ArrayList<Ticket> parseTicketWithUrl(String html, String baseUrl) {
-		ArrayList<Ticket> ticketList = new ArrayList<Ticket>();
 		if (!check(html))
-			return ticketList;
+			return null;
 
 		Document doc = Jsoup.parse(html, baseUrl); // 文件解析
 		return super.parseTicketByDoc(doc);
@@ -208,9 +203,8 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	public Map<String, String> parseStation(String html) {
-		Map<String, String> map = new LinkedHashMap<String, String>();
 		if (!check(html))
-			return map;
+			return null;
 
 		Document doc = Jsoup.parse(html);;
 		return super.parseStationByDoc(doc);
@@ -225,9 +219,8 @@ public class HtmlParser extends Parser{
 	 * @return
 	 */
 	public Map<String, String> parseStationWithUrl(String html, String baseUrl) { 
-		Map<String, String> map = new LinkedHashMap<String, String>();
 		if (!check(html))
-			return map;
+			return null;
 
 		Document doc = Jsoup.parse(html, baseUrl);
 		return super.parseStationByDoc(doc);

@@ -78,12 +78,16 @@ public class CrawlerTest {
 		formParams.setTravelOption(TravelOption.OneWay)
 			.setOrgStation(OrgStation.HKG)
 			.setDestStation(DestStation.MNL)
-			.setDepartureTime("2016-06-25")
+			.setDepartureTime("2016-06-20")
 			.setAdultNum(2)
 			.setChildNum(0)
 			.build();
-		String html = crawler.getPostResponseHtmlByParams(PostUrl, formParams);
+		
+		CookieStore[] cookieStores = new CookieStore[1];
+		String html = crawler.getPostResponseHtmlByParams(PostUrl, formParams, cookieStores);
+		//String html = crawler.getPostResponseHtmlByParams(PostUrl, formParams);
 		System.out.println(html);
+		System.out.println(cookieStores[0]);
 		System.out.println("done");
 	}
 	

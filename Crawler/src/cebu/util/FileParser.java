@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import cebu.model.Ticket;
 
@@ -49,7 +48,7 @@ public class FileParser extends Parser{
 	 */
 	private String readHtmlFromFile(File file) {
 		if (!check(file))
-			return "";
+			return null;
 
 		StringBuffer sb = null;
 		BufferedReader br = null;
@@ -81,9 +80,8 @@ public class FileParser extends Parser{
 	 * @return
 	 */
 	public Map<String, String> parseStation(File file) {
-		Map<String, String> map = new LinkedHashMap<String, String>();
 		if (!check(file))
-			return map;
+			return null;
 		
 		String html = this.readHtmlFromFile(file);
 		return htmlParser.parseStation(html);
@@ -96,9 +94,8 @@ public class FileParser extends Parser{
 	 * @return
 	 */
 	public Map<String, String> parseStationWithUrl(File file, String baseUrl) { 
-		Map<String, String> map = new LinkedHashMap<String, String>();
 		if (!check(file))
-			return map;
+			return null;
 		
 		String html = this.readHtmlFromFile(file);
 		return htmlParser.parseStationWithUrl(html, baseUrl);
@@ -111,9 +108,8 @@ public class FileParser extends Parser{
 	 */
 	public Map<String, ArrayList<String>> parseTime(File file) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
-		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
 		if (!check(file))
-			return map;
+			return null;
 		
 		String html = this.readHtmlFromFile(file);
 		return htmlParser.parseTime(html);
@@ -127,9 +123,8 @@ public class FileParser extends Parser{
 	 */
 	public Map<String, ArrayList<String>> parseTimeWithUrl(File file, String baseUrl) {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
-		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
 		if (!check(file))
-			return map;
+			return null;
 		
 		String html = this.readHtmlFromFile(file);
 		return htmlParser.parseTimeWithUrl(html, baseUrl);

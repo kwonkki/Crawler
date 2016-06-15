@@ -18,7 +18,9 @@ import cebu.model.FormParams;
 
 public class Crawler {
 	
-	private final String WHITESPACE_UTF8 = "/u00a0";
+	private static final String WHITESPACE_UTF8 = "/u00a0";
+	
+	private static final String HOST = "https://book.cebupacificair.com";
 	
 	/** 单例模式 **/
 	private Crawler() {
@@ -315,7 +317,7 @@ public class Crawler {
 			.setCharset(Consts.UTF_8);
 		
 		URI uri = null;;
-		String html = "";
+		String html = null;
 		try {
 			uri = uriBuilder.build();
 		} catch (URISyntaxException e1) {
@@ -339,11 +341,11 @@ public class Crawler {
 	public ArrayList<String> getHtmlByRadio(CookieStore cookieStore, ArrayList<String> radioValues) {
 		ArrayList<String> radioValueGeneratedHtmls = new ArrayList<String>();
 		if(radioValues == null ||  radioValues.size() <= 0)
-			return radioValueGeneratedHtmls;
+			return null;
 		
 		for(String radioValue : radioValues) {
 			String html = this.getHtmlByRadio(cookieStore, radioValue);
-//System.out.println("radio html:" + html);
+			//System.out.println("radio html:" + html);
 			radioValueGeneratedHtmls.add(html);
 		}
 		return radioValueGeneratedHtmls;
@@ -502,20 +504,40 @@ public class Crawler {
 		httpPost.setEntity(formEntity);
 
 		CloseableHttpClient httpClient = null;
-		CloseableHttpResponse response = null;
+		CloseableHttpResponse response302 = null;
+		CloseableHttpResponse response200 = null;
 		String html = null;
 
 		try {
 			// 处理post之后的重定向
-			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
-			response = httpClient.execute(httpPost);
+			//httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			
+			// 创建httpClient对象
+			httpClient = HttpClients.createDefault(); 
+			HttpClientContext context = HttpClientContext.create();
+			response302 = httpClient.execute(httpPost, context);
+			//System.out.println("first response code: " + response.getStatusLine().getStatusCode()); 
+			
+			// 不存在内部重定向，302，则不存在该航班信息，直接返回空
+			if (response302.getStatusLine().getStatusCode() != 302) 
+				return null;
+			
+			/** 内部重定向，302 存在该航班信息，需要进一步处理**/
+			String redirectURL = HOST + response302.getFirstHeader("Location").getValue();	// 重定向之后的url，为post返回页面
+			//System.out.println("redirectUrl: " + redirectURL);	
+			
+			HttpGet request = new HttpGet(redirectURL);		// get方式获取response
+			response200 = httpClient.execute(request);
+			//System.out.println("seconde response code: " + response200.getStatusLine().getStatusCode());
+			
 			// 获取response中的信息
-			html = this.getHtmlByResponse(response);
+			html = this.getHtmlByResponse(response200);
 		} catch (Exception e) {
 			System.out.println("访问[ " + postUrl + " ]出现异常!");
 			e.printStackTrace();
 		} finally {
-			this.free(response, httpClient);
+			this.free(response302, httpClient);
+			this.free(response200);
 		}
 		return html;
 	}
@@ -537,25 +559,43 @@ public class Crawler {
 		httpPost.setEntity(formEntity);
 
 		CloseableHttpClient httpClient = null;
-		CloseableHttpResponse response = null;
+		CloseableHttpResponse response302 = null;
+		CloseableHttpResponse response200 = null;
 		String html = null;
 
 		try {
 			// 处理post之后的重定向
-			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			//httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
+			
+			// 创建httpClient对象
+			httpClient = HttpClients.createDefault(); 
 			HttpClientContext context = HttpClientContext.create();
-			response = httpClient.execute(httpPost, context);
+			response302 = httpClient.execute(httpPost, context);
+			//System.out.println("first response code: " + response.getStatusLine().getStatusCode()); 
+			
+			// 不存在内部重定向，302，则不存在该航班信息，直接返回空
+			if (response302.getStatusLine().getStatusCode() != 302) 
+				return null;
+			
+			/** 内部重定向，302 存在该航班信息，需要进一步处理**/
+			String redirectURL = HOST + response302.getFirstHeader("Location").getValue();	// 重定向之后的url，为post返回页面
+			//System.out.println("redirectUrl: " + redirectURL);	
+			
+			HttpGet request = new HttpGet(redirectURL);		// get方式获取response
+			response200 = httpClient.execute(request);
+			//System.out.println("seconde response code: " + response200.getStatusLine().getStatusCode());
 			
 			// 设置cookie
 			cookieStores[0] = context.getCookieStore();
 			
 			// 获取response中的信息
-			html = this.getHtmlByResponse(response);
+			html = this.getHtmlByResponse(response200);
 		} catch (Exception e) {
 			System.out.println("访问[ " + postUrl + " ]出现异常!");
 			e.printStackTrace();
 		} finally {
-			this.free(response, httpClient);
+			this.free(response302, httpClient);
+			this.free(response200);
 		}
 		return html;
 	}

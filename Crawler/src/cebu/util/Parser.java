@@ -32,7 +32,7 @@ public abstract class Parser {
 		// 出发日、出发年月、回程日、回程年月4个list组成的map
 		Map<String, ArrayList<String>> map = new LinkedHashMap<String, ArrayList<String>>();
 		if (doc == null)
-			return map;
+			return null;
 
 		String prefix = "select#";
 		// 出发日
@@ -85,7 +85,7 @@ public abstract class Parser {
 	protected ArrayList<Ticket> parseTicketByDoc(Document doc) {
 		ArrayList<Ticket> ticketList = new ArrayList<Ticket>();
 		if (doc == null)
-			return ticketList;
+			return null;
 
 		// 获取ticket的radio values
 		ArrayList<String> ticketRadioValues = this.parseRadioValue(doc);
@@ -109,6 +109,9 @@ public abstract class Parser {
 	 */
 	protected Map<String, String> parseStationByDoc(Document doc) {
 		Map<String, String> map = new LinkedHashMap<String, String>();
+		if (doc == null)
+			return null;
+		
 		// 定位到站点div
 		Element cityPairDiv = doc.select("div#marketCityPair_1").first();
 		Elements options = cityPairDiv.select("option");
@@ -128,6 +131,9 @@ public abstract class Parser {
 	 * @param radioValue
 	 */
 	private Ticket parseTicketByRadioValue(String radioValue) {
+		if (radioValue == null || radioValue.equals(""))
+			return null;
+		
 		String carrier, number, flightNumber, depAirport, arrAirport, depTime, arrTime;
 		String year, month, day, hour, minute;
 		carrier = number = flightNumber = depAirport = arrAirport = depTime = arrTime = "";
@@ -209,7 +215,7 @@ public abstract class Parser {
 	protected ArrayList<String> parseRadioValue(Document doc) {
 		ArrayList<String> radioValueList = new ArrayList<String>();
 		if (doc == null)
-			return radioValueList;
+			return null;
 
 		// 定位到table
 		String selectTable = "table#availabilityTable";
