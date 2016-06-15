@@ -1,5 +1,6 @@
 package cebu.main;
 
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.http.client.CookieStore;
@@ -29,6 +30,7 @@ public class Main {
 	// 提交表单url
 	private final static String PostUrl = "https://book.cebupacificair.com/Search.aspx";
 	
+	private final static String SAVE_PATH_FORMPARAMS = Dir + "avaliable_formParams.txt";
 	private final static String SAVE_PATH = Dir + "test_savedHtmlByUrl.html";
 	private final static String SAVE_PATH_IniFile = Dir + "Book a Trip.html";
 	
@@ -73,16 +75,42 @@ public class Main {
 	
 	@Test
 	public void get_save_ByAllFormParams() {
+		ArrayList<FormParams> avaliableFormParams = new ArrayList<FormParams>(); 
+		
 		ArrayList<FormParams> allFormParams = buildAllFormParams();
 		System.out.println("allFormParams count: " + allFormParams.size());
 		int allCount = 0;
 		int ticketCount = 0;
 		for(FormParams formParams : allFormParams) {
 			//System.out.println(formParams);
-			ticketCount += this.get_save_TicketOneWayByParams(formParams);
+			int avaliableCount = this.get_save_TicketOneWayByParams(formParams);
+			// 有效的表单变量
+			if(avaliableCount > 0)
+				avaliableFormParams.add(formParams);
+			
+			ticketCount += avaliableCount;
 			System.out.println("current count: " + (++allCount) + ", ticket count: " + ticketCount);
 		}
+		
+		// 保存有效表单便当到文件
+		this.saveAvaliableFormParamsToFile(avaliableFormParams, SAVE_PATH_FORMPARAMS);
 	}
+	
+	/**
+	 * 保存有效表单便当到文件
+	 * @param list
+	 * @param savePath
+	 */
+	public void saveAvaliableFormParamsToFile(ArrayList<FormParams> list, String savePath) {
+		StringBuilder sb = new StringBuilder();
+		for(FormParams params : list) {
+			String str = params.toString() + "\r\n";
+			sb.append(str);
+		}
+		crawler.saveHtmlToFile(sb.toString(), savePath);
+	}
+	
+	
 	
 	/**
 	 * 构建所有可能的变量
@@ -124,6 +152,60 @@ public class Main {
 	
 	
 	
+	
+	/**
+	 * 根据表单参数，获取信息同时保存相关html文件
+	 * 单程
+	 */
+	public int get_save_TicketOneWayByParams(FormParams formParams) {
+		/** 文件保存路径  **/
+		// post response
+		String savePathPost = Prefix_Save_File 
+				+ formParams.getTravelOption() + "_" 
+				+ formParams.getOrgStation() + "_"
+				+ formParams.getDestStation() + "_"
+				+ formParams.getDepartureTime() + Suffix_Save_File;
+		// radio value html
+		String savePathRadioBase = savePathPost.replace(Suffix_Save_File, "_radio" + Suffix_Save_File);
+		
+		// 获取提交查询表单之后的response html，记录cookieStore，以数组方式传址
+		CookieStore[] cookieStores = new CookieStore[1];
+		String html = crawler.getPostResponseHtmlByParams(PostUrl, formParams, cookieStores);
+		// 不存在该航班
+		if (html == null || html.equals(""))
+			return 0;
+		
+		// 获取提交表单之后的response html中的航班的radio value信息
+		ArrayList<String> radioValues = htmlParser.parseRadioValue(html);
+		// 为空，该html中没有radio value信息，即该航线没有航班
+		if(radioValues == null || radioValues.size() <= 0)
+			return 0;
+		
+		// 否则，存在该航班，保存文件
+		crawler.saveHtmlToFile(html, savePathPost);	
+		
+		// 依次提交每个radio value信息，get方式获取对应的html，包含航班的价格信息
+		ArrayList<String> radioValueGeneratedHtmls = crawler.getHtmlByRadio(cookieStores[0], radioValues);
+		// 保存文件
+		for(int i = 0; i < radioValueGeneratedHtmls.size(); i++) {
+			String priceHtml = radioValueGeneratedHtmls.get(i);
+			String savePathRadio = savePathRadioBase.replace(Suffix_Save_File, "_" + (i + 1) + Suffix_Save_File);
+			crawler.saveHtmlToFile(priceHtml, savePathRadio);	// 保存文件
+		}
+			
+		// 根据html 和radio value html 解析完整的航班信息
+		ArrayList<Ticket> tickets = htmlParser.parseTicket(html, radioValueGeneratedHtmls);
+		
+		// System.out.println(tickets);
+		
+		// 插入数据库
+		return TicketService.insert(tickets);
+	}
+	
+	
+	
+	
+	
 	/**
 	 * 获取信息同时保存相关html文件
 	 * 单程
@@ -153,51 +235,5 @@ public class Main {
 		get_save_TicketOneWayByParams(formParams);
 	}
 	
-	/**
-	 * 根据表单参数，获取信息同时保存相关html文件
-	 * 单程
-	 */
-	public int get_save_TicketOneWayByParams(FormParams formParams) {
-		/** 文件保存路径  **/
-		// post response
-		String savePathPost = Prefix_Save_File 
-				+ formParams.getTravelOption() + "_" 
-				+ formParams.getOrgStation() + "_"
-				+ formParams.getDestStation() + "_"
-				+ formParams.getDepartureTime() + Suffix_Save_File;
-		// radio value html
-		String savePathRadioBase = savePathPost.replace(Suffix_Save_File, "_radio" + Suffix_Save_File);
-		
-		// 获取提交查询表单之后的response html，记录cookieStore，以数组方式传址
-		CookieStore[] cookieStores = new CookieStore[1];
-		String html = crawler.getPostResponseHtmlByParams(PostUrl, formParams, cookieStores);
-		crawler.saveHtmlToFile(html, savePathPost);	// 保存文件
-		
-//System.out.println(html);
-		
-		// 获取提交表单之后的response html中的航班的radio value信息
-		ArrayList<String> radioValues = htmlParser.parseRadioValue(html);
-		// 为空，该html中没有radio value信息，即该航线没有航班
-		if(radioValues == null || radioValues.size() <= 0)
-			return 0;
-		
-		
-		// 依次提交每个radio value信息，get方式获取对应的html，包含航班的价格信息
-		ArrayList<String> radioValueGeneratedHtmls = crawler.getHtmlByRadio(cookieStores[0], radioValues);
-		// 保存文件
-		for(int i = 0; i < radioValueGeneratedHtmls.size(); i++) {
-			String priceHtml = radioValueGeneratedHtmls.get(i);
-			String savePathRadio = savePathRadioBase.replace(Suffix_Save_File, "_" + (i + 1) + Suffix_Save_File);
-			crawler.saveHtmlToFile(priceHtml, savePathRadio);
-		}
-			
-		// 根据html 和radio value html 解析完整的航班信息
-		ArrayList<Ticket> tickets = htmlParser.parseTicket(html, radioValueGeneratedHtmls);
-		
-		// System.out.println(tickets);
-		
-		// 插入数据库
-		return TicketService.insert(tickets);
-	}
 
 }

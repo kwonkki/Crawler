@@ -557,7 +557,15 @@ public class Crawler {
 		this.setHttpPostHeader(httpPost);
 		// 设置实体
 		httpPost.setEntity(formEntity);
-
+		
+		
+/*		打印完整post请求url
+  		try {
+			System.out.println(this.getStrByInputStream(formEntity.getContent()));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}*/
+		
 		CloseableHttpClient httpClient = null;
 		CloseableHttpResponse response302 = null;
 		CloseableHttpResponse response200 = null;

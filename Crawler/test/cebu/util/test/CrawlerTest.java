@@ -41,7 +41,7 @@ public class CrawlerTest {
 	}
 	
 	@Test
-	public void test_savePostResponseHtml() {
+	public void test_savePostResponseHtmlConst() {
 		crawler.savePostResponseHtmlConst(PostUrl, SAVE_PATH_Response);
 		System.out.println("done");
 	}
