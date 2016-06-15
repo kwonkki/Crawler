@@ -1,6 +1,5 @@
 package cebu.main;
 
-import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.http.client.CookieStore;

@@ -1,0 +1,294 @@
+<div class="graybox2">
+  <div class="collapsible collapsed">
+    <div id="taxAndFeeInclusiveDivHeader" class="atAGlanceDivHeader">
+      <p id="bookingSummaryTotalHead">
+        TOTAL
+      </p>
+      <p class="total">
+        <span id="summaryCurrencyCode" style="margin-right: 3px;color:#000;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">PHP</span>
+        <span id="bookingSummaryTotal" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+      0.00
+    </span>
+      </p>
+    </div>
+  </div>
+  <div id="taxAndFeeInclusiveDivBody" class="contents">
+    <div class="section summary hidden" id="marketCheck">
+      <span class="summarySubHeader">One Way</span>
+      <span>2 
+      Adult(s) 
+        </span>
+    </div>
+    <div class="contents" id="priceDetails">
+      <div class="section summary hidden">
+        <div class="summaryHeader">
+          Price Details (PHP)
+        </div>
+        <div class="summaryLabel">
+          FARE
+        </div>
+        <dl class="rightpanel">
+          <div class="fareTypeItineraryDisplay fareType_0" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+      FLY
+    </div>
+          <div class="left entry">Class Y (ILO - MNL)
+            </div>
+          <br />
+          <div class="left entry">
+              • Adults, Children, &amp; Infants with Seat
+            </div>
+          <br />
+          <div id="journeyBaseFare_0" class="left entry journeyBaseFare" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+       <span class="baseFarePrice">6,499.00</span> x
+      <span class="paxCount">2</span>
+      = <span class="baseFareTotalPrice">12,998.00</span></div>
+          <br />
+          <div class="left entry">
+              • Infants
+            </div>
+          <br />
+          <div class="left entry">
+               0.00 x 0 = 0.00</div>
+          <br />
+          <div id="specialPax_0" class="journeyBaseFare" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />
+          <input id="departAllInAmount" type="hidden" value="14,923.76" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />
+        </dl>
+        <div class="summarySubTotal">
+          <span class="amountLabel">
+            SUBTOTAL : 
+          </span>
+          <span id="faresSubTotal" class="totalAmount">12,998.00</span>
+        </div>
+        <br />
+        <div id="adminFee">
+          <div class="summarySubTotal">
+            <span class="amountLabel">
+              ADMIN FEE :
+            </span>
+            <br />
+          </div>
+        </div>
+        <div id="webAndMobileAdminFee">
+          <div class="left" style="margin-top: 10px;">
+            • Web Admin Fee :
+            <span id="priceWAF" class="amountItem">336.00</span></div>
+          <br />
+          <div style="height: 30px;" />
+        </div>
+        <br />
+        <div id="showTax" style="display:none;width:auto;border:none;box-shadow: gray 0px 0px 4px 4px;">
+          <div style="white-space:nowrap;">Aviation Security Fee - 
+      30.00<br xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />Value Added Tax - 
+      1,559.76<br xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" /><taxAndFeeNonFlight /></div>
+        </div>
+        <div style="cursor:pointer;border-bottom: 1px solid grey;" id="TaxesAndFeesLink" class="summarySubTotal">
+          <span class="amountLabel">
+            TAXES AND FEES : 
+          </span>
+          <br />
+          <span class="amount-item" id="taxesFaresTotal">1,589.76</span>
+        </div>
+        <div class="summaryOverallTotal">
+          <span class="amountLabel">
+            TOTAL :
+          </span>
+          <br />
+          <span id="overallTotalCurrencyCode" style="font-size:1.4em;float:left;">PHP 
+          </span>
+          <span id="overallTotal" class="totalAmount">14,923.76</span>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="taxAndFeeInclusiveDivFooter" class="atAGlanceDivFooter" />
+</div>
+<div>
+  <img alt="Getgo points" src="images/CebuAirRevamp/getgo-points-logo.png" onclick="SKYSALES.Util.openWindow('https://www.getgo.com.ph', '_blank', 800,800)" style="cursor: pointer; cursor: hand;" />
+</div>
+<div id="fareRulesDisplayBody" class="hidden">
+  <div id="headernote" style="display:none;margin-bottom:15px;font-size:12px;clear:both;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <h4 id="headerNoteHeader">Fare rules for your chosen flights are displayed below. </h4>
+    <p id="headerNoteText">Make sure that you have read and understood the fare rules before you continue to pay for your booking.</p>
+  </div>
+  <script type="text/javascript" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+        var url = window.location.href.split('/');
+        if((url[url.length - 1].indexOf('FareRulesPayment') &gt; -1) || (url[url.length - 1].indexOf('FareRulesChangePayment') &gt; -1)
+        || (url[url.length - 1].indexOf('FinalizeChange') &gt; -1) || (url[url.length - 1].indexOf('CustomerFinalizeChange') &gt; -1)){
+        if(document.getElementById("headernote")){
+        document.getElementById("headernote").style.display = "block";
+        }
+        }
+      </script>
+  <div class="&#xA;            flightDepartImage&#xA;           flightImageHalf" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <div class="&#xA;            fareRulesDepartLabel&#xA;          ">DEPARTURE 
+          </div>
+    <div class="&#xA;            fareRulesFlightDetailsDepart&#xA;          " style="width:80%;">Iloilo 
+          (ILO) to 
+          Manila 
+          (MNL) 
+
+
+          Class Y 
+            PHP 
+            <span class="fare-amount">7,461.88</span></div>
+  </div>
+  <br style="clear:both;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />
+  <div class="specific-rule-depart foreign fareRuleHalf" style="margin-top:40px;border-bottom:none;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <div>
+      <div class="specific-rule-items" style="width:auto;">
+        <div class="fareRules">Regular GO Fare</div>
+        <br style="clear:both;" />
+        <div class="rule-set">
+          <div class="row Flight Changes" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">Flight Changes</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Changes allowed but must be done not less than (4) hours before departure. </span>
+          </div>
+          <br />
+          <div class="row Rebooking" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">Rebooking</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Allowed but subject to applicable fees and penalties.</span>
+          </div>
+          <br />
+          <div class="row No Show" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">No Show</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Fares and all other fees are forfeited or considered flown.</span>
+          </div>
+          <br />
+          <div class="row Cancellation/ Rerouting" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">Cancellation/ Rerouting</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Allowed and subject to penalties.  Balance of the fare (excluding ancillaries) is stored in a Travel Fund which must be used within 90 days. For flights to/from the US, allowed within 24 hours if booked 7 days or more from scheduled time of departure.<br /></span>
+          </div>
+          <br />
+          <div class="row Name Change" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">Name Change</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Allowed upon payment of applicable fee but not allowed for partially-flown tickets.</span>
+          </div>
+          <br />
+          <div class="row Baggage Allowance" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">Baggage Allowance</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Not included. You may purchase this on the next few pages. </span>
+          </div>
+          <br />
+          <div class="row Meals" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">Meals</span>
+            <span style="width:272px;float:left;font-size:1.3em;">Not included.  You may purchase this on the next few pages.</span>
+          </div>
+          <br />
+        </div>
+        <div style="clear:both" />
+        <div style="border-bottom: 1px solid gray; margin-bottom: 15px;" />
+      </div>
+    </div>
+  </div>
+  <div style="width: 100%; clear:both;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <p class="rulesFooter" style="font-size: 1.5em; font-weight: 400">
+      <span class="blue">NOTE: </span>For complete summary of applicable fees, taxes and surcharges, please check out <a href="https://www.cebupacificair.com/Pages/fee-summary.aspx" target="_blank">Fees Summary</a>.
+
+                Carriage of passenger and baggage is subject to the Terms and Conditions of Carriage approved by the Civil Aeronautics Board. For complete Terms and Conditions of Carriage, please refer to <a onclick="SKYSALES.Util.initDisplayDialogOpenExternal(640, 650, 'Conditions of Carriage','GeneralTermsAndCondition.aspx', 0);" href="#" class="noExitPrompt">Conditions of Carriage</a><a onclick="SKYSALES.Util.initDisplayDialogOpenExternal(640, 650, '','', 0);" href="#" class="noExitPrompt" />.
+              </p>
+  </div>
+  <div id="labelColapsibleDepart" onclick="SKYSALES.Util.showDepartFareRule();" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <span id="arrowDepart" class="fareRulesLabelCollapsible">
+      <label id="fareRulesFilipino" href="#">
+    Basahin sa Filipino
+  </label>
+    </span>
+  </div>
+  <br xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />
+  <br style="clear:both;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />
+  <div id="specific-rule native" class="specific-rule-native depart" style="display:none;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <div style="margin-top:20px;">
+      <div class="specific-rule-items depart" style="width:48%;">
+        <div class="fareRules">
+          <i>Regular GO Fare</i>
+        </div>
+        <br style="clear:both;" />
+        <div class="rule-set">
+          <div class="row &lt;i&gt;Mga pagbabago sa byahe&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>Mga pagbabago sa byahe</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Maaring magbago ng byahe subalit kailangang gawin ito ng hindi bababa sa apat (4) na oras  bago ang paglipad.</i>
+            </span>
+          </div>
+          <br />
+          <div class="row &lt;i&gt;Pagbabago sa petsa ng paglipad&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>Pagbabago sa petsa ng paglipad</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Maaari pero may karampatang bayad.</i>
+            </span>
+          </div>
+          <br />
+          <div class="row &lt;i&gt;No Show&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>No Show</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Ang buong pamasahe ay hindi na maaaring i-refund.</i>
+            </span>
+          </div>
+          <br />
+          <div class="row &lt;i&gt;Pagkansela/ Pagbabago ng panggagalingan o destinasyon&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>Pagkansela/ Pagbabago ng panggagalingan o destinasyon</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Maari pero may karampatang bayad.  Ang maiiwang halaga ng pamasahe (di kasama ang ancillaries) ay ilalagay sa Travel Fund na magagamit hanggang 90 araw lamang. Para sa mga lipad papunta at galing ng US, maaring gawin sa loob ng 24 na oras kung ang booking ay ginawa ng 7 araw o higit sa napiling araw ng paglipad.</i>
+            </span>
+          </div>
+          <br />
+          <div class="row &lt;i&gt;Pagbabago ng pangalan ng pasahero&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>Pagbabago ng pangalan ng pasahero</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Maari pero may karampatang bayad.  Hindi maari kung na-ilipad na ang isa/ilang bahagi ng buong byahe.</i>
+            </span>
+          </div>
+          <br />
+          <div class="row &lt;i&gt;Libreng Bagahe&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>Libreng Bagahe</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Hindi kasama. Maaring bilhin sa mga susunod na pahina</i>
+            </span>
+          </div>
+          <br />
+          <div class="row &lt;i&gt;Pagkain&lt;/i&gt;" style="float:left;position:relative;padding-bottom:5px;padding-top:10px;border-top: 1px solid grey;">
+            <span style="width:110px;margin-right:15px;float:left;font-weight:bold;font-size:1.3em;color:#666666;">
+              <i>Pagkain</i>
+            </span>
+            <span style="width:272px;float:left;font-size:1.3em;">
+              <i>Hindi kasama. Maaring bilhin sa mga susunod na pahina.</i>
+            </span>
+          </div>
+          <br />
+        </div>
+        <div style="clear:both" />
+        <div style="border-bottom: 1px solid gray; margin-bottom: 15px;" />
+      </div>
+    </div>
+    <div id="fareRulesNativeNote" style="width:100%;clear:both;display:none;">
+      <p class="rulesFooter" style="font-size: 1.4em;font-weight: 400;">
+        <span class="blue italicText">PAALALA: </span>Para sa kumpletong listahan ng lahat ng fees, taxes and surcharges, puntahan ang  <a href="https://www.cebupacificair.com/Pages/fee-summary.aspx" target="_blank">Fees Summary</a>.
+
+                Ang paglipad ng pasahero at mga bagahe ay sakop ng  Terms and Conditions of Carriage na aprubado ng Civil Aeronautics Board.  Para sa kumpletong Terms and Conditions of Carriage, basahin ang <a onclick="SKYSALES.Util.initDisplayDialogOpenExternal(640, 650, 'Conditions of Carriage','GeneralTermsAndCondition.aspx', 0);" href="#" class="noExitPrompt">Conditions of Carriage</a><a onclick="SKYSALES.Util.initDisplayDialogOpenExternal(640, 650, '','', 0);" href="#" class="noExitPrompt" />.
+              </p>
+    </div>
+  </div>
+  <br xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script" />
+  <div class="fare-rules-left scrollbox" style="display:none;" xmlns:formatterExtension="urn:navitaire:formatters:currency" xmlns:scriptExtension="urn:navitaire:extensions:script">
+    <p>
+      <label id="Label">Going Out</label>
+      <div id="" class="">
+        <p />
+      </div>
+    </p>
+  </div>
+</div>
+
