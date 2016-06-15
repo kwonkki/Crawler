@@ -1,7 +1,5 @@
 package cebu.dao.service.test;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import cebu.dao.service.TicketService;
@@ -30,8 +28,7 @@ public class TicketServiceTest {
 		ticket.setSeats(2);
 		ticket.setcreateTime("20160101122045");
 		
-		TicketService ticketService = new TicketService();
-		ticketService.insert(ticket);
+		TicketService.insert(ticket);
 		
 		System.out.println("done");
 	}
@@ -51,8 +48,7 @@ public class TicketServiceTest {
 		ticket.setSeats(2);
 		ticket.setcreateTime("20160101122045");
 		
-		TicketService ticketService = new TicketService();
-		System.out.println(ticketService.query(ticket));
+		System.out.println(TicketService.query(ticket));
 		
 		System.out.println("done");
 	}
@@ -72,9 +68,7 @@ public class TicketServiceTest {
 		ticket.setSeats(2);
 		ticket.setcreateTime("20160101124000");
 		
-		TicketService ticketService = new TicketService();
-		System.out.println(ticketService.update(ticket));
-		
+		System.out.println(TicketService.update(ticket));
 		System.out.println("done");
 	}
 }

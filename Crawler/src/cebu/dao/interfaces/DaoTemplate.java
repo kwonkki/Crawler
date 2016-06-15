@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import cebu.util.db.JdbcUtil;
+import cebu.dao.util.JdbcUtil;
 
 /**
  * Dao的jdbc实现模板

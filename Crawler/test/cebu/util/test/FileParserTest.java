@@ -7,11 +7,15 @@ import java.util.Date;
 import org.junit.Test;
 import cebu.model.Ticket;
 import cebu.util.FileParser;
-import cebu.util.ToolUtil;
+
+/**
+ * 测试类，FileParser以HtmlParser为基础，因此只需要测试FileParser即可
+ * @author Administrator
+ *
+ */
 
 public class FileParserTest {
 
-	/**中文测试**/
 	private final static String URL = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
 	private final static String Response_Base_Url = "https://book.cebupacificair.com/Select.aspx";
 	private final static String SAVE_PATH_Response_Params = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response_params.html";
@@ -30,18 +34,6 @@ public class FileParserTest {
 	@Test
 	public void test_parseTime() {
 		System.out.println(fileParser.parseTime(new File(SAVE_PATH_IniFile)));
-		System.out.println("done");
-	}
-	
-	@Test 
-	public void test_parseStation() {
-		ToolUtil.printMap(fileParser.parseStation(new File(SAVE_PATH_IniFile)));
-		System.out.println("done");
-	}
-	
-	@Test 
-	public void test_parseStationWithUrl() {
-		ToolUtil.printMap(fileParser.parseStationWithUrl(new File(SAVE_PATH_IniFile), URL));
 		System.out.println("done");
 	}
 	

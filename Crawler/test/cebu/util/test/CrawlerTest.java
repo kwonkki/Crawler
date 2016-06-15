@@ -1,6 +1,5 @@
 package cebu.util.test;
 
-import static org.junit.Assert.*;
 import java.util.List;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.HttpClientContext;

@@ -1,4 +1,4 @@
-package cebu.util.db;
+package cebu.dao.util;
 
 import java.io.*;
 import java.sql.*;
@@ -8,6 +8,12 @@ import org.apache.commons.dbcp2.BasicDataSourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Jdbc工具类
+ * 只负责获取连接和释放资源，不涉及具体与实体相关的数据库操作
+ * @author Administrator
+ *
+ */
 public class JdbcUtil {
 /*	private static final String URL = "jdbc:mysql://localhost:3306/cebu";
 	private static final String USER = "root";
