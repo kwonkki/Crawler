@@ -3,7 +3,10 @@ package test;
 import static org.junit.Assert.*;
 
 import java.awt.datatransfer.StringSelection;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.net.URI;
@@ -14,7 +17,10 @@ import java.util.List;
 
 import org.apache.commons.dbcp2.Constants;
 import org.apache.http.Consts;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -215,10 +221,15 @@ public class JejuTest {
 		String postUrl = PostUrl;
 		HttpPost httpPost = new HttpPost(postUrl);
 		httpPost.setEntity(postingString);
-		// httpPost.setHeader("Content-Type",
-		// "application/x-www-form-urlencoded");
-		httpPost.setHeader("Accept", "application/json");
-		httpPost.setHeader("Content-type", "application/json");
+		httpPost.setHeader("Host", "www.jejuair.net");
+		httpPost.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
+		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+		httpPost.setHeader("Accept-Language", "en-US,zh;q=0.8,zh-CN;q=0.5,en;q=0.3");
+		httpPost.setHeader("Accept-Encoding", "gzip, deflate");
+		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		httpPost.setHeader("Origin", "https://www.jejuair.net");
+		httpPost.setHeader("Referer", "https://www.jejuair.net/jejuair/main.jsp");
+
 
 		try {
 			System.out.println(crawler.getStrByInputStream(httpPost.getEntity().getContent()));
@@ -230,10 +241,85 @@ public class JejuTest {
 		HttpClientContext context = HttpClientContext.create();
 		CloseableHttpResponse response = httpClient.execute(httpPost, context);
 
+		CookieStore cookieStore = new BasicCookieStore();
+		cookieStore = context.getCookieStore();
+		
 		System.out.println(response.getStatusLine().getStatusCode());
 
 		String html = crawler.getHtmlByResponse(response);
 		crawler.saveHtmlToFile(html, SavePath);
+		
+		JSONObject jsonSecond = new JSONObject();
+		jsonSecond.put("AdultPaxCnt", "2");
+		jsonSecond.put("ChildPaxCnt", "0");
+		jsonSecond.put("InfantPaxCnt", "0");
+		jsonSecond.put("RouteType", "I");
+		jsonSecond.put("SystemType", "IBE");
+		jsonSecond.put("Language", "EN");
+		jsonSecond.put("DepStn", "WEH");
+		jsonSecond.put("ArrStn", "ICN");
+		jsonSecond.put("SegType", "DEP");
+		jsonSecond.put("TripType", "OW");
+		jsonSecond.put("DepDate", "2016-06-30");
+		jsonSecond.put("Index", "3");
+
+		String postUrlSecond = "https://www.jejuair.net/jejuair/com/jeju/ibe/searchAvail.do";
+		StringEntity entitySecond = null;
+		try {
+			entitySecond = new StringEntity(jsonSecond.toString());
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+		HttpPost httpPostSecond = new HttpPost(postUrlSecond);
+		httpPostSecond.setEntity(entitySecond);
+
+		httpPostSecond.setHeader("Host", "www.jejuair.net");
+		httpPostSecond.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
+		httpPostSecond.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+		httpPostSecond.setHeader("Accept-Language", "en-US,zh;q=0.8,zh-CN;q=0.5,en;q=0.3");
+		httpPostSecond.setHeader("Accept-Encoding", "gzip, deflate, br");
+		httpPostSecond.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		httpPostSecond.setHeader("X-Requested-With", "XMLHttpRequest");
+		httpPostSecond.setHeader("Referer", "https://www.jejuair.net/jejuair/com/jeju/ibe/goAvail.do");
+
+		String paramStrSecond = crawler.getStrByInputStream(entitySecond.getContent());
+		System.out.println("entity str: " + paramStrSecond);
+		System.out.println(httpPostSecond.getRequestLine());
+
+		HttpClientContext contextSecond = HttpClientContext.create();
+		CloseableHttpClient httpClientSecond = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
+		CloseableHttpResponse responseSecond = httpClientSecond.execute(httpPostSecond, contextSecond);
+
+		String reStrSecond = crawler.getStrByInputStream(responseSecond.getEntity().getContent());
+
+System.out.println(reStrSecond);
+		
+		try {
+
+			JSONParser parser = new JSONParser();
+			Object resultObject = parser.parse(reStrSecond);
+System.out.println(resultObject);
+			if (resultObject instanceof JSONArray) {
+				JSONArray array = (JSONArray) resultObject;
+				for (Object object : array) {
+					JSONObject obj = (JSONObject) object;
+					System.out.println(obj.toString());
+					System.out.println(obj.get("example"));
+					System.out.println(obj.get("fr"));
+				}
+
+			} else if (resultObject instanceof JSONObject) {
+				JSONObject obj = (JSONObject) resultObject;
+				System.out.println(obj.toString());
+				System.out.println(obj.get("example"));
+				System.out.println(obj.get("fr"));
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		System.out.println(reStrSecond);
 	}
 
 	@Test
@@ -389,37 +475,13 @@ public class JejuTest {
 		CloseableHttpClient httpClientFirst = HttpClients.createDefault();
 		CloseableHttpResponse responseFirst = httpClientFirst.execute(httpPostFirst, contextFirst);
 
-		CookieStore[] cookieStores = new CookieStore[1];
-		cookieStores[0] = contextFirst.getCookieStore();
-System.out.println("cookie: " + cookieStores[0]);
+		CookieStore cookieStore = new BasicCookieStore();
+		cookieStore = contextFirst.getCookieStore();
+System.out.println("cookieStore: " + cookieStore);
 		String reStrFirst = crawler.getStrByInputStream(responseFirst.getEntity().getContent());
 		System.out.println(reStrFirst);
 
-		try {
-
-			JSONParser parser = new JSONParser();
-			Object resultObject = parser.parse(reStrFirst);
-			System.out.println(resultObject);
-			if (resultObject instanceof JSONArray) {
-				JSONArray array = (JSONArray) resultObject;
-				for (Object object : array) {
-					JSONObject obj = (JSONObject) object;
-					System.out.println(obj.toString());
-					System.out.println(obj.get("example"));
-					System.out.println(obj.get("fr"));
-				}
-
-			} else if (resultObject instanceof JSONObject) {
-				JSONObject obj = (JSONObject) resultObject;
-				System.out.println(obj.toString());
-				System.out.println(obj.get("example"));
-				System.out.println(obj.get("fr"));
-			}
-
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
+		
 		JSONObject json = new JSONObject();
 		json.put("AdultPaxCnt", "2");
 		json.put("ChildPaxCnt", "0");
@@ -435,33 +497,38 @@ System.out.println("cookie: " + cookieStores[0]);
 		json.put("Index", "3");
 
 		String postUrl = "https://www.jejuair.net/jejuair/com/jeju/ibe/searchAvail.do";
-		StringEntity entity = null;
-		try {
-			entity = new StringEntity(json.toString());
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+		StringEntity entity = new StringEntity(json.toString());
 		HttpPost httpPost = new HttpPost(postUrl);
 		httpPost.setEntity(entity);
 
-		httpPost.setHeader("Host", "www.jejuair.net");
-		httpPost.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
+		List<Cookie> cookies = cookieStore.getCookies();
+		StringBuffer sb = new StringBuffer();
+		for(Cookie cookie : cookies) {
+			sb.append(cookie.getName() + "=" + cookie.getValue() + "; ");
+		}
+		String cookieStr = sb.toString().substring(0, sb.toString().length() - 3);
+System.out.println("cookieStr: " + cookieStr);
+		
+		
+		httpPost.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36");
 		httpPost.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
 		httpPost.setHeader("Accept-Language", "en-US,zh;q=0.8,zh-CN;q=0.5,en;q=0.3");
-		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
+		httpPost.setHeader("Accept-Encoding", "gzip, deflate");
 		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
+		httpPost.setHeader("Host", "www.jejuair.net");
+		httpPost.setHeader("DNT", "1");
+		httpPost.setHeader("Origin", "https://www.jejuair.net");
 		httpPost.setHeader("Referer", "https://www.jejuair.net/jejuair/com/jeju/ibe/goAvail.do");
-
-		CloseableHttpClient httpClient = null;
-		CloseableHttpResponse response = null;
-
-		httpClient = HttpClients.createDefault();
+		httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
+		httpPost.setHeader("Cookie", cookieStr);
+		
 		HttpClientContext context = HttpClientContext.create();
-		response = httpClient.execute(httpPost, context);
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		CloseableHttpResponse response = httpClient.execute(httpPost, context);
 
 		String reStr = crawler.getStrByInputStream(response.getEntity().getContent());
-
+		System.out.println(reStr);
+		
 		try {
 
 			JSONParser parser = new JSONParser();
@@ -487,7 +554,7 @@ System.out.println("cookie: " + cookieStores[0]);
 			// TODO: handle exception
 		}
 
-		System.out.println(reStr);
+		
 
 	}
 
@@ -510,7 +577,7 @@ System.out.println("cookie: " + cookieStores[0]);
 		httpPostFirst.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
 		httpPostFirst.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
 		httpPostFirst.setHeader("Accept-Language", "en-US,zh;q=0.8,zh-CN;q=0.5,en;q=0.3");
-		httpPostFirst.setHeader("Accept-Encoding", "gzip, deflate, br");
+		httpPostFirst.setHeader("Accept-Encoding", "gzip, deflate");
 		httpPostFirst.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
 		httpPostFirst.setHeader("X-Requested-With", "XMLHttpRequest");
 		httpPostFirst.setHeader("Origin", "https://www.jejuair.net");
@@ -524,6 +591,11 @@ System.out.println("cookie: " + cookieStores[0]);
 		cookieStore = httpClientContext.getCookieStore();
 System.out.println("------------cookieStores: " + cookieStore);
 System.out.println("------------httpContext: " + httpClientContext.toString());
+		List<Cookie> cookies = cookieStore.getCookies();
+System.out.println("---------------- cookie ------------------");
+		for(Cookie cookie : cookies) {
+			System.out.println(cookie.getName() + " = " + cookie.getValue());
+		}
 
 		String reStrFirst = crawler.getStrByInputStream(responseFirst.getEntity().getContent());
 		System.out.println(reStrFirst);
@@ -585,9 +657,9 @@ System.out.println("------------httpContext: " + httpClientContext.toString());
 		httpPost.setHeader("Referer", "https://www.jejuair.net/jejuair/com/jeju/ibe/goAvail.do");
 
 		
-		List<Cookie> cookies = cookieStore.getCookies();
-		System.out.println("---------------- cookie ------------------");
-		for(Cookie cookie : cookies) {
+		List<Cookie> cookies2 = cookieStore.getCookies();
+		System.out.println("---------------- cookie2 ------------------");
+		for(Cookie cookie : cookies2) {
 			System.out.println(cookie.getName() + " = " + cookie.getValue());
 		}
 		
@@ -704,58 +776,71 @@ System.out.println("result: " + result);
 	
 	@Test
 	public void test_post_form_Second() throws Exception {
-		JSONObject json = new JSONObject();
-		json.put("AdultPaxCnt", "2");
-		json.put("ChildPaxCnt", "0");
-		json.put("InfantPaxCnt", "0");
-		json.put("RouteType", "I");
-		json.put("SystemType", "IBE");
-		json.put("Language", "EN");
-		json.put("DepStn", "WEH");
-		json.put("ArrStn", "ICN");
-		json.put("SegType", "DEP");
-		json.put("TripType", "OW");
-		json.put("DepDate", "2016-06-30");
-		json.put("Index", "3");
+		JSONObject jsonSecond = new JSONObject();
+		jsonSecond.put("AdultPaxCnt", "2");
+		jsonSecond.put("ChildPaxCnt", "0");
+		jsonSecond.put("InfantPaxCnt", "0");
+		jsonSecond.put("RouteType", "I");
+		jsonSecond.put("SystemType", "IBE");
+		jsonSecond.put("Language", "EN");
+		jsonSecond.put("DepStn", "WEH");
+		jsonSecond.put("ArrStn", "ICN");
+		jsonSecond.put("SegType", "DEP");
+		jsonSecond.put("TripType", "OW");
+		jsonSecond.put("DepDate", "2016-06-27");
+		jsonSecond.put("Index", "0");
 
-		String postUrl = "https://www.jejuair.net/jejuair/com/jeju/ibe/searchAvail.do";
-		StringEntity entity = null;
-		try {
-			entity = new StringEntity(json.toString());
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
+		String postUrlSecond = "https://www.jejuair.net/jejuair/com/jeju/ibe/searchAvail.do";
+		StringEntity entitySecond = new StringEntity(jsonSecond.toString(), Consts.UTF_8);
+		HttpPost httpPostSecond = new HttpPost(postUrlSecond);
+		
+		httpPostSecond.setEntity(entitySecond);
+
+		
+		httpPostSecond.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36");
+		httpPostSecond.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
+		httpPostSecond.setHeader("Accept-Language", "en-US,zh;q=0.8,zh-CN;q=0.5,en;q=0.3");
+		httpPostSecond.setHeader("Accept-Encoding", "gzip, deflate");
+		httpPostSecond.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+		httpPostSecond.setHeader("Host", "www.jejuair.net");
+		httpPostSecond.setHeader("DNT", "1");
+		httpPostSecond.setHeader("Origin", "https://www.jejuair.net");
+		httpPostSecond.setHeader("Referer", "https://www.jejuair.net/jejuair/com/jeju/ibe/goAvail.do");
+		httpPostSecond.setHeader("X-Requested-With", "XMLHttpRequest");
+		
+		String paramStrSecond = crawler.getStrByInputStream(entitySecond.getContent());
+		System.out.println("entity str: " + paramStrSecond);
+		System.out.println("----------request line: " + httpPostSecond.getRequestLine());
+
+		CookieStore cookieStore = new BasicCookieStore();
+		HttpClientContext httpClientContext = HttpClientContext.create();
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		CloseableHttpResponse responseSecond = httpClient.execute(httpPostSecond, httpClientContext);
+
+		cookieStore = httpClientContext.getCookieStore();
+System.out.println("------------cookieStores: " + cookieStore);
+System.out.println("------------httpContext: " + httpClientContext.toString());
+		List<Cookie> cookies = cookieStore.getCookies();
+System.out.println("---------------- cookie ------------------");
+		for(Cookie cookie : cookies) {
+			System.out.println(cookie.getName() + " = " + cookie.getValue());
 		}
-		HttpPost httpPost = new HttpPost(postUrl);
-		httpPost.setEntity(entity);
-
-		httpPost.setHeader("Host", "www.jejuair.net");
-		httpPost.setHeader("User-agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0");
-		httpPost.setHeader("Accept", "application/json, text/javascript, */*; q=0.01");
-		httpPost.setHeader("Accept-Language", "en-US,zh;q=0.8,zh-CN;q=0.5,en;q=0.3");
-		httpPost.setHeader("Accept-Encoding", "gzip, deflate, br");
-		httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-		httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
-		httpPost.setHeader("Referer", "https://www.jejuair.net/jejuair/com/jeju/ibe/goAvail.do");
-
-		String paramStr = crawler.getStrByInputStream(entity.getContent());
-		System.out.println("entity str: " + paramStr);
-		System.out.println(httpPost.getRequestLine());
-
-		CloseableHttpClient httpClient = null;
-		CloseableHttpResponse response = null;
-
-		httpClient = HttpClients.createDefault();
-		HttpClientContext context = HttpClientContext.create();
-		response = httpClient.execute(httpPost, context);
-
-		String reStr = crawler.getStrByInputStream(response.getEntity().getContent());
-
-System.out.println(reStr);
+		
+System.out.println("------------ response headers:");
+		Header[] headers = responseSecond.getAllHeaders();
+		for(Header header : headers) {
+			System.out.println(header.getName() + "=" + header.getValue());
+		}
+		
+/*		String info = this.getResponseBody(responseSecond.getEntity());
+System.out.println("info: " + info);*/
+		
+		String reStrSecond = crawler.getStrByInputStream(responseSecond.getEntity().getContent());
+System.out.println(reStrSecond);
 		
 		try {
-
 			JSONParser parser = new JSONParser();
-			Object resultObject = parser.parse(reStr);
+			Object resultObject = parser.parse(reStrSecond);
 System.out.println(resultObject);
 			if (resultObject instanceof JSONArray) {
 				JSONArray array = (JSONArray) resultObject;
@@ -765,20 +850,48 @@ System.out.println(resultObject);
 					System.out.println(obj.get("example"));
 					System.out.println(obj.get("fr"));
 				}
-
 			} else if (resultObject instanceof JSONObject) {
 				JSONObject obj = (JSONObject) resultObject;
 				System.out.println(obj.toString());
 				System.out.println(obj.get("example"));
 				System.out.println(obj.get("fr"));
 			}
-
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 
-		System.out.println(reStr);
+		System.out.println(reStrSecond);
 
 	}
+	
+	
+	
+	public String getResponseBody(final HttpEntity entity) throws IOException, ParseException {
+        if (entity == null) {
+            throw new IllegalArgumentException("HTTP entity may not be null");
+        }
+        InputStream instream = entity.getContent();
+
+        if (instream == null) {
+            return "";
+        }
+        if (entity.getContentLength() > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException(
+
+            "HTTP entity too large to be buffered in memory");
+        }
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(instream, HTTP.UTF_8));
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+        } finally {
+            instream.close();
+            reader.close();
+        }
+        return buffer.toString();
+    }
 
 }
