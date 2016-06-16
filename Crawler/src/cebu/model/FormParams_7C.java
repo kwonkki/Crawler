@@ -221,7 +221,30 @@ public class FormParams_7C {
 
 	@Override
 	public String toString() {
-		String info = "";
+		String info = 
+				"mainFlag=" + this.getMainFlag() + ", " +
+				"routeType=" + this.getRouteType() + ", " +
+				"tripType=" + this.getTripType()+ ", " +
+				"payType=" + this.getPayType() + ", " +
+				"depStn1=" + this.getDepStn1() + ", " +
+				"arrStn1=" + this.getArrStn1() + ", " +
+				"depStn1=" + this.getDepStn2() + ", " +
+				"arrStn2=" + this.getArrStn2() + ", " +
+				"depStnName1=" + this.getDepStnName1() + ", " +
+				"arrStnName1=" + this.getArrStnName1() + ", " +
+				"depStnName2=" + this.getDepStnName2() + ", " +
+				"arrStnName2=" + this.getArrStnName2() + ", " +
+				"depDate1=" + this.getDepDate1() + ", " +
+				"depDate2=" + this.getDepDate2() + ", " +
+				"country1=" + this.getCountry1() + ", " +
+				"country2=" + this.getCountry2() + ", " +
+				"selectSectionSize=" + this.getSelectSectionSize() + ", " +
+				"adtPaxCnt=" + this.getAdtPaxCnt() + ", " +
+				"chdPaxCnt=" + this.getChdPaxCnt() + ", " +
+				"infPaxCnt=" + this.getInfPaxCnt() + ", " +
+				"dualFlag=" + this.getDualFlag() +", " +
+				"multiFlag=" + this.getMultiFlag();
+				
 		return info;
 	}
 
