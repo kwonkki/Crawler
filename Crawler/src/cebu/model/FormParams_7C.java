@@ -32,8 +32,8 @@ public class FormParams_7C {
 	private String arrStnName1 = "Destination";
 	private String depStnName2 = "Origin";
 	private String arrStnName2 = "Seoul(Incheon)";
-	private String depDate1 = "2016-12-20"; // 始发日期
-	private String depDate2 = "2016-12-20";
+	private String depDate1 = "2016-06-30"; // 始发日期
+	private String depDate2 = "2016-06-30";
 	private String country1 = "";
 	private String country2 = "CN";
 	private int selectSectionSize = 1;
