@@ -66,8 +66,8 @@ public class CrawlerService_7C implements CrawlerService {
 			.build();
 
 		String jsonStr = crawler.getPostResponseHtmlByParams(this.postUrl, formParams);
-
 		ArrayList<Ticket> tickets = parser.parseTicketPartly(jsonStr);
+		
 		for(Ticket ticket : tickets) {
 			List<NameValuePair> params = crawler.buildParamsForPricePostOw(ticket);
 			String priceStr = crawler.getPostResponseJsonByParams(this.postUrl_Price, params);
@@ -89,8 +89,40 @@ public class CrawlerService_7C implements CrawlerService {
 	@Override
 	public ArrayList<Ticket> getInfoRt(String depAirport, String arrAirport, String depTime, String retTime,
 			int adultNum) {
-		// TODO Auto-generated method stub
-		return null;
+		FormParams_7C formParams = new FormParams_7C();
+		formParams.setDepAirport(depAirport)
+			.setArrAirport(arrAirport)
+			.setDepTime(depTime)
+			.setRetTime(retTime)
+			.setAdultNum(adultNum)
+			.build();
+
+		String jsonStrDep = crawler.getPostResponseHtmlByParams(this.postUrl, formParams);
+		ArrayList<Ticket> ticketsDep = parser.parseTicketPartly(jsonStrDep);
+		
+		String jsonStrRet = crawler.getPostResponseJsonByParams(this.postUrl, formParams.getFormParamsRt());
+		ArrayList<Ticket> ticketsRet = parser.parseTicketPartly(jsonStrRet);
+		
+		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+		
+		for(int i = 0; i < ticketsDep.size(); i++) {
+			Ticket ticketDep = ticketsDep.get(i);
+			Ticket ticketRet = ticketsRet.get(i);
+			List<NameValuePair> params = crawler.buildParamsForPricePostRt(ticketDep, ticketRet);
+System.out.println(params);
+			String priceStr = crawler.getPostResponseJsonByParams(this.postUrl_Price, params);
+System.out.println(priceStr);
+			TicketPrice ticketPrice = parser.parseTicketPrice(priceStr);
+	
+			System.out.println(ticketPrice);
+/*			ticket.setadultPrice(ticketPrice.getAdultPrice());
+			ticket.setadultTax(ticketPrice.getAdultTax());
+			ticket.setCurrency(ticketPrice.getCurrency());
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+			ticket.setcreateTime(sdf.format(new Date()));*/
+		}
+		return ticketsDep;
 	}
 	
 }

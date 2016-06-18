@@ -65,6 +65,33 @@ public class Crawler_7C extends Crawler{
 		return params;
 	}
 	
+	public List<NameValuePair> buildParamsForPricePostRt(Ticket ticketDep, Ticket ticketRet) {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("ReqType", "Price"));
+		params.add(new BasicNameValuePair("TripType", "RT"));
+		params.add(new BasicNameValuePair("AdultPaxCnt", "2"));
+		params.add(new BasicNameValuePair("ChildPaxCnt", "0"));
+		params.add(new BasicNameValuePair("InfantPaxCnt", "0"));
+		params.add(new BasicNameValuePair("DepStn", ticketDep.getdepAirport()));
+		params.add(new BasicNameValuePair("ArrStn", ticketDep.getarrAirport()));
+		params.add(new BasicNameValuePair("DepDate", ticketDep.getdepTime()));
+		params.add(new BasicNameValuePair("ArrDate", ticketDep.getarrTime()));
+		params.add(new BasicNameValuePair("FltNo", ticketDep.getflightNumber().split(" ")[1]));
+		params.add(new BasicNameValuePair("RBD", "A"));
+		params.add(new BasicNameValuePair("FareBasis", "AEE1CN"));
+		params.add(new BasicNameValuePair("DepDate2", ticketRet.getdepTime()));
+		params.add(new BasicNameValuePair("ArrDate2", ticketRet.getarrTime()));
+		params.add(new BasicNameValuePair("DepStn2", ticketRet.getdepAirport()));
+		params.add(new BasicNameValuePair("ArrStn2", ticketRet.getarrAirport()));
+		params.add(new BasicNameValuePair("FltNo2", ticketRet.getflightNumber().split(" ")[1]));
+		params.add(new BasicNameValuePair("RBD2", "D"));
+		params.add(new BasicNameValuePair("FareBasis2", "DEE1CN"));
+		params.add(new BasicNameValuePair("Language", "EN"));
+		params.add(new BasicNameValuePair("RouteType", "I"));
+		params.add(new BasicNameValuePair("SystemType", "IBE"));
+		return params;
+	}
+	
 	
 	/**
 	 * 根据表单类FormParams获取post返回的json
