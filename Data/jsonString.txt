@@ -1,0 +1,83 @@
+"{\"Result\":{\"message\":\"\",\"data\":{\"availData\":[{\"seatCount\":\"\",\"normalEquivFare\":\"" + 
+"1630\",\"afterDepDate\":\"\",\"nonFlt\":\"\",\"YClassStatusCode\":\"\",\"normalFareRuleInfoDat" + 
+"as\":[{\"fareRuleItem\":\"Fare Type\",\"fareRuleDesc\":\"Regular Fare\"},{\"fareRuleItem\":" + 
+"\"Fee : Reservation Change\",\"fareRuleDesc\":\"CNY 25 per Sector\"},{\"fareRuleItem\":\"" + 
+"Fee : Cancellation\",\"fareRuleDesc\":\"CNY 50 per sector\"},{\"fareRuleItem\":\"Free al" + 
+"lowance baggage\",\"fareRuleDesc\":\"1PC/20KG (INFANT10KG)\"}],\"arrStnDesc\":\"Seoul(In" + 
+"cheon)(ICN)\",\"taxDataIndex\":\"\",\"normalFee\":\"\",\"specialRBD\":\"\",\"carrier\":\"7C\",\"sp" + 
+"ecialEquivFareName\":\"\",\"pointUseRate\":\"\",\"arrTime\":\"1355\",\"acType\":\"737\",\"discou" + 
+"ntSeatCount\":\"8\",\"depStnDesc\":\"Weihai(WEH)\",\"depTime\":\"1150\",\"discountFee\":\"\",\"s" + 
+"eatDesc\":\"\",\"normalSeatCount\":\"9\",\"seatAvailDataBeans\":[{\"seatCount\":\"9\",\"RBD\":\"" + 
+"Y\"},{\"seatCount\":\"9\",\"RBD\":\"B\"},{\"seatCount\":\"9\",\"RBD\":\"K\"},{\"seatCount\":\"9\",\"RB" + 
+"D\":\"N\"},{\"seatCount\":\"9\",\"RBD\":\"Q\"},{\"seatCount\":\"9\",\"RBD\":\"M\"},{\"seatCount\":\"9\"" + 
+",\"RBD\":\"T\"},{\"seatCount\":\"9\",\"RBD\":\"W\"},{\"seatCount\":\"8\",\"RBD\":\"O\"},{\"seatCount\"" + 
+":\"0\",\"RBD\":\"R\"},{\"seatCount\":\"0\",\"RBD\":\"X\"},{\"seatCount\":\"0\",\"RBD\":\"S\"},{\"seatCo" + 
+"unt\":\"0\",\"RBD\":\"L\"},{\"seatCount\":\"0\",\"RBD\":\"H\"},{\"seatCount\":\"0\",\"RBD\":\"E\"},{\"se" + 
+"atCount\":\"0\",\"RBD\":\"J\"},{\"seatCount\":\"0\",\"RBD\":\"F\"},{\"seatCount\":\"0\",\"RBD\":\"V\"}," + 
+"{\"seatCount\":\"0\",\"RBD\":\"G\"},{\"seatCount\":\"9\",\"RBD\":\"Z\"},{\"seatCount\":\"9\",\"RBD\":\"" + 
+"D\"},{\"seatCount\":\"9\",\"RBD\":\"C\"},{\"seatCount\":\"9\",\"RBD\":\"A\"},{\"seatCount\":\"0\",\"RB" + 
+"D\":\"I\"},{\"seatCount\":\"0\",\"RBD\":\"P\"},{\"seatCount\":\"9\",\"RBD\":\"U\"}],\"normalEquivFar" + 
+"eName\":\"Normal fare\",\"specialEquivFareBasis\":\"\",\"specialFee\":\"\",\"fltType\":\"\",\"di" + 
+"scountFareRuleNo\":\"CN25\",\"discountEquivFareBasis\":\"OOW1CN\",\"pointFareInfo\":{\"pnt" + 
+"ClassFareBasis\":\"\",\"pntClassSeatCount\":\"\",\"specialEquivFarePoint\":\"\",\"pntClassRB" + 
+"D\":\"\",\"discountEquivFarePoint\":\"\",\"normalEquivFarePoint\":\"\",\"minFarePoint\":\"\"},\"" + 
+"tax\":\"0\",\"specialFareRuleInfoDatas\":[],\"fltNo\":\"8562\",\"discountEquivFareName\":\"S" + 
+"pecial fare\",\"normalEquivFareBasis\":\"YOW1CN\",\"RBD\":\"\",\"minFare\":\"0\",\"jjimFlag\":\"" + 
+"\",\"depStn\":\"WEH\",\"normalRBD\":\"Y\",\"fareBasis\":\"\",\"fare\":\"\",\"beforeDepDate\":\"\",\"sp" + 
+"ecialEquivTotalFare\":\"\",\"equivFare\":\"\",\"discountFareRuleInfoDatas\":[{\"fareRuleIt" + 
+"em\":\"Fare Type\",\"fareRuleDesc\":\"Special Fare\"},{\"fareRuleItem\":\"Fee : Reservatio" + 
+"n Change\",\"fareRuleDesc\":\"CNY 50 per Sector\"},{\"fareRuleItem\":\"Fee : Cancellatio" + 
+"n\",\"fareRuleDesc\":\"CNY 100 per sector\"},{\"fareRuleItem\":\"Free allowance baggage\"" + 
+",\"fareRuleDesc\":\"1PC/15KG (?? 10KG)\"}],\"currency\":\"CNY\",\"equivFareBasis\":\"\",\"aft" + 
+"erMinFare\":\"0\",\"specialSeatCount\":\"\",\"discountEquivTotalFare\":\"\",\"specialFareRul" + 
+"eNo\":\"\",\"connectAvailData\":{\"normalEquivFare\":\"\",\"depStn\":\"\",\"normalRBD\":\"\",\"cur" + 
+"rency\":\"\",\"arrStnDesc\":\"\",\"specialRBD\":\"\",\"specialEquivFareName\":\"\",\"arrTime\":\"\"" + 
+",\"carrier\":\"\",\"acType\":\"\",\"depStnDesc\":\"\",\"arrDate\":\"\",\"depTime\":\"\",\"depDate\":\"\"" + 
+",\"arrStn\":\"\",\"normalEquivFareName\":\"\",\"specialEquivFareBasis\":\"\",\"fltType\":\"\",\"d" + 
+"iscountEquivFareBasis\":\"\",\"specialEquivFare\":\"\",\"discountEquivFare\":\"\",\"fltNo\":\"" + 
+"\",\"discountEquivFareName\":\"\",\"normalEquivFareBasis\":\"\",\"discountRBD\":\"\"},\"arrDat" + 
+"e\":\"20160630\",\"depDate\":\"20160630\",\"fuelCharge\":\"0\",\"arrStn\":\"ICN\",\"normalFareRu" + 
+"leNo\":\"CN21\",\"fareRuleNo\":\"\",\"specialEquivFare\":\"\",\"beforeMinFare\":\"0\",\"groupFar" + 
+"eDatas\":[],\"normalEquivTotalFare\":\"\",\"connectNo\":\"\",\"discountEquivFare\":\"420\",\"d" + 
+"iscountRBD\":\"O\"},{\"seatCount\":\"\",\"normalEquivFare\":\"1630\",\"afterDepDate\":\"\",\"non" + 
+"Flt\":\"\",\"YClassStatusCode\":\"\",\"normalFareRuleInfoDatas\":[{\"fareRuleItem\":\"Fare T" + 
+"ype\",\"fareRuleDesc\":\"Regular Fare\"},{\"fareRuleItem\":\"Fee : Reservation Change\",\"" + 
+"fareRuleDesc\":\"CNY 25 per Sector\"},{\"fareRuleItem\":\"Fee : Cancellation\",\"fareRul" + 
+"eDesc\":\"CNY 50 per sector\"},{\"fareRuleItem\":\"Free allowance baggage\",\"fareRuleDe" + 
+"sc\":\"1PC/20KG (INFANT10KG)\"}],\"arrStnDesc\":\"Seoul(Incheon)(ICN)\",\"taxDataIndex\":" + 
+"\"\",\"normalFee\":\"\",\"specialRBD\":\"\",\"carrier\":\"7C\",\"specialEquivFareName\":\"\",\"poin" + 
+"tUseRate\":\"\",\"arrTime\":\"1855\",\"acType\":\"737\",\"discountSeatCount\":\"5\",\"depStnDesc" + 
+"\":\"Weihai(WEH)\",\"depTime\":\"1645\",\"discountFee\":\"\",\"seatDesc\":\"\",\"normalSeatCount" + 
+"\":\"9\",\"seatAvailDataBeans\":[{\"seatCount\":\"9\",\"RBD\":\"Y\"},{\"seatCount\":\"9\",\"RBD\":\"" + 
+"B\"},{\"seatCount\":\"9\",\"RBD\":\"K\"},{\"seatCount\":\"9\",\"RBD\":\"N\"},{\"seatCount\":\"9\",\"RB" + 
+"D\":\"Q\"},{\"seatCount\":\"9\",\"RBD\":\"M\"},{\"seatCount\":\"9\",\"RBD\":\"T\"},{\"seatCount\":\"5\"" + 
+",\"RBD\":\"W\"},{\"seatCount\":\"5\",\"RBD\":\"O\"},{\"seatCount\":\"0\",\"RBD\":\"R\"},{\"seatCount\"" + 
+":\"0\",\"RBD\":\"X\"},{\"seatCount\":\"0\",\"RBD\":\"S\"},{\"seatCount\":\"0\",\"RBD\":\"L\"},{\"seatCo" + 
+"unt\":\"0\",\"RBD\":\"H\"},{\"seatCount\":\"0\",\"RBD\":\"E\"},{\"seatCount\":\"0\",\"RBD\":\"J\"},{\"se" + 
+"atCount\":\"0\",\"RBD\":\"F\"},{\"seatCount\":\"0\",\"RBD\":\"V\"},{\"seatCount\":\"0\",\"RBD\":\"G\"}," + 
+"{\"seatCount\":\"9\",\"RBD\":\"Z\"},{\"seatCount\":\"9\",\"RBD\":\"D\"},{\"seatCount\":\"0\",\"RBD\":\"" + 
+"C\"},{\"seatCount\":\"0\",\"RBD\":\"A\"},{\"seatCount\":\"0\",\"RBD\":\"I\"},{\"seatCount\":\"0\",\"RB" + 
+"D\":\"P\"},{\"seatCount\":\"9\",\"RBD\":\"U\"}],\"normalEquivFareName\":\"Normal fare\",\"specia" + 
+"lEquivFareBasis\":\"\",\"specialFee\":\"\",\"fltType\":\"\",\"discountFareRuleNo\":\"CN25\",\"di" + 
+"scountEquivFareBasis\":\"OOW1CN\",\"pointFareInfo\":{\"pntClassFareBasis\":\"\",\"pntClass" + 
+"SeatCount\":\"\",\"specialEquivFarePoint\":\"\",\"pntClassRBD\":\"\",\"discountEquivFarePoin" + 
+"t\":\"\",\"normalEquivFarePoint\":\"\",\"minFarePoint\":\"\"},\"tax\":\"0\",\"specialFareRuleInf" + 
+"oDatas\":[],\"fltNo\":\"8504\",\"discountEquivFareName\":\"Special fare\",\"normalEquivFar" + 
+"eBasis\":\"YOW1CN\",\"RBD\":\"\",\"minFare\":\"0\",\"jjimFlag\":\"\",\"depStn\":\"WEH\",\"normalRBD\"" + 
+":\"Y\",\"fareBasis\":\"\",\"fare\":\"\",\"beforeDepDate\":\"\",\"specialEquivTotalFare\":\"\",\"equ" + 
+"ivFare\":\"\",\"discountFareRuleInfoDatas\":[{\"fareRuleItem\":\"Fare Type\",\"fareRuleDes" + 
+"c\":\"Special Fare\"},{\"fareRuleItem\":\"Fee : Reservation Change\",\"fareRuleDesc\":\"CN" + 
+"Y 50 per Sector\"},{\"fareRuleItem\":\"Fee : Cancellation\",\"fareRuleDesc\":\"CNY 100 p" + 
+"er sector\"},{\"fareRuleItem\":\"Free allowance baggage\",\"fareRuleDesc\":\"1PC/15KG (?" + 
+"? 10KG)\"}],\"currency\":\"CNY\",\"equivFareBasis\":\"\",\"afterMinFare\":\"0\",\"specialSeatC" + 
+"ount\":\"\",\"discountEquivTotalFare\":\"\",\"specialFareRuleNo\":\"\",\"connectAvailData\":{" + 
+"\"normalEquivFare\":\"\",\"depStn\":\"\",\"normalRBD\":\"\",\"currency\":\"\",\"arrStnDesc\":\"\",\"s" + 
+"pecialRBD\":\"\",\"specialEquivFareName\":\"\",\"arrTime\":\"\",\"carrier\":\"\",\"acType\":\"\",\"d" + 
+"epStnDesc\":\"\",\"arrDate\":\"\",\"depTime\":\"\",\"depDate\":\"\",\"arrStn\":\"\",\"normalEquivFar" + 
+"eName\":\"\",\"specialEquivFareBasis\":\"\",\"fltType\":\"\",\"discountEquivFareBasis\":\"\",\"s" + 
+"pecialEquivFare\":\"\",\"discountEquivFare\":\"\",\"fltNo\":\"\",\"discountEquivFareName\":\"\"" + 
+",\"normalEquivFareBasis\":\"\",\"discountRBD\":\"\"},\"arrDate\":\"20160630\",\"depDate\":\"201" + 
+"60630\",\"fuelCharge\":\"0\",\"arrStn\":\"ICN\",\"normalFareRuleNo\":\"CN21\",\"fareRuleNo\":\"\"" + 
+",\"specialEquivFare\":\"\",\"beforeMinFare\":\"0\",\"groupFareDatas\":[],\"normalEquivTotal" + 
+"Fare\":\"\",\"connectNo\":\"\",\"discountEquivFare\":\"420\",\"discountRBD\":\"O\"}],\"index\":\"3" + 
+"\",\"depDate\":\"20160630\",\"segType\":\"DEP\"},\"code\":\"0000\"}}

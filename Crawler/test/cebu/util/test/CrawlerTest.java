@@ -7,11 +7,9 @@ import org.apache.http.cookie.Cookie;
 import org.junit.Before;
 import org.junit.Test;
 
-import cebu.model.FormParams;
-import cebu.util.Crawler;
-import cebu.util.FormUtil.DestStation;
-import cebu.util.FormUtil.OrgStation;
-import cebu.util.FormUtil.TravelOption;
+import cebu.model.FormParams_5J;
+import cebu.util.crawler.Crawler_5J;
+import cebu.util.parser.FormUtil.TravelOption;
 
 public class CrawlerTest {
 	private final static String URL = "https://book.cebupacificair.com/Search.aspx?culture=en-us";
@@ -20,11 +18,11 @@ public class CrawlerTest {
 	private final static String SAVE_PATH_Response = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response.html";
 	private final static String SAVE_PATH_Response_Params = "C:/Users/lihaijun/Documents/GitHub/Crawler/Data/post_response_params.html";
 	
-	private Crawler crawler = null;
+	private Crawler_5J crawler = null;
 	
 	@Before
 	public void before() {
-		crawler = Crawler.getInstance();
+		crawler = Crawler_5J.getInstance();
 	}
 	
 	@Test
@@ -49,11 +47,11 @@ public class CrawlerTest {
 	@Test
 	public void test_savePostResponseHtmlByParams() {
 		// 构建表单变量
-		FormParams formParams = new FormParams();
+		FormParams_5J formParams = new FormParams_5J();
 		formParams.setTravelOption(TravelOption.OneWay)
-			.setOrgStation(OrgStation.HKG)
-			.setDestStation(DestStation.MNL)
-			.setDepartureTime("2016-06-20")
+			.setDepAirport("HKG")
+			.setArrAirport("MNL")
+			.setDepTime("2016-06-20")
 			.setAdultNum(2)
 			.setChildNum(0)
 			.build();
@@ -73,11 +71,11 @@ public class CrawlerTest {
 	@Test
 	public void test_getPostResponseHtmlByParams() {
 		// 构建表单变量
-		FormParams formParams = new FormParams();
+		FormParams_5J formParams = new FormParams_5J();
 		formParams.setTravelOption(TravelOption.OneWay)
-			.setOrgStation(OrgStation.HKG)
-			.setDestStation(DestStation.MNL)
-			.setDepartureTime("2016-06-20")
+			.setDepAirport("HKG")
+			.setArrAirport("MNL")
+			.setDepTime("2016-06-20")
 			.setAdultNum(2)
 			.setChildNum(0)
 			.build();
@@ -93,11 +91,11 @@ public class CrawlerTest {
 	@Test
 	public void test_getHtmlByRadio() {
 		// 构建表单变量
-		FormParams formParams = new FormParams();
+		FormParams_5J formParams = new FormParams_5J();
 		formParams.setTravelOption(TravelOption.OneWay)
-			.setOrgStation(OrgStation.HKG)
-			.setDestStation(DestStation.MNL)
-			.setDepartureTime("2016-06-25")
+			.setDepAirport("HKG")
+			.setArrAirport("MNL")
+			.setDepTime("2016-06-20")
 			.setAdultNum(2)
 			.setChildNum(0)
 			.build();

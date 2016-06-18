@@ -11,6 +11,9 @@ import cebu.model.Ticket;
 
 /**
  * dao实现方式，jdbc + apache common dbcp 数据源
+ * 
+ * 注意修改数据库表名称 "5j"
+ * 
  * @author Administrator
  *
  */

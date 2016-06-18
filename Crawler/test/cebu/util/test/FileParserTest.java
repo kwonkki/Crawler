@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import org.junit.Test;
 import cebu.model.Ticket;
-import cebu.util.FileParser;
+import cebu.util.parser.FileParser;
 
 /**
  * 测试类，FileParser以HtmlParser为基础，因此只需要测试FileParser即可

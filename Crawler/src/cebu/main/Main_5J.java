@@ -5,14 +5,13 @@ import org.apache.http.client.CookieStore;
 
 import cebu.dao.service.TicketService;
 import cebu.model.FormParams;
+import cebu.model.FormParams_5J;
 import cebu.model.Ticket;
-import cebu.util.Crawler;
-import cebu.util.HtmlParser;
-import cebu.util.FormUtil.DestStation;
-import cebu.util.FormUtil.OrgStation;
-import cebu.util.FormUtil.TravelOption;
+import cebu.util.crawler.Crawler_5J;
+import cebu.util.parser.FormUtil.TravelOption;
+import cebu.util.parser.HtmlParser;
 
-public class Main {
+public class Main_5J {
 	
 	// 文件保存目录
 	private final static String Dir = "D:/Documents/Github/Crawler/Data/";
@@ -26,27 +25,20 @@ public class Main {
 	private final static String PostUrl = "https://book.cebupacificair.com/Search.aspx";
 	
 	// 爬虫类和html解析类
-	private static Crawler crawler = Crawler.getInstance();
+	private static Crawler_5J crawler = Crawler_5J.getInstance();
 	private static HtmlParser htmlParser = HtmlParser.getInstance();
 	
 	public static void main(String[] args) {
-		Main main = new Main();
+		Main_5J main = new Main_5J();
 		
 		// 构建表单变量
-		TravelOption travelOption = TravelOption.OneWay;
-		OrgStation orgStation = OrgStation.HKG;
-		DestStation destStation = DestStation.MNL;
-		String depTime = "2016-06-20";
-		int adultNum = 2;
-		int childNum = 0;
-		
-		FormParams formParams = new FormParams();
-		formParams.setTravelOption(travelOption)
-			.setOrgStation(orgStation)
-			.setDestStation(destStation)
-			.setDepartureTime(depTime)
-			.setAdultNum(adultNum)
-			.setChildNum(childNum)
+		FormParams_5J formParams = new FormParams_5J();
+		formParams.setTravelOption(TravelOption.OneWay)
+			.setDepAirport("HKG")
+			.setArrAirport("MNL")
+			.setDepTime("2016-06-20")
+			.setAdultNum(2)
+			.setChildNum(0)
 			.build();
 		
 		// 获取信息，保存html文件，存入数据库
@@ -64,10 +56,9 @@ public class Main {
 		/** 文件保存路径  **/
 		// post response
 		String savePathPost = Prefix_Save_File 
-				+ formParams.getTravelOption() + "_" 
-				+ formParams.getOrgStation() + "_"
-				+ formParams.getDestStation() + "_"
-				+ formParams.getDepartureTime() + Suffix_Save_File;
+				+ formParams.getDepAirport()+ "_"
+				+ formParams.getArrAirport()+ "_"
+				+ formParams.getDepTime() + Suffix_Save_File;
 		// radio value html
 		String savePathRadioBase = savePathPost.replace(Suffix_Save_File, "_radio" + Suffix_Save_File);
 		

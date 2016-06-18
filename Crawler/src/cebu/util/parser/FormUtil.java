@@ -1,4 +1,4 @@
-package cebu.util;
+package cebu.util.parser;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

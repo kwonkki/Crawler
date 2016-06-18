@@ -30,5 +30,9 @@ public class TicketPrice {
 		this.adultTax = adultTax;
 	}
 	
+	public String toString() {
+		return "currency: " + this.getCurrency() + ", adultPrice: " + this.getAdultPrice() +
+				", adultTax: " + this.getAdultTax();
+	}
 	
 }

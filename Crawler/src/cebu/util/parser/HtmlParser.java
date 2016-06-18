@@ -1,4 +1,4 @@
-package cebu.util;
+package cebu.util.parser;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -4,107 +4,130 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
-import cebu.util.FormUtil;
-import cebu.util.FormUtil.DestStation;
-import cebu.util.FormUtil.OrgStation;
-import cebu.util.FormUtil.TravelOption;
+import org.apache.http.NameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 表单变量类，用于传递post请求参数
+ * 
  * @author lihaijun
  *
  */
 
-public class FormParams {
+public abstract class FormParams {
 
-	private TravelOption travelOption;	// 单程、往返、中转
-	private OrgStation orgStation;	// 始发站，枚举
-	private DestStation destStation;	// 终点站，枚举
-	private String departureTime; 	
-	private String returnTime = "";
-	private String adultNum = "2";
-	private String childNum = "0";
-	
-	private List<NameValuePair> formParams;		// 用于post表单提交的真正的参数
-	private Pattern pattern;
-	
-	private String departureTime_Day;	// 出发时间，天
-	private String departureTime_YearMonth;	// 出发时间，年月
-	private String returnTime_Day;	// 返回时间，天
-	private String returnTime_YearMonth;	// 返回时间，年月
-	
-	public FormParams() {
+	protected final Logger logger = LoggerFactory.getLogger(FormParams.class);
+
+	protected String depAirport = "";
+	protected String arrAirport = "";
+	protected String depTime = "";
+	protected String retTime = "";
+	protected String adultNum = "2";
+	protected String childNum = "0";
+
+	protected List<NameValuePair> formParams; // 用于post表单提交的真正的参数
+	protected Pattern pattern;
+
+	protected String depTime_Day; // 出发时间，天
+	protected String depTime_YearMonth; // 出发时间，年月
+	protected String retTime_Day; // 返回时间，天
+	protected String retTime_YearMonth; // 返回时间，年月
+
+	protected FormParams() {
 		// 日期格式验证
 		String regexTime = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
 		formParams = new ArrayList<NameValuePair>();
 		pattern = Pattern.compile(regexTime);
 	}
-	
-	
-	public TravelOption getTravelOption() {
-		return travelOption;
+
+	public String getDepTime_Day() {
+		return depTime_Day;
 	}
 
-	public FormParams setTravelOption(TravelOption travelOption) {
-		this.travelOption = travelOption;
+	public FormParams setDepTime_Day(String depTime_Day) {
+		this.depTime_Day = depTime_Day;
 		return this;
 	}
 
-	public OrgStation getOrgStation() {
-		return orgStation;
+	public String getDepTime_YearMonth() {
+		return depTime_YearMonth;
 	}
 
-	public FormParams setOrgStation(OrgStation orgStation) {
-		this.orgStation = orgStation;
+	public FormParams setDepTime_YearMonth(String depTime_YearMonth) {
+		this.depTime_YearMonth = depTime_YearMonth;
 		return this;
 	}
 
-	public DestStation getDestStation() {
-		return destStation;
+	public String getRetTime_Day() {
+		return retTime_Day;
 	}
 
-	public FormParams setDestStation(DestStation destStation) {
-		this.destStation = destStation;
+	public FormParams setRetTime_Day(String retTime_Day) {
+		this.retTime_Day = retTime_Day;
 		return this;
 	}
 
-	public String getDepartureTime() {
-		return departureTime;
+	public String getRetTime_YearMonth() {
+		return retTime_YearMonth;
 	}
 
-	public FormParams setDepartureTime(String departureTime) {
-		Matcher m = pattern.matcher(departureTime);
+	public FormParams setRetTime_YearMonth(String retTime_YearMonth) {
+		this.retTime_YearMonth = retTime_YearMonth;
+		return this;
+	}
+
+	public String getDepAirport() {
+		return depAirport;
+	}
+
+	public FormParams setDepAirport(String depAirport) {
+		this.depAirport = depAirport;
+		return this;
+	}
+
+	public String getArrAirport() {
+		return arrAirport;
+	}
+
+	public FormParams setArrAirport(String arrAirport) {
+		this.arrAirport = arrAirport;
+		return this;
+	}
+
+	public String getDepTime() {
+		return depTime;
+	}
+
+	public FormParams setDepTime(String depTime) {
+		Matcher m = pattern.matcher(depTime);
 		if (m.find()) {
-			this.departureTime = departureTime;
-			String[] times = departureTime.split("-");
-			this.departureTime_Day = times[2];
-			this.departureTime_YearMonth = times[0] + "-" + times[1];
+			this.depTime = depTime;
+			String[] times = depTime.split("-");
+			this.depTime_Day = times[2];
+			this.depTime_YearMonth = times[0] + "-" + times[1];
 			return this;
-		}
-		else {
-			System.out.println("Illeagal format String of time");
+		} else {
+			log("Illeagal format String of time");
 			return this;
 		}
 	}
 
-	public String getReturnTime() {
-		return returnTime;
+	public String getRetTime() {
+		return retTime;
 	}
 
-	public FormParams setReturnTime(String returnTime) {
-		Matcher m = pattern.matcher(returnTime);
+	public FormParams setRetTime(String retTime) {
+		Matcher m = pattern.matcher(retTime);
 		if (m.find()) {
-			this.returnTime = returnTime;
-			String[] times = returnTime.split("-");
-			this.returnTime_Day = times[2];
-			this.returnTime_YearMonth = times[0] + "-" + times[1];
+			this.retTime = retTime;
+			String[] times = retTime.split("-");
+			this.retTime_Day = times[2];
+			this.retTime_YearMonth = times[0] + "-" + times[1];
 			return this;
-		}
-		else {
-			System.out.println("Illeagal format String of time");
+		} else {
+			log("Illeagal format String of time");
 			return this;
 		}
 	}
@@ -139,73 +162,9 @@ public class FormParams {
 	/**
 	 * 构建真正的表单变量
 	 */
-	public void build() {
-		formParams.add(new BasicNameValuePair("__EVENTTARGET", ""));
-		formParams.add(new BasicNameValuePair("__EVENTARGUMENT", ""));
-		formParams.add(new BasicNameValuePair("__VIEWSTATE", "/wEPDwUBMGRkZ0I3jKvfnhKfx57f3Wjr7p2WhvU="));
-		formParams.add(new BasicNameValuePair("pageToken", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$RadioButtonMarketStructure", travelOption.toString()));
-		formParams.add(new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation1",
-				orgStation.toString()));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketOrigin1", orgStation.toString()));
-		formParams.add(new BasicNameValuePair("name_originStationContainercategory", FormUtil.mapOrgStation.get(orgStation.toString())));
-		formParams.add(new BasicNameValuePair("originStationContainercategory", orgStation.toString()));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation1", destStation.toString()));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketDestination1", destStation.toString()));
-		formParams.add(new BasicNameValuePair("name_destinationStationContainercategory", FormUtil.mapDestStation.get(orgStation.toString())));
-		formParams.add(new BasicNameValuePair("destinationStationContainercategory", destStation.toString()));
-		formParams.add(new BasicNameValuePair("date_picker_1", departureTime));
-		formParams.add(new BasicNameValuePair("date_picker_1_AccCalendar", departureTime));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay1", departureTime_Day));	// departure time day
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth1", departureTime_YearMonth));	// departure time year, month
-		formParams.add(
-				new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation2", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketOrigin2", ""));
-		formParams.add(new BasicNameValuePair("name_originStationContainercategory", "From"));
-		formParams.add(new BasicNameValuePair("originStationContainercategory", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView_AvailabilitySearchInputSearchViewdestinationStation2", ""));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$TextBoxMarketDestination2", ""));
-		formParams.add(new BasicNameValuePair("name_destinationStationContainercategory", "To"));
-		formParams.add(new BasicNameValuePair("destinationStationContainercategory", ""));
-		formParams.add(new BasicNameValuePair("date_picker_2", returnTime));
-		formParams.add(new BasicNameValuePair("date_picker_2_AccCalendar", returnTime));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketDay2", returnTime_Day));	// return time day
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2", returnTime_YearMonth));	// return time year, month
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", adultNum));
-		formParams.add(new BasicNameValuePair(
-				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_CHD", childNum));
-		formParams.add(
-				new BasicNameValuePair("ControlGroupSearchView$AvailabilitySearchInputSearchView$promoCodeID", ""));
-		formParams.add(new BasicNameValuePair("ControlGroupSearchView$AvailabilitySearchInputSearchView$ButtonSubmit",
-				"FIND IT!"));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$TextBoxUserID", "EMAIL"));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$PasswordFieldPassword", ""));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxConfirmation", ""));
-		formParams.add(new BasicNameValuePair("MemberLoginView2LoginView$tboxHiddenUsername", ""));
+	public abstract void build();
+
+	public final void log(String info) {
+		logger.error(info);
 	}
-	
-	@Override
-	public String toString() {
-		String info = "travelOption=" + this.getTravelOption() + ", "
-				+ "orgStation=" + this.getOrgStation() + ", "
-				+ "destStation=" + this.getDestStation() + ", "	
-				+ "departureTime=" + this.getDepartureTime() + ", "
-				+ "returnTime=" + this.getReturnTime() + ", "
-				+ "adultNum=" + this.getAdultNum() + ", "
-				+ "childNum=" + this.getChildNum();
-		return info;
-	}
-	
 }
