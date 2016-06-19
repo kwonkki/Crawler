@@ -109,20 +109,19 @@ public class CrawlerService_7C implements CrawlerService {
 			Ticket ticketDep = ticketsDep.get(i);
 			Ticket ticketRet = ticketsRet.get(i);
 			List<NameValuePair> params = crawler.buildParamsForPricePostRt(ticketDep, ticketRet);
-System.out.println(params);
 			String priceStr = crawler.getPostResponseJsonByParams(this.postUrl_Price, params);
-System.out.println(priceStr);
 			TicketPrice ticketPrice = parser.parseTicketPrice(priceStr);
 	
-			System.out.println(ticketPrice);
-/*			ticket.setadultPrice(ticketPrice.getAdultPrice());
+			// 如何处理往返的价格和税收有待确定
+/*			System.out.println(ticketPrice);
+			ticket.setadultPrice(ticketPrice.getAdultPrice());
 			ticket.setadultTax(ticketPrice.getAdultTax());
 			ticket.setCurrency(ticketPrice.getCurrency());
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			ticket.setcreateTime(sdf.format(new Date()));*/
 		}
-		return ticketsDep;
+		return ticketsDep; // 有待改正，具体返回情况
 	}
 	
 }
