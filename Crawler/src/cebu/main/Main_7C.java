@@ -25,10 +25,12 @@ public class Main_7C {
 		System.out.println(tickets);
 		
 		
-		System.out.println("-------------- return ----------------");
+		
+		// 往返模式，尚未完成
+/*		System.out.println("-------------- return ----------------");
 		service = CrawlerService_7C.getInstance();
 		tickets = service.getTickets("WEH", "ICN", "2016-06-30", "2016-07-31", 2);
-		System.out.println(tickets);
+		System.out.println(tickets);*/
 		
 		
 		

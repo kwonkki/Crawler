@@ -20,7 +20,6 @@ import cebu.util.parser.HtmlParser_7C;
  *
  */
 
-
 public class CrawlerService_7C implements CrawlerService {
 	
 	/** 单例模式 **/
@@ -36,7 +35,8 @@ public class CrawlerService_7C implements CrawlerService {
 		return InstanceHolder.CrawlerService_7C;
 	}
 
-	private Crawler_7C crawler = Crawler_7C.getInstance();
+	// 爬虫类和解析类
+	private Crawler_7C crawler = Crawler_7C.getInstance();	
 	private HtmlParser_7C parser = HtmlParser_7C.getInstance();
 	
 	// 第一次post得到航班列表，第二次post得到航班价格（主要是税）
@@ -47,8 +47,10 @@ public class CrawlerService_7C implements CrawlerService {
 	public ArrayList<Ticket> getTickets(String depAirport, String arrAirport, String depTime, String retTime,
 			int adultNum) {
 		if (CommonUtil.checkStrNullOrEmpty(retTime)) {
+			// 返程时间为空或者null，使用单程
 			return this.getInfoOw(depAirport, arrAirport, depTime, adultNum);
 		} else {
+			// 否则使用往返
 			return this.getInfoRt(depAirport, arrAirport, depTime, retTime, adultNum);
 		}
 	}
@@ -58,6 +60,7 @@ public class CrawlerService_7C implements CrawlerService {
 	 */
 	@Override
 	public ArrayList<Ticket> getInfoOw(String depAirport, String arrAirport, String depTime, int adultNum) {
+		// 设置表单变量
 		FormParams_7C formParams = new FormParams_7C();
 		formParams.setDepAirport(depAirport)
 			.setArrAirport(arrAirport)
@@ -65,63 +68,37 @@ public class CrawlerService_7C implements CrawlerService {
 			.setAdultNum(adultNum)
 			.build();
 
+		// 获取response json，解析Ticket信息，不包括价格信息
 		String jsonStr = crawler.getPostResponseHtmlByParams(this.postUrl, formParams);
 		ArrayList<Ticket> tickets = parser.parseTicketPartly(jsonStr);
 		
+		// 遍历获取价格信息
 		for(Ticket ticket : tickets) {
+			// 根据ticket类构建params
 			List<NameValuePair> params = crawler.buildParamsForPricePostOw(ticket);
+			// 第二次post，获取价格和税收信息
 			String priceStr = crawler.getPostResponseJsonByParams(this.postUrl_Price, params);
-			TicketPrice ticketPrice = parser.parseTicketPrice(priceStr);
+			TicketPrice ticketPrice = parser.parseTicketPrice(priceStr);	// 解析为TicketPrice类
 			
+			// 更新价格信息
 			ticket.setadultPrice(ticketPrice.getAdultPrice());
 			ticket.setadultTax(ticketPrice.getAdultTax());
 			ticket.setCurrency(ticketPrice.getCurrency());
-			
+			// createTime
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 			ticket.setcreateTime(sdf.format(new Date()));
 		}
-		return tickets;
+		return tickets;	// 返回完成Ticket列表
 	}
 
 	/**
 	 * 往返
+	 * 尚未完成
 	 */
 	@Override
 	public ArrayList<Ticket> getInfoRt(String depAirport, String arrAirport, String depTime, String retTime,
 			int adultNum) {
-		FormParams_7C formParams = new FormParams_7C();
-		formParams.setDepAirport(depAirport)
-			.setArrAirport(arrAirport)
-			.setDepTime(depTime)
-			.setRetTime(retTime)
-			.setAdultNum(adultNum)
-			.build();
-
-		String jsonStrDep = crawler.getPostResponseHtmlByParams(this.postUrl, formParams);
-		ArrayList<Ticket> ticketsDep = parser.parseTicketPartly(jsonStrDep);
-		
-		String jsonStrRet = crawler.getPostResponseJsonByParams(this.postUrl, formParams.getFormParamsRt());
-		ArrayList<Ticket> ticketsRet = parser.parseTicketPartly(jsonStrRet);
-		
-		ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-		
-		for(int i = 0; i < ticketsDep.size(); i++) {
-			Ticket ticketDep = ticketsDep.get(i);
-			Ticket ticketRet = ticketsRet.get(i);
-			List<NameValuePair> params = crawler.buildParamsForPricePostRt(ticketDep, ticketRet);
-			String priceStr = crawler.getPostResponseJsonByParams(this.postUrl_Price, params);
-			TicketPrice ticketPrice = parser.parseTicketPrice(priceStr);
-	
-			// 如何处理往返的价格和税收有待确定
-/*			System.out.println(ticketPrice);
-			ticket.setadultPrice(ticketPrice.getAdultPrice());
-			ticket.setadultTax(ticketPrice.getAdultTax());
-			ticket.setCurrency(ticketPrice.getCurrency());
-			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-			ticket.setcreateTime(sdf.format(new Date()));*/
-		}
-		return ticketsDep; // 有待改正，具体返回情况
+		return null;
 	}
 	
 }
