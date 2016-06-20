@@ -34,7 +34,7 @@ public class Main_7C {
 		
 		
 		
-		// 插入数据库
+		// 插入数据库,数据表如果有变更，注意更新DaoImplTicket类中的tableName
 		// TicketService.insert(tickets);
 	}
 }

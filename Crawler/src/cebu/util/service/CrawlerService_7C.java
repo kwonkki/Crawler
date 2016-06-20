@@ -20,7 +20,7 @@ import cebu.util.parser.HtmlParser_7C;
  *
  */
 
-public class CrawlerService_7C implements CrawlerService {
+public class CrawlerService_7C implements ICrawlerService {
 	
 	/** 单例模式 **/
 	private CrawlerService_7C() {

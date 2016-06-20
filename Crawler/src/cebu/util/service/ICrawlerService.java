@@ -10,7 +10,7 @@ import cebu.model.Ticket;
  *
  */
 
-public interface CrawlerService {
+public interface ICrawlerService {
 	
 	/**
 	 * 获取Ticket信息
