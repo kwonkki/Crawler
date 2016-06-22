@@ -270,10 +270,6 @@ public abstract class Parser {
 		if (doc == null)
 			return null;
 
-		String currency = "";
-		int adultPrice = -1;
-		int adultTax = -1;
-
 		// adult人数
 		Element adultCountSpan = doc.select("span.paxCount").first();
 		int adultCount = Integer.valueOf(adultCountSpan.text());
@@ -281,18 +277,18 @@ public abstract class Parser {
 
 		// 货币单位
 		Element currencySpan = doc.select("span#overallTotalCurrencyCode").first();
-		currency = currencySpan.text();
+		String currency = currencySpan.text();
 		//System.out.println(currency);
 
 		// adult price
 		Element adultPriceSpan = doc.select("span.baseFarePrice").first();
-		adultPrice = Double.valueOf(adultPriceSpan.text().replace(",", "").trim()).intValue();
+		String adultPrice = adultPriceSpan.text().replace(",", "").trim();
 		//System.out.println(adultPrice);
 
 		// adult tax , 注意除以人数，得到单价
 		Element adultTaxSpan = doc.select("span#taxesFaresTotal").first();
 		int adultTaxTotal = Double.valueOf(adultTaxSpan.text().replace(",", "").trim()).intValue();
-		adultTax = Integer.valueOf(adultTaxTotal / adultCount);
+		String adultTax = String.valueOf(adultTaxTotal / adultCount);
 		//System.out.println(adultTax);
 
 		TicketPrice ticketPrice = new TicketPrice();

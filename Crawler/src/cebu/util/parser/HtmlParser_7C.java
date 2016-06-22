@@ -61,8 +61,8 @@ public class HtmlParser_7C {
 		String currency = (String) priceObj.get("equivCurrency");	// 货币
 
 		TicketPrice ticketPrice = new TicketPrice();
-		ticketPrice.setAdultPrice(Double.valueOf(adultPrice.trim()).intValue());
-		ticketPrice.setAdultTax(Double.valueOf(adultTax.trim()).intValue());
+		ticketPrice.setAdultPrice(adultPrice);
+		ticketPrice.setAdultTax(adultTax);
 		ticketPrice.setCurrency(currency);
 		
 		return ticketPrice;

@@ -29,17 +29,67 @@ public abstract class FormParams {
 
 	protected List<NameValuePair> formParams; // 用于post表单提交的真正的参数
 	protected Pattern pattern;
-
-	protected String depTime_Day; // 出发时间，天
-	protected String depTime_YearMonth; // 出发时间，年月
-	protected String retTime_Day; // 返回时间，天
-	protected String retTime_YearMonth; // 返回时间，年月
-
+	protected String timeSpliter; //时间格式分隔符
+	
+	protected String depTime_Year;	// 出发年月日
+	protected String depTime_Month; 
+	protected String depTime_Day; 
+	
+	protected String retTime_Year;	// 返程年月日
+	protected String retTime_Month; 
+	protected String retTime_Day; 
+	
 	protected FormParams() {
 		// 日期格式验证
-		String regexTime = "[0-9]{4}-[0-9]{2}-[0-9]{2}";
+		this.setTimeSpliter();
+		this.setPattern();
 		formParams = new ArrayList<NameValuePair>();
+	}
+
+	public void setTimeSpliter() {
+		this.timeSpliter = "-";
+	}
+	
+	public void setPattern() {
+		String regexTime = "[0-9]{4}" + this.timeSpliter + "[0-9]{2}" + this.timeSpliter + "[0-9]{2}";
 		pattern = Pattern.compile(regexTime);
+	}
+	
+	
+	public String getDepTime_Year() {
+		return depTime_Year;
+	}
+
+	public FormParams setDepTime_Year(String depTime_Year) {
+		this.depTime_Year = depTime_Year;
+		return this;
+	}
+
+	public String getDepTime_Month() {
+		return depTime_Month;
+	}
+
+	public FormParams setDepTime_Month(String depTime_Month) {
+		this.depTime_Month = depTime_Month;
+		return this;
+	}
+
+	public String getRetTime_Year() {
+		return retTime_Year;
+	}
+
+	public FormParams setRetTime_Year(String retTime_Year) {
+		this.retTime_Year = retTime_Year;
+		return this;
+	}
+
+	public String getRetTime_Month() {
+		return retTime_Month;
+	}
+
+	public FormParams setRetTime_Month(String retTime_Month) {
+		this.retTime_Month = retTime_Month;
+		return this;
 	}
 
 	public String getDepTime_Day() {
@@ -51,14 +101,6 @@ public abstract class FormParams {
 		return this;
 	}
 
-	public String getDepTime_YearMonth() {
-		return depTime_YearMonth;
-	}
-
-	public FormParams setDepTime_YearMonth(String depTime_YearMonth) {
-		this.depTime_YearMonth = depTime_YearMonth;
-		return this;
-	}
 
 	public String getRetTime_Day() {
 		return retTime_Day;
@@ -69,14 +111,6 @@ public abstract class FormParams {
 		return this;
 	}
 
-	public String getRetTime_YearMonth() {
-		return retTime_YearMonth;
-	}
-
-	public FormParams setRetTime_YearMonth(String retTime_YearMonth) {
-		this.retTime_YearMonth = retTime_YearMonth;
-		return this;
-	}
 
 	public String getDepAirport() {
 		return depAirport;
@@ -104,9 +138,10 @@ public abstract class FormParams {
 		Matcher m = pattern.matcher(depTime);
 		if (m.find()) {
 			this.depTime = depTime;
-			String[] times = depTime.split("-");
-			this.depTime_Day = times[2];
-			this.depTime_YearMonth = times[0] + "-" + times[1];
+			String[] times = depTime.split(this.timeSpliter);
+			this.setDepTime_Year(times[0]);
+			this.setDepTime_Month(times[1]);
+			this.setDepTime_Day(times[2]);
 			return this;
 		} else {
 			log("Illeagal format String of time");
@@ -122,9 +157,10 @@ public abstract class FormParams {
 		Matcher m = pattern.matcher(retTime);
 		if (m.find()) {
 			this.retTime = retTime;
-			String[] times = retTime.split("-");
-			this.retTime_Day = times[2];
-			this.retTime_YearMonth = times[0] + "-" + times[1];
+			String[] times = retTime.split(this.timeSpliter);
+			this.setRetTime_Year(times[0]);
+			this.setRetTime_Month(times[1]);
+			this.setRetTime_Day(times[2]);
 			return this;
 		} else {
 			log("Illeagal format String of time");

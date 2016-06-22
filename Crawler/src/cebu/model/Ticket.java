@@ -9,8 +9,8 @@ public class Ticket {
 	private String deptime;
 	private String arrtime;
 	private String currency;
-	private int adultprice;
-	private int adulttax;
+	private String adultprice;
+	private String adulttax;
 	private String createtime;	// 当前时间 精确到秒
 	private int seats = 2;	// 2
 	
@@ -84,19 +84,19 @@ public class Ticket {
 		this.flytime = flytime;
 	}
 
-	public int getadultPrice() {
+	public String getadultPrice() {
 		return adultprice;
 	}
 
-	public void setadultPrice(int adultprice) {
+	public void setadultPrice(String adultprice) {
 		this.adultprice = adultprice;
 	}
 
-	public int getadultTax() {
+	public String getadultTax() {
 		return adulttax;
 	}
 
-	public void setadultTax(int adulttax) {
+	public void setadultTax(String adulttax) {
 		this.adulttax = adulttax;
 	}
 
@@ -153,6 +153,7 @@ public class Ticket {
 				", arrtime=" + this.getarrTime() +
 				", createtime=" + this.getcreateTime() +
 				", adultPrice=" + this.getadultPrice() +
+				", currency=" + this.getCurrency() + 
 				", audltTax=" + this.getadultTax() +
 				", seats=" + this.getSeats();
 		return info;

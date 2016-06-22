@@ -8,6 +8,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import cebu.util.common.CommonUtil;
 
+
 /**
  * 表单变量类，用于传递post请求参数
  * 继承自FormParams类

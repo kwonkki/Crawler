@@ -8,8 +8,8 @@ package cebu.model;
 public class TicketPrice {
 	
 	private String currency;	// 货币单位
-	private int adultPrice;		// 成人价格
-	private int adultTax;		// 成人税
+	private String adultPrice;		// 成人价格
+	private String adultTax;		// 成人税
 	
 	public String getCurrency() {
 		return currency;
@@ -17,16 +17,16 @@ public class TicketPrice {
 	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
-	public int getAdultPrice() {
+	public String getAdultPrice() {
 		return adultPrice;
 	}
-	public void setAdultPrice(int adultPrice) {
+	public void setAdultPrice(String adultPrice) {
 		this.adultPrice = adultPrice;
 	}
-	public int getAdultTax() {
+	public String getAdultTax() {
 		return adultTax;
 	}
-	public void setAdultTax(int adultTax) {
+	public void setAdultTax(String adultTax) {
 		this.adultTax = adultTax;
 	}
 	

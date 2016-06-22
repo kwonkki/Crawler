@@ -1,6 +1,6 @@
 package cebu.util.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import cebu.model.Ticket;
 
@@ -21,7 +21,7 @@ public interface ICrawlerService {
 	 * @param adultNum		成人数目
 	 * @return
 	 */
-	public ArrayList<Ticket> getTickets(String depAirport, String arrAirport, 
+	public List<Ticket> getTickets(String depAirport, String arrAirport, 
 			String depTime, String retTime, int adultNum);
 	
 	/**
@@ -32,7 +32,7 @@ public interface ICrawlerService {
 	 * @param adultNum
 	 * @return
 	 */
-	public ArrayList<Ticket> getInfoOw(String depAirport, String arrAirport, 
+	public List<Ticket> getInfoOw(String depAirport, String arrAirport, 
 			String depTime, int adultNum);
 	
 	/**
@@ -44,7 +44,7 @@ public interface ICrawlerService {
 	 * @param adultNum
 	 * @return
 	 */
-	public ArrayList<Ticket> getInfoRt(String depAirport, String arrAirport, 
+	public List<Ticket> getInfoRt(String depAirport, String arrAirport, 
 			String depTime, String retTime, int adultNum);
 	
 }

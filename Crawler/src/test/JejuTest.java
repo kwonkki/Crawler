@@ -329,8 +329,8 @@ System.out.println("ticket: " + ticket);
 
 
 		TicketPrice ticketPrice = new TicketPrice();
-		ticketPrice.setAdultPrice(Double.valueOf(adultPrice.trim()).intValue());
-		ticketPrice.setAdultTax(Double.valueOf(adultTax.trim()).intValue());
+		ticketPrice.setAdultPrice(adultPrice.trim());
+		ticketPrice.setAdultTax(adultTax.trim());
 		ticketPrice.setCurrency(currency);
 		
 		System.out.println(ticketPrice);

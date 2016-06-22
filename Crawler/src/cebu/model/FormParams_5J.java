@@ -63,7 +63,7 @@ public class FormParams_5J extends FormParams {
 				this.getDepTime_Day())); // departure time day
 		formParams.add(new BasicNameValuePair(
 				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth1",
-				this.getDepTime_YearMonth())); // departure time year, month
+				this.getDepTime_Year() + "-" + this.getDepTime_Month()));// departure time year, month
 		formParams.add(
 				new BasicNameValuePair("ControlGroupSearchView_AvailabilitySearchInputSearchVieworiginStation2", ""));
 		formParams.add(new BasicNameValuePair(
@@ -83,7 +83,7 @@ public class FormParams_5J extends FormParams {
 				this.getRetTime_Day())); // return time day
 		formParams.add(new BasicNameValuePair(
 				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListMarketMonth2",
-				this.getRetTime_YearMonth())); // return time year, month
+				this.getDepTime_Year() + "-" + this.getDepTime_Month())); // return time year, month
 		formParams.add(new BasicNameValuePair(
 				"ControlGroupSearchView$AvailabilitySearchInputSearchView$DropDownListPassengerType_ADT", adultNum));
 		formParams.add(new BasicNameValuePair(

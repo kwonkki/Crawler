@@ -38,8 +38,8 @@ public class DaoImplTicket extends DaoTemplate implements IDaoTicket{
 			ticket.setarrAirport(rs.getString("arrAirport"));
 			ticket.setdepTime(rs.getString("depTime"));
 			ticket.setarrTime(rs.getString("arrTime"));
-			ticket.setadultPrice(rs.getInt("adultPrice"));
-			ticket.setadultTax(rs.getInt("adultTax"));
+			ticket.setadultPrice(rs.getString("adultPrice"));
+			ticket.setadultTax(rs.getString("adultTax"));
 			ticket.setSeats(rs.getInt("seats"));
 			ticket.setcreateTime(rs.getString("createTime"));
 			return ticket;

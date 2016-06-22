@@ -23,8 +23,8 @@ public class TicketServiceTest {
 		ticket.setarrAirport("MNL");
 		ticket.setdepTime("201601201330");
 		ticket.setarrTime("201601201540");
-		ticket.setadultPrice(480);
-		ticket.setadultTax(330);
+		ticket.setadultPrice("480");
+		ticket.setadultTax("330");
 		ticket.setSeats(2);
 		ticket.setcreateTime("20160101122045");
 		
@@ -43,8 +43,8 @@ public class TicketServiceTest {
 		ticket.setarrAirport("MNL");
 		ticket.setdepTime("201601201330");
 		ticket.setarrTime("201601201540");
-		ticket.setadultPrice(480);
-		ticket.setadultTax(330);
+		ticket.setadultPrice("480");
+		ticket.setadultTax("330");
 		ticket.setSeats(2);
 		ticket.setcreateTime("20160101122045");
 		
@@ -63,8 +63,8 @@ public class TicketServiceTest {
 		ticket.setarrAirport("MNLLLLL");
 		ticket.setdepTime("201601201330");
 		ticket.setarrTime("201601201540");
-		ticket.setadultPrice(480);
-		ticket.setadultTax(330);
+		ticket.setadultPrice("480");
+		ticket.setadultTax("330");
 		ticket.setSeats(2);
 		ticket.setcreateTime("20160101124000");
 		
