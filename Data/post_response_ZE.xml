@@ -1,0 +1,538 @@
+<data>
+	<event>1</event>
+	<msg></msg>
+	<sevenDays1>2016-07-24 (Su)</sevenDays1>
+	<sevenDays2>2016-07-28 (Th)</sevenDays2>
+	<sevenDays3>2016-07-29 (Fr)</sevenDays3>
+	<sevenDays4>2016-07-30 (Sa)</sevenDays4>
+	<sevenDays5>2016-07-31 (Su)</sevenDays5>
+	<sevenDays6>2016-08-01 (Mo)</sevenDays6>
+	<sevenDays7>2016-08-02 (Tu)</sevenDays7>
+	<sevenDays8>2016-08-03 (We)</sevenDays8>
+	<sevenDays9>2016-08-07 (Su)</sevenDays9>
+	<bean>
+<isNewCFG>true</isNewCFG>		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-700</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 201</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 201~ ~~GMP~07/31/2016 06:25~CJU~07/31/2016 07:30</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>07:30</sta>
+			<std>06:25</std>
+			<journeykey>ZE~ 201~ ~~GMP~07/31/2016 06:25~CJU~07/31/2016 07:30</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 203</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 203~ ~~GMP~07/31/2016 06:50~CJU~07/31/2016 07:55</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>07:55</sta>
+			<std>06:50</std>
+			<journeykey>ZE~ 203~ ~~GMP~07/31/2016 06:50~CJU~07/31/2016 07:55</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 205</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 205~ ~~GMP~07/31/2016 08:20~CJU~07/31/2016 09:25</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>09:25</sta>
+			<std>08:20</std>
+			<journeykey>ZE~ 205~ ~~GMP~07/31/2016 08:20~CJU~07/31/2016 09:25</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 207</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 207~ ~~GMP~07/31/2016 09:45~CJU~07/31/2016 10:50</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>10:50</sta>
+			<std>09:45</std>
+			<journeykey>ZE~ 207~ ~~GMP~07/31/2016 09:45~CJU~07/31/2016 10:50</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 209</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 209~ ~~GMP~07/31/2016 10:20~CJU~07/31/2016 11:25</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>11:25</sta>
+			<std>10:20</std>
+			<journeykey>ZE~ 209~ ~~GMP~07/31/2016 10:20~CJU~07/31/2016 11:25</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-700</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 211</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 211~ ~~GMP~07/31/2016 11:05~CJU~07/31/2016 12:10</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>12:10</sta>
+			<std>11:05</std>
+			<journeykey>ZE~ 211~ ~~GMP~07/31/2016 11:05~CJU~07/31/2016 12:10</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 213</flightNumber>
+			<highFare>
+			</highFare>
+			<journeyKey>ZE~ 213~ ~~GMP~07/31/2016 11:40~CJU~07/31/2016 12:45</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+			</secondaryLowFare>
+			<sta>12:45</sta>
+			<std>11:40</std>
+			<journeykey>ZE~ 213~ ~~GMP~07/31/2016 11:40~CJU~07/31/2016 12:45</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 215</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 215~ ~~GMP~07/31/2016 13:05~CJU~07/31/2016 14:10</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>14:10</sta>
+			<std>13:05</std>
+			<journeykey>ZE~ 215~ ~~GMP~07/31/2016 13:05~CJU~07/31/2016 14:10</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 217</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 217~ ~~GMP~07/31/2016 14:45~CJU~07/31/2016 15:50</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>15:50</sta>
+			<std>14:45</std>
+			<journeykey>ZE~ 217~ ~~GMP~07/31/2016 14:45~CJU~07/31/2016 15:50</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 219</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 219~ ~~GMP~07/31/2016 15:20~CJU~07/31/2016 16:25</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>16:25</sta>
+			<std>15:20</std>
+			<journeykey>ZE~ 219~ ~~GMP~07/31/2016 15:20~CJU~07/31/2016 16:25</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 221</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 221~ ~~GMP~07/31/2016 16:25~CJU~07/31/2016 17:30</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>17:30</sta>
+			<std>16:25</std>
+			<journeykey>ZE~ 221~ ~~GMP~07/31/2016 16:25~CJU~07/31/2016 17:30</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-700</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 223</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 223~ ~~GMP~07/31/2016 16:30~CJU~07/31/2016 17:35</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>17:35</sta>
+			<std>16:30</std>
+			<journeykey>ZE~ 223~ ~~GMP~07/31/2016 16:30~CJU~07/31/2016 17:35</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 257</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 257~ ~~GMP~07/31/2016 18:15~CJU~07/31/2016 19:20</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>19:20</sta>
+			<std>18:15</std>
+			<journeykey>ZE~ 257~ ~~GMP~07/31/2016 18:15~CJU~07/31/2016 19:20</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 225</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 225~ ~~GMP~07/31/2016 18:40~CJU~07/31/2016 19:45</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>19:45</sta>
+			<std>18:40</std>
+			<journeykey>ZE~ 225~ ~~GMP~07/31/2016 18:40~CJU~07/31/2016 19:45</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-800A</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 227</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 227~ ~~GMP~07/31/2016 19:45~CJU~07/31/2016 20:50</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>20:50</sta>
+			<std>19:45</std>
+			<journeykey>ZE~ 227~ ~~GMP~07/31/2016 19:45~CJU~07/31/2016 20:50</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-700</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 229</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 229~ ~~GMP~07/31/2016 19:50~CJU~07/31/2016 20:55</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>20:55</sta>
+			<std>19:50</std>
+			<journeykey>ZE~ 229~ ~~GMP~07/31/2016 19:50~CJU~07/31/2016 20:55</journeykey>
+		</list>
+		<list>
+			<isRun>true</isRun>
+			<aircraftType>B737-700</aircraftType>
+			<arrivalStation>CJU</arrivalStation>
+			<carrerCode>ZE</carrerCode>
+			<departureStation>GMP</departureStation>
+			<flightNumber> 235</flightNumber>
+			<highFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</highFare>
+			<journeyKey>ZE~ 235~ ~~GMP~07/31/2016 20:10~CJU~07/31/2016 21:15</journeyKey>
+			<lowFare>
+			</lowFare>
+			<opSuffix>32</opSuffix>
+			<secondaryLowFare>
+				<amount>92900.0000</amount>
+				<amountView>92,900</amountView>
+				<clsssOfService>Y</clsssOfService>
+				<currencyCode>KRW</currencyCode>
+				<fareBasis>YHNNF1</fareBasis>
+				<fareSellKey>Y~YHNNF1~1015~~None</fareSellKey>
+				<ruleNumber>1015</ruleNumber>
+				<ruleTariff></ruleTariff>
+				<seatAvailable>0</seatAvailable>
+				<normalFare>true</normalFare>
+			</secondaryLowFare>
+			<sta>21:15</sta>
+			<std>20:10</std>
+			<journeykey>ZE~ 235~ ~~GMP~07/31/2016 20:10~CJU~07/31/2016 21:15</journeykey>
+		</list>
+	</bean>
+</data>

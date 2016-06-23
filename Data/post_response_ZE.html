@@ -1,0 +1,2573 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	
+
+
+
+
+
+
+ 
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-60454008-3', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+				
+		
+		
+		
+		
+		
+		
+			
+			
+			
+		
+		
+		
+		
+		
+		
+		
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge" /> 
+		<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+		<meta http-equiv="cache-control" content="max-age=0"/>
+		<meta http-equiv="cache-control" content="no-cache"/>
+		<meta http-equiv="expires" content="0"/>
+		<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
+		<meta http-equiv="pragma" content="no-cache"/>
+		<title>		
+			Eastarjet
+		</title>
+		<link rel="shortcut icon" href="http://www.eastarjet.com/eastarjet_common/img/icon/favicon2.ico">
+		<link href="http://image.eastarjet.com/eastarjet_common/css/en/default.css" rel="stylesheet" type="text/css" media="all" />	
+		<link href="http://image.eastarjet.com/eastarjet_common/js/jquery/themes/base/ui.all.css" rel="stylesheet" type="text/css" />
+		<link href="http://image.eastarjet.com/eastarjet_common/js/jquery/themes/blitzer/jquery-ui-1.7.2.custom.css" rel="stylesheet" type="text/css" />
+		<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/jquery-1.4.2.js" type="text/javascript"></script> 
+		<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/ui/ui.core.js" type="text/javascript"></script>
+		<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/ui/ui.draggable.js" charset="utf-8" type="text/javascript"></script>
+		<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/ui/ui.dialog.js" charset="utf-8" type="text/javascript"></script>
+		<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/ui/ui.resizable.js" charset="utf-8" type="text/javascript"></script>
+		
+		<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/ui/ui.datepicker.js" type="text/javascript"></script>
+		<script src="http://image.eastarjet.com/eastarjet_common/js/common.js" type="text/javascript"></script>	
+		<script type="text/javascript">
+		
+		$.datepicker.setDefaults({
+			//
+			showOn: 'both', 
+			buttonImage: 'http://image.eastarjet.com/eastarjet_common/img/en/common/btn_calendar.gif', 
+			buttonImageOnly: true,
+			buttonText: 'Select',
+			changeMonth: true,
+			changeYear: true,
+		    dateFormat: 'yy-mm-dd',
+		    showButtonPanel: true,
+		    currentText: 'Move to today',
+		    closeText: 'Close'
+		});
+			$(document).ready(function() {
+								
+				$('input').keydown(function(e){
+					if (e.which == 13) {
+						$(this).next('input').focus();
+					}
+				});
+				
+			});
+			var commonAct = {
+				logout: function() {
+					$.post('./loginAjax.ajax',{method:'logout'},function(data){
+						if (data == null || $(data).find('event').text() == '0') {
+			        		alert($(data).find('msg').text());
+			        	} else {
+			        		alert($(data).find('msg').text());
+			        		location.replace($(data).find('link').text());
+			        	}
+					});
+				},
+				href: function(url) {
+					location.href = url + "?return_url=" + escape(location.href);
+				},
+				quickBook: function(objFrm) {
+					var isSuccess = true;
+					if ($(objFrm).find('#cd_fromline option:selected').val() == "0" && isSuccess) {
+						alert('Please select Departure city.');
+						isSuccess = false;
+						$(objFrm).find('#cd_fromline').focus();
+					}
+					if ($(objFrm).find('input[name=dt_from]').val() == "" && isSuccess) {
+						alert('Please select Departure date.');
+						isSuccess = false;
+					}
+					if ($(objFrm).find('#cd_return0').attr('checked') && isSuccess) {
+						if ($(objFrm).find('#cd_toline option:selected').val() == "0" && isSuccess) {
+							alert('Please select Arrival city.');
+							isSuccess = false;
+						}
+						if ($(objFrm).find('input[name=dt_to]').val() == "" && isSuccess) {
+							alert('Please select Arrival date.');
+							isSuccess = false;
+						}
+						var dtFrom = $(objFrm).find('input[name=dt_from]').val();
+						dtFrom = dtFrom.substring(0,10).replace(/-/g,"");
+						var dtTo = $(objFrm).find('input[name=dt_to]').val();
+						dtTo = dtTo.substring(0,10).replace(/-/g,"");
+						if (parseInt(dtFrom,10) > parseInt(dtTo,10) && isSuccess) {
+							alert('Please check your date.');
+							isSuccess = false;
+						}
+					}
+					
+					var person_m = $(objFrm).find('#no_person_m option:selected').val();
+					var person_p = $(objFrm).find('#no_person_p option:selected').val();
+					var person_b = $(objFrm).find('#no_person_b option:selected').val();
+					var maximum = 9;
+					//
+					if ((parseInt(person_m,10) == 0 && (parseInt(person_p,10) > 0 || parseInt(person_b,10) > 0)) && isSuccess) {
+						alert('성인동반 없이 유아, 소아는 예매 할 수 없습니다.');
+						isSuccess = false;
+						$(objFrm).find('#no_person_m').focus();
+					} else if ((parseInt(person_b,10) > parseInt(person_m,10)) && isSuccess) {
+						alert('The number of infants traveling cannot exceed the number of adult companions.');
+						isSuccess = false;
+						$(objFrm).find('#no_person_m').focus();
+					} else if ((parseInt(person_m,10) + parseInt(person_p,10)) == 0 && isSuccess) {
+						alert('Please select passenger count.');
+						isSuccess = false;
+					} else if ((parseInt(person_m,10) + parseInt(person_p,10)) > maximum && isSuccess) {
+						//
+						//
+						isSuccess = false;
+					}
+					return isSuccess;
+				}
+			};
+			var validate = {
+				login: {
+					loginPublic: function() {
+					var isSuccess = true;
+					if ($('#nm_id').length > 0 && isSuccess) {
+						var nm_id = $.trim($('#nm_id').val());	
+						if (nm_id == "") {
+							alert('You need to enter your ID.');
+							isSuccess = false;
+						} else if (!(nm_id.search(/[^a-zA-Z0-9\_]/g) == -1)) {
+							alert('User ID must be 6 ~ 20 digit English character and number ');
+							isSuccess = false;	
+						} else if (!((/[a-zA-Z]/g).test(nm_id))) {
+							alert('User ID must be 6 ~ 20 digit English character and number ');
+							isSuccess = false;	
+						} else if (!(nm_id.length >= 4 && nm_id.length <= 20)) {
+							alert('User ID must be 6 ~ 20 digit English character and number ');
+							isSuccess = false;	
+						}
+						if (!isSuccess) $('#nm_id').focus();
+					}
+					if ($('#nm_passwd').length > 0 && isSuccess) {
+						var nm_passwd = $.trim($('#nm_passwd').val());
+						if (nm_passwd == "") {
+							alert('You need to enter your Password.');
+							isSuccess = false;
+						}
+						if (!isSuccess) $('#nm_passwd').focus();
+					}
+					return isSuccess;
+					}
+				}
+				,join: {
+					joinIpin: function() {
+						var isSuccess = true;
+						if ($('#ch_terms1').length > 0 && isSuccess) {
+							if (!$('#ch_terms1').attr('checked')) {
+								alert('Please check your consent to the terms of use.');
+								isSuccess = false;
+								$('#ch_terms1').focus();
+							} else if (!$('#ch_terms2').attr('checked')) {
+								alert('Please check your consent to the privacy statement.');
+								isSuccess = false;
+								$('#ch_terms2').focus();
+							}
+						}
+						if ($('#nm_lastname').length > 0 && isSuccess) {
+							var nm_name1 = $.trim($('#nm_lastname').val());
+							var nm_name2 = $.trim($('#nm_firstname').val());
+							var nm_name = nm_name1 + nm_name2;
+							if (nm_name1 == "") {
+								alert('Please enter your Last name.');
+								isSuccess = false;
+								$('#nm_lastname').focus();
+							} else if (nm_name2 == "") {
+								alert('Please enter your First name.');
+								isSuccess = false;
+								$('#nm_firstname').focus();
+							} else if (!(nm_name.search(/[^ㅎ-힣]/g) == -1)) {
+								alert('성명은 한글만 입력 가능합니다.');
+								isSuccess = false;
+								$('#nm_lastname').focus();
+							}
+						}
+						if ($('#nm_jumin1').length > 0 && isSuccess) {
+							var nm_jumin1 = $.trim($('#nm_jumin1').val());
+							var nm_jumin2 = $.trim($('#nm_jumin2').val());
+							var nm_jumin = nm_jumin1 + nm_jumin2;
+							var reg = new RegExp("^[0-9+]{6}[0-9]{7}$","gi");
+							if (nm_jumin1 == "") {
+								alert('Please enter your resident registration number.');
+								isSuccess = false;
+								$('#nm_jumin1').focus();
+							} else if (nm_jumin2 == "") {
+								alert('Please enter your resident registration number.');
+								isSuccess = false;
+								$('#nm_jumin2').focus();
+							} else if ((nm_jumin.match(reg) ? false : true)) {
+								alert('The resident registration number format entered is invalid.');
+								isSuccess = false;
+								$('#nm_jumin1').focus();
+							}						
+						}
+						return isSuccess;
+					}
+					,joinPublic: function() {
+						var isSuccess = true;
+						if ($('#cd_gender').length > 0 && isSuccess) {
+							if ($('#cd_gender option:selected').val() == "") {
+								alert('Please select your gender.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#cd_gender').focus();
+						}
+						if ($('#nm_id').length > 0 && isSuccess) {
+							var nm_id = $('#nm_id').val();
+							if (nm_id == "") {
+								alert('You need to enter your ID.');
+								isSuccess = false;
+							} else if (!(nm_id.search(/[^a-zA-Z0-9]/g) == -1)) {
+								alert('User ID must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!((/[a-zA-Z]/g).test(nm_id))) {
+								alert('User ID must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!(nm_id.length >= 4 && nm_id.length <= 20)) {
+								alert('User ID must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if ($.trim($('#cd_idck').val()) == 'false') {
+								alert('Please check duplication');
+								isSuccess = false;	
+							}
+							if (!isSuccess) $('#nm_id').focus();
+						}
+						if ($('#nm_passwd').length > 0 && isSuccess) {
+							var nm_passwd = $.trim($('#nm_passwd').val());
+							var nm_passwd2 = $.trim($('#nm_passwd2').val());
+							if (nm_passwd == "") {
+								alert('You need to enter your Password.');
+								isSuccess = false;
+							} else if (!(nm_passwd.search(/[^a-zA-Z0-9]/g) == -1)) {
+								alert('Password must be 6 ~ 20 digit English character and number.');
+								isSuccess = false;	
+							} else if (!((/[a-zA-Z]/g).test(nm_passwd))) {
+								alert('Password must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!(nm_passwd.length >= 4 && nm_passwd.length <= 20)) {
+								alert('Password must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (nm_passwd != nm_passwd2) {
+								alert('You have entered the wrong password.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_passwd').focus();
+						}		
+						if ($('#nm_birthday').length > 0 && isSuccess) {
+							var nm_birthday = $.trim($('#nm_birthday').val());
+							if (nm_birthday == "") {
+								alert('Please enter your date of birth.');
+								isSuccess = false;
+							}
+						}
+						if ($('#nm_mailid').length > 0 && isSuccess) {
+							var nm_mailid = $.trim($('#nm_mailid').val());
+							var nm_maildomain = $.trim($('#nm_maildomain').val());
+							var nm_email = nm_mailid + "@" + nm_maildomain;
+							var reg = new RegExp("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$","gi");
+							if (nm_email == "") {
+								alert('The e-mail format entered is invalid.');
+								isSuccess = false;
+							} else if (nm_email.match(reg) ? false : true) {
+								alert('The e-mail format entered is invalid.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_mailid').focus();
+						}
+						return isSuccess;
+					}
+					,joinAgency: function() {
+						var isSuccess = true;
+						if ($('#nm_id').length > 0 && isSuccess) {
+							var nm_id = $.trim($('#nm_id').val());	
+							if (nm_id == "") {
+								alert('You need to enter your ID.');
+								isSuccess = false;
+							} else if (!(nm_id.search(/[^a-zA-Z0-9]/g) == -1)) {
+								alert('User ID must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!((/[a-zA-Z]/g).test(nm_id))) {
+								alert('User ID must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!(nm_id.length >= 4 && nm_id.length <= 20)) {
+								alert('User ID must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if ($.trim($('#cd_idck').val()) == 'false') {
+								alert('Please check duplication');
+								isSuccess = false;	
+							}
+							if (!isSuccess) $('#nm_id').focus();
+						}
+						if ($('#nm_passwd').length > 0 && isSuccess) {
+							var nm_passwd = $.trim($('#nm_passwd').val());
+							var nm_passwd2 = $.trim($('#nm_passwd2').val());
+							if (nm_passwd == "") {
+								alert('You need to enter your Password.');
+								isSuccess = false;
+							} else if (!(nm_passwd.search(/[^a-zA-Z0-9]/g) == -1)) {
+								alert('Password must be 6 ~ 20 digit English character and number.');
+								isSuccess = false;	
+							} else if (!((/[a-zA-Z]/g).test(nm_passwd))) {
+								alert('Password must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!(nm_passwd.length >= 4 && nm_passwd.length <= 20)) {
+								alert('Password must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (nm_passwd != nm_passwd2) {
+								alert('You have entered the wrong password.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_passwd').focus();
+						}	
+						if ($('#nm_agencyname').length > 0 && isSuccess) {
+							if ($.trim($('#nm_agencyname').val()) == "") {
+								alert('회사명을 입력해 주세요.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_agencyname').focus();
+						}
+						/*
+						if ($('#nm_agencyurl').length > 0 && isSuccess) {
+							if ($.trim($('#nm_agencyurl').val()) == "") {
+								alert('회사웹 사이트 주소를 입력해 주세요.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_agencyurl').focus();
+						}
+						*/
+						if ($('#nm_zipcode').length > 0 && isSuccess) {
+							if ($.trim($('#nm_zipcode').val()) == "") {
+								alert('회사 우편번호 검색을 해주세요.');
+								isSuccess = false;
+							}
+							if ($.trim($('#nm_address2').val()) == "") {
+								alert('화사 주소를 입력해 주세요.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_address2').focus();
+						}
+						if ($('#nm_contactphone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{2,4}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = $('#nm_contactphone1').val();
+							var nm_phone2 = $('#nm_contactphone2').val();
+							var nm_phone3 = $('#nm_contactphone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('회사 전화번호가 올바르지 않습니다.\n회사 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactphone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('회사 전화번호가 올바르지 않습니다.\n회사 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactphone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('회사 전화번호가 올바르지 않습니다.\n회사 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactphone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('회사 전화번호가 올바르지 않습니다.\n회사 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactphone1').focus();
+							}						
+						}
+						if ($('#nm_contactfax1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{2,4}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = $('#nm_contactfax1').val();
+							var nm_phone2 = $('#nm_contactfax2').val();
+							var nm_phone3 = $('#nm_contactfax3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('회사 팩스번호가 올바르지 않습니다.\n회사 팩스번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactfax1').focus();
+							} else if (nm_phone2 == "") {
+								alert('회사 팩스번호가 올바르지 않습니다.\n회사 팩스번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactfax2').focus();
+							} else if (nm_phone3 == "") {
+								alert('회사 팩스번호가 올바르지 않습니다.\n회사 팩스번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactfax3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('회사 팩스번호가 올바르지 않습니다.\n회사 팩스번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_contactfax1').focus();
+							}						
+						}
+						if ($('#nm_lastname').length > 0 && isSuccess) {
+							var nm_name1 = $.trim($('#nm_lastname').val());
+							var nm_name2 = $.trim($('#nm_firstname').val());
+							var nm_name = nm_name1 + nm_name2;
+							if (nm_name1 == "") {
+								alert('대표자 성명(성)을 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_lastname').focus();
+							} else if (nm_name2 == "") {
+								alert('대표자 성명(이름)을 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_firstname').focus();
+							}
+						}
+						if ($('#cd_gender').length > 0 && isSuccess) {
+							if ($('#cd_gender option:selected').val() == "") {
+								alert('대표자 성별을 선택 주세요.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#cd_gender').focus();
+						}
+						if ($('#nm_mailid').length > 0 && isSuccess) {
+							var nm_mailid = $.trim($('#nm_mailid').val());
+							var nm_maildomain = $.trim($('#nm_maildomain').val());
+							var nm_email = nm_mailid + "@" + nm_maildomain;
+							var reg = new RegExp("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$","gi");
+							if (nm_email == "") {
+								alert('대표자 이메일 형식이 올바르지 않습니다.');
+								isSuccess = false;
+							} else if (nm_email.match(reg) ? false : true) {
+								alert('대표자 이메일 형식이 올바르지 않습니다.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_mailid').focus();
+						}
+						if ($('#nm_phone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{2,4}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = $('#nm_phone1').val();
+							var nm_phone2 = $('#nm_phone2').val();
+							var nm_phone3 = $('#nm_phone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('대표자 전화번호가 올바르지 않습니다.\n대표자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_phone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('대표자 전화번호가 올바르지 않습니다.\n대표자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_phone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('대표자 전화번호가 올바르지 않습니다.\n대표자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_phone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('대표자 전화번호가 올바르지 않습니다.\n대표자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_phone1').focus();
+							}						
+						}
+						if ($('#nm_cellphone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{2,4}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = $('#nm_cellphone1').val();
+							var nm_phone2 = $('#nm_cellphone2').val();
+							var nm_phone3 = $('#nm_cellphone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('대표자 핸드폰 번호가 올바르지 않습니다.\n대표자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_cellphone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('대표자 핸드폰 번호가 올바르지 않습니다.\n대표자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_cellphone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('대표자 핸드폰 번호가 올바르지 않습니다.\n대표자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_cellphone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('대표자 핸드폰 번호가 올바르지 않습니다.\n대표자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#nm_cellphone1').focus();
+							}						
+						}
+						if ($('#charge_nm_lastname').length > 0 && isSuccess) {
+							var nm_name1 = $.trim($('#charge_nm_lastname').val());
+							var nm_name2 = $.trim($('#charge_nm_firstname').val());
+							var nm_name = nm_name1 + nm_name2;
+							if (nm_name1 == "") {
+								alert('담당자 성명(성)을 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_lastname').focus();
+							} else if (nm_name2 == "") {
+								alert('담당자 성명(이름)을 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_firstname').focus();
+							}
+						}
+						if ($('#charge_nm_jumin1').length > 0 && isSuccess) {
+							var nm_jumin1 = $.trim($('#charge_nm_jumin1').val());
+							var nm_jumin2 = $.trim($('#charge_nm_jumin2').val());
+							var nm_jumin = nm_jumin1 + nm_jumin2;
+							var reg = new RegExp("^[0-9+]{6}[0-9]{7}$","gi");
+							if (nm_jumin1 == "") {
+								alert('Please enter your resident registration number.');
+								isSuccess = false;
+								$('#charge_nm_jumin1').focus();
+							} else if (nm_jumin2 == "") {
+								alert('Please enter your resident registration number.');
+								isSuccess = false;
+								$('#charge_nm_jumin2').focus();
+							} else if ((nm_jumin.match(reg) ? false : true)) {
+								alert('The resident registration number format entered is invalid.');
+								isSuccess = false;
+								$('#charge_nm_jumin1').focus();
+							}						
+						}
+						if ($('#charge_nm_mailid').length > 0 && isSuccess) {
+							var nm_mailid = $.trim($('#charge_nm_mailid').val());
+							var nm_maildomain = $.trim($('#charge_nm_maildomain').val());
+							var nm_email = nm_mailid + "@" + nm_maildomain;
+							var reg = new RegExp("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$","gi");
+							if (nm_email == "") {
+								alert('담당자 이메일 형식이 올바르지 않습니다.');
+								isSuccess = false;
+							} else if (nm_email.match(reg) ? false : true) {
+								alert('담당자 이메일 형식이 올바르지 않습니다.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#charge_nm_mailid').focus();
+						}
+						if ($('#charge_nm_phone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{2,4}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = $('#charge_nm_phone1').val();
+							var nm_phone2 = $('#charge_nm_phone2').val();
+							var nm_phone3 = $('#charge_nm_phone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('담당자 전화번호가 올바르지 않습니다.\n담당자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_phone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('담당자 전화번호가 올바르지 않습니다.\n담당자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_phone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('담당자 전화번호가 올바르지 않습니다.\n담당자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_phone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('담당자 전화번호가 올바르지 않습니다.\n담당자 전화번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_phone1').focus();
+							}						
+						}
+						if ($('#charge_nm_cellphone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{2,4}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = $('#charge_nm_cellphone1').val();
+							var nm_phone2 = $('#charge_nm_cellphone2').val();
+							var nm_phone3 = $('#charge_nm_cellphone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('담당자 핸드폰 번호가 올바르지 않습니다.\n담당자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_cellphone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('담당자 핸드폰 번호가 올바르지 않습니다.\n담당자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_cellphone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('담당자 핸드폰 번호가 올바르지 않습니다.\n담당자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_cellphone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('담당자 핸드폰 번호가 올바르지 않습니다.\n담당자 핸드폰 번호를 입력해 주세요.');
+								isSuccess = false;
+								$('#charge_nm_cellphone1').focus();
+							}						
+						}
+						return isSuccess;
+					},
+					joinForeignerIpin: function() {
+						var isSuccess = true;
+						if ($('#ch_terms1').length > 0 && isSuccess) {
+							if (!$('#ch_terms1').attr('checked')) {
+								alert('Please check your consent to the terms of use.');
+								isSuccess = false;
+								$('#ch_terms1').focus();
+							}else if (!$('#ch_terms2').attr('checked')) {
+								alert('Please check your consent to the personal information the use policy.');
+								isSuccess = false;
+								$('#ch_terms2').focus();
+							}else if (!$('#ch_terms3').attr('checked')) {
+								alert('Please check your consent to the privacy statement.');
+								isSuccess = false;
+								$('#ch_terms3').focus();
+							}
+						}
+						if ($('#nm_jumin1').length > 0 && isSuccess) {
+							var nm_jumin1 = $.trim($('#nm_jumin1').val());
+							var nm_jumin2 = $.trim($('#nm_jumin2').val());
+							var nm_jumin = nm_jumin1 + nm_jumin2;
+							var reg = new RegExp("^[0-9+]{6}[0-9]{7}$","gi");
+							if (nm_jumin1 == "") {
+								alert('외국인 등록번호 앞자리를 입력해주세요.');
+								isSuccess = false;
+								$('#nm_jumin1').focus();
+							} else if (nm_jumin2 == "") {
+								alert('외국인 등록번호 뒷자리를 입력해주세요.');
+								isSuccess = false;
+								$('#nm_jumin2').focus();
+							} else if ((nm_jumin.match(reg) ? false : true)) {
+								alert('외국인 등록번호 형식이 올바르지 않습니다.');
+								isSuccess = false;
+								$('#nm_jumin1').focus();
+							}						
+						}
+						if ($('#nm_passport').length > 0 && isSuccess) {
+							var nm_passport = $.trim($('#nm_passport').val());
+							var reg = new RegExp("^[0-9A-Z]{1,9}$","gi");
+							if (nm_passport == "") {
+								alert('Please enter your Passport No.');
+								isSuccess = false;
+								$('#nm_passport').focus();
+							} else if ((nm_passport.match(reg) ? false : true)) {
+								alert('Passport number format entered is invalid.');
+								isSuccess = false;
+								$('#nm_passport').focus();
+							}						
+						}
+						if ($('#nm_lastname').length > 0 && isSuccess) {
+							var nm_name1 = $.trim($('#nm_lastname').val());
+							var nm_name2 = $.trim($('#nm_firstname').val());
+							var nm_name = nm_name1 + nm_name2;
+							if (nm_name1 == "") {
+								alert('Please enter your Last name.');
+								isSuccess = false;
+								$('#nm_lastname').focus();
+							} else if (nm_name2 == "") {
+								alert('Please enter your First name.');
+								isSuccess = false;
+								$('#nm_firstname').focus();
+							} else if (!(nm_name.search(/[^0-9a-zA-Zㅎ-힣]/g) == -1)) {
+								alert('Enter your name in Roman characters only.');
+								isSuccess = false;
+								$('#nm_lastname').focus();
+							}
+						}
+						return isSuccess;
+					}
+					
+				}
+				,mypage: {
+					passwdChange: function(objFrm) {
+						var isSuccess = true;
+						if ($('#nm_passwdcheck').length > 0 && isSuccess) {
+							var nm_passwdold = $.trim($(objFrm).find('#nm_passwdold').val());
+							var nm_passwd = $.trim($(objFrm).find('#nm_passwd').val());
+							var nm_passwd2 = $.trim($(objFrm).find('#nm_passwd2').val());
+							if (nm_passwdold == "") {
+								alert('Please input current password.');
+								isSuccess = false;
+							} if (nm_passwd == "") {
+								alert('You need to enter your Password.');
+								isSuccess = false;
+							} else if (!(nm_passwd.search(/[^a-zA-Z0-9]/g) == -1)) {
+								alert('Password must be 6 ~ 20 digit English character and number.');
+								isSuccess = false;	
+							} else if (!((/[a-zA-Z]/g).test(nm_passwd))) {
+								alert('Password must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (!(nm_passwd.length >= 4 && nm_passwd.length <= 20)) {
+								alert('Password must be 6 ~ 20 digit English character and number ');
+								isSuccess = false;	
+							} else if (nm_passwd != nm_passwd2) {
+								alert('You have entered the wrong password.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $(objFrm).find('#nm_passwd').focus();
+						}
+						return isSuccess;	
+					}
+					,modifyPublic: function() {
+						var isSuccess = true;
+						if ($('#cd_gender').length > 0 && isSuccess) {
+							if ($('#cd_gender option:selected').val() == "") {
+								alert('Please select your gender.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#cd_gender').focus();
+						}					
+						if ($('#nm_birthday').length > 0 && isSuccess) {
+							var nm_birthday = $.trim($('#nm_birthday').val());
+							if (nm_birthday == "") {
+								alert('Please enter your date of birth.');
+								isSuccess = false;
+							}
+						}
+						if ($('#nm_mailid').length > 0 && isSuccess) {
+							var nm_mailid = $.trim($('#nm_mailid').val());
+							var nm_maildomain = $.trim($('#nm_maildomain').val());
+							var nm_email = nm_mailid + "@" + nm_maildomain;
+							var reg = new RegExp("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$","gi");
+							if (nm_email == "") {
+								alert('The e-mail format entered is invalid.');
+								isSuccess = false;
+							} else if (nm_email.match(reg) ? false : true) {
+								alert('The e-mail format entered is invalid.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $('#nm_mailid').focus();
+						}
+						return isSuccess;
+					}
+				}
+				,book: {
+					bookingStep1: function(objFrm) {
+						var isSuccess = true;
+						if ($(objFrm).find('#cd_fromline option:selected').val() == "0" && isSuccess) {
+							alert('Please select Departure city.');
+							isSuccess = false;
+							$(objFrm).find('#cd_fromline').focus();
+						}
+						if ($(objFrm).find('input[name=dt_from]').val() == "" && isSuccess) {
+							alert('Please select Departure date.');
+							isSuccess = false;
+						}
+						if ($(objFrm).find('#cd_return0').attr('checked') && isSuccess) {
+							if ($(objFrm).find('#cd_toline option:selected').val() == "0" && isSuccess) {
+								alert('Please select Arrival city.');
+								isSuccess = false;
+							}
+							if ($(objFrm).find('input[name=dt_to]').val() == "" && isSuccess) {
+								alert('Please select Arrival date.');
+								isSuccess = false;
+							}
+							var dtFrom = $(objFrm).find('input[name=dt_from]').val();
+							dtFrom = dtFrom.substring(0,10).replace(/-/g,"");
+							var dtTo = $(objFrm).find('input[name=dt_to]').val();
+							dtTo = dtTo.substring(0,10).replace(/-/g,"");
+							if (parseInt(dtFrom,10) > parseInt(dtTo,10) && isSuccess) {
+								alert('Please check your date.');
+								isSuccess = false;
+							}
+						}
+						
+						var person_m = $(objFrm).find('#no_person_m option:selected').val();
+						var person_p = $(objFrm).find('#no_person_p option:selected').val();
+						var person_b = $(objFrm).find('#no_person_b option:selected').val();
+						var maximum = 9;
+						//
+						if ((parseInt(person_m,10) == 0 && (parseInt(person_p,10) > 0 || parseInt(person_b,10) > 0)) && isSuccess) {
+							alert('성인동반 없이 유아, 소아는 예매 할 수 없습니다.');
+							isSuccess = false;
+							$(objFrm).find('#no_person_m').focus();
+						} else if ((parseInt(person_b,10) > parseInt(person_m,10)) && isSuccess) {
+							alert('The number of infants traveling cannot exceed the number of adult companions.');
+							isSuccess = false;
+							$(objFrm).find('#no_person_m').focus();
+						} else if ((parseInt(person_m,10) + parseInt(person_p,10)) == 0 && isSuccess) {
+							alert('Please select passenger count.');
+							isSuccess = false;
+						} else if ((parseInt(person_m,10) + parseInt(person_p,10)) > maximum && isSuccess) {
+							//
+							//
+							isSuccess = false;
+						}
+						return isSuccess;
+					}
+					,bookingStep2: function(objFrm) {
+						var isSuccess = true;
+						var checkCount = 1;
+						//
+						if ($('#bookStepFrm').find('input:radio:checked').length < checkCount) {
+							alert('Please select a flight.');
+							isSuccess = false;
+						}
+						return isSuccess;
+					}
+					,bookingStep3: function(objFrm) {
+						var isSuccess = true;
+						if ($(objFrm).find('#nm_lastname').length > 0 && isSuccess) {
+							var nm_name1 = $.trim($(objFrm).find('#nm_lastname').val());
+							var nm_name2 = $.trim($(objFrm).find('#nm_firstname').val());
+							var nm_name = nm_name1 + nm_name2;
+							if (nm_name1 == "") {
+								alert('Type your last name. (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#nm_lastname').focus();
+							} else if (nm_name2 == "") {
+								alert('Type your first name. (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#nm_firstname').focus();
+							}
+						}
+						if ($(objFrm).find('#cd_gender') && isSuccess) {
+							if ($(objFrm).find('#cd_gender').val() == "") {
+								alert('Please select your gender. (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#cd_gender').focus();
+							}
+						}
+						//
+						/*
+						if ($(objFrm).find('#nm_jumin').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{13}$","gi");
+							var nm_jumin = (objFrm).find('#nm_jumin').val();
+							if ((nm_jumin.match(reg) ? true : false)) {
+								alert('The resident registration number format entered is invalid.');
+								isSuccess = false;
+								$(objFrm).find('#nm_jumin').focus();
+							}						
+						}
+						*/
+						//
+						if ($(objFrm).find('#nm_phone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9+-]{2,6}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = (objFrm).find('#nm_phone1').val();
+							var nm_phone2 = (objFrm).find('#nm_phone2').val();
+							var nm_phone3 = (objFrm).find('#nm_phone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('Please enter your contact number (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#nm_phone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('Please enter your contact number (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#nm_phone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('Please enter your contact number (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#nm_phone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('Please enter your contact number (Person who makes a reservation)');
+								isSuccess = false;
+								$(objFrm).find('#nm_phone1').focus();
+							}						
+						}
+						if ($(objFrm).find('#nm_mailid').length > 0 && isSuccess) {
+							var nm_mailid = $.trim($(objFrm).find('#nm_mailid').val());
+							var nm_maildomain = $.trim($(objFrm).find('#nm_maildomain').val());
+							var nm_email = nm_mailid + "@" + nm_maildomain;
+							var reg = new RegExp("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,3})$","gi");
+							if (nm_email == "") {
+								alert('The e-mail format entered is invalid.');
+								isSuccess = false;
+							} else if (nm_email.match(reg) ? false : true) {
+								alert('The e-mail format entered is invalid.');
+								isSuccess = false;
+							}
+							if (!isSuccess) $(objFrm).find('#nm_mailid').focus();
+						}
+						if ($(objFrm).find('#nm_phone1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9+-]{2,6}-[0-9]{3,4}-[0-9]{4}$","gi");
+							var nm_phone1 = (objFrm).find('#emergency_nm_phone1').val();
+							var nm_phone2 = (objFrm).find('#emergency_nm_phone2').val();
+							var nm_phone3 = (objFrm).find('#emergency_nm_phone3').val();
+							var nm_phone = nm_phone1 + "-" + nm_phone2 + "-" + nm_phone3;
+							if (nm_phone1 == "") {
+								alert('Enter emergency contact number of the representative of passengers.');
+								isSuccess = false;
+								$(objFrm).find('#emergency_nm_phone1').focus();
+							} else if (nm_phone2 == "") {
+								alert('Enter emergency contact number of the representative of passengers.');
+								isSuccess = false;
+								$(objFrm).find('#emergency_nm_phone2').focus();
+							} else if (nm_phone3 == "") {
+								alert('Enter emergency contact number of the representative of passengers.');
+								isSuccess = false;
+								$(objFrm).find('#emergency_nm_phone3').focus();
+							} else if ((nm_phone.match(reg) ? false : true)) {
+								alert('Enter emergency contact number of the representative of passengers.');
+								isSuccess = false;
+								$(objFrm).find('#emergency_nm_phone1').focus();
+							}						
+						}
+						if ($(objFrm).find('#ck_tbnone').length == 0 || !$(objFrm).find('#ck_tbnone').attr('checked')) {
+							if ($(objFrm).find('#passenger_nm_lastname').length > 0 && isSuccess) {
+								$(objFrm).find('input[name=passenger_nm_lastname]').each(function(){
+									if ($.trim($(this).val()) == "") {
+										alert('Type a passenger’s last name ');
+										isSuccess = false;
+										$(this).focus();
+										return false;
+									}
+								});
+							}
+							if ($(objFrm).find('#passenger_nm_firstname').length > 0 && isSuccess) {
+								$(objFrm).find('input[name=passenger_nm_firstname]').each(function(){
+									if ($.trim($(this).val()) == "") {
+										alert('Type a passenger’s first name. ');
+										isSuccess = false;
+										$(this).focus();
+										return false;
+									}
+								});
+							}
+							if ($(objFrm).find('#passenger_nm_jumin').length > 0 && isSuccess) {
+								var reg = new RegExp("^[0-9]{13}$","gi");
+								$(objFrm).find('input[name=passenger_nm_jumin]').each(function(){
+									var nm_jumin = $(this).val();
+									if (nm_jumin != '') {
+										if ((nm_jumin.match(reg) ? false : true)) {
+											alert('탑승자 주민번호 형식이 올바르지 않습니다.');
+											isSuccess = false;
+											$(this).focus();
+											return false;
+										}
+									}
+								});
+							}
+							if ($(objFrm).find('#passenger_nm_birthday').length > 0 && isSuccess) {
+								$(objFrm).find('input[name=passenger_nm_birthday]').each(function(){
+									var index = $(objFrm).find('input[name=passenger_nm_birthday]').index(this);
+									if($(objFrm).find('input[name=passenger_nm_paxtype]').eq(index).val() == 'ADT'){
+										if ($.trim($(this).val()).length < 8 && $.trim($(this).val()).length > 0) {
+											alert('Please enter your Date of birth (ex: YYYYMMDD)');
+											isSuccess = false;
+											$(this).focus();
+											return false;
+										}
+									}else{
+										if ($.trim($(this).val()).length < 8) {
+											alert('Please enter your Date of birth (ex: YYYYMMDD)');
+											isSuccess = false;
+											$(this).focus();
+											return false;
+										}
+										//유아의 경우  24개월 체크
+										else if($(objFrm).find('input[name=passenger_nm_paxtype]').eq(index).val() == 'INF') {
+											var std = '2016-07-31 (Su)';
+											//
+												std = '0000-00-00';
+											//
+											var birthday = $.trim($(this).val());
+											var dob = new Date(Number(birthday.substr(0,4))+2, Number(birthday.substr(4,2)) -1, Number(birthday.substr(6,2))).valueOf();
+											var now = new Date(Number(std.substr(0,4)), Number(std.substr(5,2)) -1, Number(std.substr(8,2))).valueOf();
+											if(now >= dob)
+											{
+												alert('Infant must be under age 2 on travel date.');
+												isSuccess = false;
+												$(this).focus();
+												return false;
+											}
+										}
+										//소아의 경우 만12세 체크
+										else if($(objFrm).find('input[name=passenger_nm_paxtype]').eq(index).val() == 'CHD') {
+											var std = '2016-07-31 (Su)';
+											var birthday = $.trim($(this).val());
+											var now = new Date(Number(std.substr(0,4)), Number(std.substr(5,2)) -1, Number(std.substr(8,2))).valueOf();
+
+											if ($(objFrm).find('input[name=international]').length > 0){
+												//국제선  만12세미만
+												var dob = new Date(Number(birthday.substr(0,4))+12, Number(birthday.substr(4,2)) -1, Number(birthday.substr(6,2))).valueOf();
+												if(now >= dob)
+												{
+													alert('Children must be under the age of 12.');
+													isSuccess = false;
+													$(this).focus();
+													return false;
+												}
+											}else{
+												//국내선 만 13세 미만
+												var dob = new Date(Number(birthday.substr(0,4))+13, Number(birthday.substr(4,2)) -1, Number(birthday.substr(6,2))).valueOf();
+												if(now >= dob)
+												{
+													alert('Child must be age 2-12 on travel date.');
+													isSuccess = false;
+													$(this).focus();
+													return false;
+												}
+											}
+										}
+									}
+								});
+							}
+							// 운임할인대상
+							if ($(objFrm).find('#passenger_cd_paytype').length > 0 && isSuccess) {
+								$(objFrm).find('select[name=passenger_cd_paytype]').each(function() {
+									if ($.trim($(this).val()) == '') {
+										alert('Please select your paxtype.');
+										isSuccess = false;
+										$(this).focus();
+										return false;
+									}
+								});
+							}
+						} else if ($(objFrm).find('#ck_tbnone').length > 0 || $(objFrm).find('#ck_tbnone').attr('checked')) {
+							if ($(objFrm).find('#passenger_nm_lastname').length > 0 && isSuccess) {
+								$(objFrm).find('.tr_inf input[name=passenger_nm_lastname]').each(function(){
+									if ($.trim($(this).val()) == "") {
+										alert('Type a passenger’s last name ');
+										isSuccess = false;
+										$(this).focus();
+										return false;
+									}
+								});
+							}
+							if ($(objFrm).find('#passenger_nm_firstname').length > 0 && isSuccess) {
+								$(objFrm).find('.tr_inf input[name=passenger_nm_firstname]').each(function(){
+									if ($.trim($(this).val()) == "") {
+										alert('Type a passenger’s first name. ');
+										isSuccess = false;
+										$(this).focus();
+										return false;
+									}
+								});
+							}
+							if ($(objFrm).find('#passenger_nm_jumin').length > 0 && isSuccess) {
+								var reg = new RegExp("^[0-9]{13}$","gi");
+								$(objFrm).find('.tr_inf input[name=passenger_nm_jumin]').each(function(){
+									var nm_jumin = $(this).val();
+									if (nm_jumin != '') {
+										if ((nm_jumin.match(reg) ? false : true)) {
+											alert('탑승자 주민번호 형식이 올바르지 않습니다.');
+											isSuccess = false;
+											$(this).focus();
+											return false;
+										}
+									}
+								});
+							}
+							if ($(objFrm).find('#passenger_nm_birthday').length > 0 && isSuccess) {
+								$(objFrm).find('.tr_inf input[name=passenger_nm_birthday]').each(function(){
+									if ($.trim($(this).val()).length < 8) {
+										alert('Please enter your Date of birth (ex: YYYYMMDD)');
+										isSuccess = false;
+										$(this).focus();
+										return false;
+									}
+								});
+							}
+						}
+						return isSuccess;
+					}
+					,bookingStep4: function(objFrm) {
+						var isSuccess = true;
+						if ($(objFrm).find('#nm_accountnumber1').length > 0 && isSuccess) {
+							var reg = new RegExp("^[0-9]{4}-[0-9]{4}-[0-9]{1,4}-[0-9]{0,4}$","gi");
+							$(objFrm).find('#nm_accountnumber1').each(function(key, obj){
+								var nm_card1 = $(objFrm).find('#nm_accountnumber1').eq(key).val();
+								var nm_card2 = $(objFrm).find('#nm_accountnumber2').eq(key).val();
+								var nm_card3 = $(objFrm).find('#nm_accountnumber3').eq(key).val();
+								var nm_card4 = $(objFrm).find('#nm_accountnumber4').eq(key).val();
+								var nm_card = nm_card1 + '-' + nm_card2 + '-' + nm_card3 + '-' + nm_card4;
+
+								if ((nm_card.match(reg) ? false : true)) {
+									alert('You entered the wrong credit card number.');
+									isSuccess = false;
+									$(obj).focus();
+									return false;
+								}	
+							});
+						}
+
+						if ($(objFrm).find('#cd_authtype_a').length > 0 && isSuccess) {
+							$(objFrm).find('input[name=cd_authtype]').each(function(key, obj){
+								if ($(objFrm).find('input[name=cd_authtype]').eq(key).val() == "0") {
+									/*
+									if ($(objFrm).find('#nm_cardholdername').eq(key).length > 0 && isSuccess) {
+										var nm_name = $.trim($(objFrm).find('#nm_cardholdername').eq(key).val());
+										if (nm_name == "") {
+											alert('Please enter the Cardholder's Name.');
+											isSuccess = false;
+											$(objFrm).find('#nm_cardholdername').eq(key).focus();
+										}
+									}
+									*/
+									if ($(objFrm).find('#nm_pin').eq(key).length > 0 && isSuccess) {
+										var reg = new RegExp("^[0-9]{7}$","gi");
+										var nm_pin = $.trim($(objFrm).find('#nm_pin').eq(key).val());
+										if ((nm_pin.match(reg) ? false : true)) {
+											alert('카드 소유자 주민번호 뒷7자리를 입력해 주세요.');
+											isSuccess = false;
+											$(objFrm).find('#nm_pin').eq(key).focus();
+										}
+									}
+								} else {
+									if ($(objFrm).find('#nm_businessname').eq(key).length > 0 && isSuccess) {
+										var nm_name = $.trim($(objFrm).find('#nm_businessname').eq(key).val());
+										if (nm_name == "") {
+											alert('Please enter the Corporate name.');
+											isSuccess = false;
+											$(objFrm).find('#nm_businessname').focus();
+										}
+									}
+									if ($(objFrm).find('#nm_businessregister').eq(key).length > 0 && isSuccess) {
+										var reg = new RegExp("^[0-9]{10}$","gi");
+										var nm_pin = $.trim($(objFrm).find('#nm_businessregister').eq(key).val());
+										if ((nm_pin.match(reg) ? false : true)) {
+											alert('Please enter 10 digit Business ID number.');
+											isSuccess = false;
+											$(objFrm).find('#nm_businessregister').eq(key).focus();
+										}
+									}
+								}
+							});
+							
+						}
+						
+						
+						return isSuccess;
+					}
+				}				
+			};
+
+			//
+			
+			function getFareName(_class, _dom_int,isNewCFG) {
+				var fare_dom;
+				var fare_int;
+				if(isNewCFG=="true" || isNewCFG==true){
+					 fare_dom = {
+						earlyBird: '',
+						low: 'E,P,T,I,L',
+						secondaryLow: '',
+						high: 'Y'
+					};
+
+					fare_int = {
+						low: 'T,I,L',
+						secondaryLow: '',
+						high: 'Y'
+					};
+				}else{
+					fare_dom = {
+							earlyBird: '',
+							low: 'E,R,I,G,P',
+							secondaryLow: '',
+							high: 'Y'
+					};
+	
+					fare_int = {
+						low: 'I,Z,A,B',
+						secondaryLow: '',
+						high: 'Y,H'
+					};
+				}
+				
+				var fareName = "secondaryLow";
+				if(_dom_int == "int"){
+					for(var key in fare_int) {
+						if(fare_int[key].match(_class)) { 
+							fareName = key;
+						}
+					}
+				}else{
+					for(var key in fare_dom) {
+						if(fare_dom[key].match(_class)) { 
+							fareName = key;
+						}
+					}
+				}
+				return fareName;
+			}
+		</script>
+	
+	
+	
+		
+		
+	
+	
+	
+	<link href="http://image.eastarjet.com/eastarjet_common/js/jquery/cluetip/jquery.cluetip.css" rel="stylesheet" type="text/css" />
+	<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/cluetip/jquery.hoverIntent.js" type="text/javascript"></script>
+	<script src="http://image.eastarjet.com/eastarjet_common/js/jquery/cluetip/jquery.cluetip.js" type="text/javascript"></script>
+	<script type="text/javascript" src="http://image.eastarjet.com/eastarjet_common/js/jquery/jquery.form.js" charset="utf-8"></script>
+	<script type="text/javascript">
+		var person_m = '2';
+		var person_p = '0';
+		var cd_fromline = 'GMP';
+		var cd_toline = 'CJU';				
+		var nm_fromline = 'Gimpo(GMP)';
+		var nm_toline = 'Jeju(CJU)';				
+		var total_FSF = '0';
+		var total_APF = '8000';
+		$(window).load(function() {
+			$('#bookStepFrm').find('#dt_from').val('2016-07-31 (Su)');
+			$('#bookStepFrm').find('#dt_to').val('0000-00-00');
+
+			//--- 국내선에서 국제선 예매 불가 --- START ☆
+			var valid_station = 'GMP|CJJ|KUV|CJU|ICN|PUS|YNY';
+			if(valid_station.indexOf(cd_fromline) < 0 || valid_station.indexOf(cd_toline) < 0) {
+				alert('The Page you are attempting to access is invalid.');
+				location.href('http://www.eastarjet.com/book/index.htm');
+			}
+			//--- 국내선에서 국제선 예매 불가 --- END ★
+			
+			bookStep2.dataBinding($('#bookStepFrm').find('#dt_from'));
+			//
+        	window.scrollBy(0, 270);
+		});
+		$(function(){
+			$('.datepicker').datepicker({minDate: 0,dayNamesView: true});
+
+			$('#bookStepFrm').find('#dt_from,#dt_to').change(function(){
+				bookStep2.dataBindingBefore($(this));
+				var departDate = $('#bookStepFrm').find('#dt_from').val();
+				var arrivalDate = $('#bookStepFrm').find('#dt_to').val();
+				departDate = departDate.substring(0,10).replace(/-/g,"");
+				arrivalDate = arrivalDate.substring(0,10).replace(/-/g,"");
+				if($(this).attr('id') == 'dt_from') {
+					//
+				} else {
+					if (parseInt(departDate,10) > parseInt(arrivalDate,10)) {
+						$('#bookStepFrm').find('#dt_from').val($('#bookStepFrm').find('#dt_to').val());
+						bookStep2.dataBindingBefore($('#bookStepFrm').find('#dt_from'));
+					}
+				}
+			});
+			$('#bookStepFrm').find('#divDeparture').find('table.table-week').find('a,img').click(function(){
+				var departDate = $(this).attr('title');
+				departDate = departDate.substring(0,10).replace(/-/g,"");
+				var nowDate = '20160623';
+				if (parseInt(departDate) < parseInt(nowDate)) {
+					return;
+				}
+				$('#bookStepFrm').find('#dt_from').val($(this).attr('title'));
+				bookStep2.dataBindingBefore($('#bookStepFrm').find('#dt_from'));
+				//
+			});	
+			//
+			$('#bookStepFrm').ajaxForm({
+				dataType:  'xml',
+				beforeSubmit: function() {
+					//alert("before");
+					// LOADER 로딩 바를 띄운다!
+					LOADER.show();
+		        },
+		        success: function(data) {
+		        	// LOADER 로딩 바를 감춘다!
+					LOADER.hide();
+		        	if (data == null || $(data).find('event').text() == '0') {
+		        		alert($(data).find('msg').text());
+		        		if($(data).find('link').text() == '-1'){
+		        			history.go(-1);
+		        		}
+		        	} else {
+		        		
+		        		
+		        			$('#div_nologonSaleFare2').dialog('open');
+		        		
+		        		
+		        		
+		        	}
+		        	
+		        },
+		        skipEncodingOverride: true
+		    });
+			$('#bookStepFrm').find('#tab_departure02,#tab_arrival02').click(function() {
+				var img = $(this).attr('src');
+				var tableLayout = $(this).attr('id') == 'tab_departure02' ? $('#bookStepFrm').find('#table_departJourney') : $('#bookStepFrm').find('#table_arrivalJourney');
+				if (img.indexOf('th_02.gif') == -1) {
+					img = img.replace('th_02b.gif', 'th_02.gif');
+					$(tableLayout).find('tbody').find('tr').find('td.high').hide();
+					$(tableLayout).find('tbody').find('tr').find('td.price').show();
+				} else {
+					img = img.replace('th_02.gif', 'th_02b.gif');
+					$(tableLayout).find('tbody').find('tr').find('td.high').show();
+					$(tableLayout).find('tbody').find('tr').find('td.price').hide();
+				}
+				if ($(tableLayout).find('td.sale input[type=radio]:checked').size() == 0) {
+					$(tableLayout).find('tr').css('background','#ffffff');
+				}
+				$(tableLayout).find('td.price input[type=radio]:checked').attr('checked', false);
+				$(tableLayout).find('td.high input[type=radio]:checked').attr('checked', false);
+				bookStep2.totalPay();
+				$(this).attr('src', img);
+			});
+			$('#bookStepFrm').find('#tab_departure55,#tab_arrival55').click(function() {
+				var img = $(this).attr('src');
+				var tableLayout = $(this).attr('id') == 'tab_departure55' ? $('#bookStepFrm').find('#table_departJourney') : $('#bookStepFrm').find('#table_arrivalJourney');
+				if (img.indexOf('th_55.gif') == -1) {
+					img = img.replace('th_55b.gif', 'th_55.gif');
+					$(tableLayout).find('tbody').find('tr').find('td.high').hide();
+					$(tableLayout).find('tbody').find('tr').find('td.price').show();
+				} else {
+					img = img.replace('th_55.gif', 'th_55b.gif');
+					$(tableLayout).find('tbody').find('tr').find('td.high').show();
+					$(tableLayout).find('tbody').find('tr').find('td.price').hide();
+				}
+				if ($(tableLayout).find('td.sale input[type=radio]:checked').size() == 0) {
+					$(tableLayout).find('tr').css('background','#ffffff');
+				}
+				$(tableLayout).find('td.price input[type=radio]:checked').attr('checked', false);
+				$(tableLayout).find('td.high input[type=radio]:checked').attr('checked', false);
+				bookStep2.totalPay();
+				$(this).attr('src', img);
+			});
+			
+			/*********************************************
+		    * Layer popup settting start
+		    **********************************************/
+			$('#fareRuleInfo').dialog({
+				width: 520,
+				height: 770,
+				resizable: false,
+				modal: true,
+				autoOpen: false
+			});
+			$('#fareRuleConfirm').dialog({
+				//
+				//
+				width: 525,
+				height: 820,
+				//
+				resizable: false,
+				modal: true,
+				autoOpen: false
+			});
+			$('#div_nologonSaleFare').dialog({
+				width: 451,
+				height: 260,
+				resizable: false,
+				autoOpen: false
+			});
+			$('#div_nologonSaleFare2').dialog({
+				width: 451,
+				height: 260,
+				resizable: false,
+				autoOpen: false
+			});
+			$('#bookStepFrm').find('#btn_fareRule1,#btn_fareRule2').click(function() {
+				var selectFromFare = $('#nm_fromFareName').val();
+				var selectToFare = $('#nm_toFareName').val();
+				var tabIdx = 0;
+
+				var fareName = $(this).attr('id') == 'btn_fareRule1' ? selectFromFare : selectToFare;
+				if (fareName == 'low') {tabIdx = 0;}
+				else if (fareName == 'secondaryLow') {tabIdx = 1;}
+				else if (fareName == 'high') {tabIdx = 2;}
+
+				var div_fare = $('#div_' + fareName + 'Fare').clone();
+				
+				$('#fareRuleInfo').find('div').find('div:eq(0)').find('ul li').find('a').removeClass('current');
+				$('#fareRuleInfo').find('div').find('div:eq(0)').find('ul li:eq('+tabIdx+')').find('a').addClass('current');
+				$('#fareRuleInfo').find('div').find('div:eq(1)')
+					.html(div_fare);
+				 
+				var selectedFareSize = $(this).attr('id') == 'btn_fareRule1' ? $('#bookStepFrm').find('#divDeparture').find('input:radio:checked').size() : $('#bookStepFrm').find('#divArrival').find('input:radio:checked').size();		
+				if (selectedFareSize == 0) {
+					alert('Please select a fare.');
+					return;
+				}
+				$('#fareRuleInfo').dialog('open');
+			});
+
+			$('#fareRuleInfo').find('div').find('div:eq(0)').find('ul li').click(function() {
+				var fareName = 'high';
+				var tabIdx = $('#fareRuleInfo').find('div').find('div:eq(0)').find('ul li').index(this);
+				if (tabIdx == 0) {fareName = 'low';}
+				else if (tabIdx == 1) {fareName = 'secondaryLow';}
+				else if (tabIdx == 2) {fareName = 'high';}
+
+				var div_fare = $('#div_' + fareName + 'Fare').clone();
+				$('#fareRuleInfo').find('div').find('div:eq(0)').find('ul li').find('a').removeClass('current');
+				$('#fareRuleInfo').find('div').find('div:eq(0)').find('ul li:eq('+tabIdx+')').find('a').addClass('current');
+				$('#fareRuleInfo').find('div').find('div:eq(1)')
+					.html(div_fare);
+			});
+			
+			/*********************************************
+		    * Layer popup settting end
+		    **********************************************/
+			$('#bookStepFrm').find('#btn_submit').click(function() {
+				//===================
+				var departTime = ($('#bookStepFrm').find('#divDeparture').find('input:radio:checked').parent('label').parent('td').parent('tr').children(':nth-child(4)').text());
+				departTime = departTime.replace(/\s/g, "");
+				departTime = departTime.split("→")[0];
+				var arrivalTime = ($('#bookStepFrm').find('#divArrival').find('input:radio:checked').parent('label').parent('td').parent('tr').children(':nth-child(4)').text());
+				arrivalTime = arrivalTime.replace(/\s/g, "");
+				arrivalTime = arrivalTime.split("→")[0];
+				var departDate = $('#bookStepFrm').find('#dt_from').val();
+				var arrivalDate = $('#bookStepFrm').find('#dt_to').val();
+				if (departDate == arrivalDate && departTime >= arrivalTime){
+					alert('JourneysOverlap.');
+					return;
+				}
+				//==========================
+				var checkCount = 1;
+				//
+				if ($('#bookStepFrm').find('input:radio:checked').length < checkCount) {
+					alert('Please select a flight.');
+					return;
+				}
+				
+				$('#chk_checkin').attr('checked', false);
+				var selectFromFare = $('#nm_fromFareName').val();
+				var selectToFare = $('#nm_toFareName').val();
+				var div_fromFare = $('#div_' + selectFromFare + 'Fare').clone();
+				var div_toFare = $('#div_' + selectToFare + 'Fare').clone();
+
+				var img_fromRule = 'layer_t1.gif';
+				var img_toRule = 'layer_t1.gif';
+				img_fromRule = selectFromFare == 'low' ? 'layer_t1.gif' : selectFromFare == 'secondaryLow' ? 'layer_t2.gif' : 'layer_t3.gif';
+				img_toRule = selectToFare == 'low' ? 'layer_t1.gif' : selectToFare == 'secondaryLow' ? 'layer_t2.gif' : 'layer_t3.gif';
+				//
+				$('#fareRuleConfirm').find('#img_fromRule').attr('src', 'http://image.eastarjet.com/eastarjet_common/img/en/booking/' + img_fromRule);
+				$('#fareRuleConfirm').find('#img_toRule').attr('src', 'http://image.eastarjet.com/eastarjet_common/img/en/booking/' + img_toRule);
+				$('#fareRuleConfirm').find('#td_fromFare')
+					.html(div_fromFare);
+				$('#fareRuleConfirm').find('#td_toFare')
+					.html(div_toFare);
+				$('#fareRuleConfirm').dialog('open');
+			});
+			$('#btn_checkin').click(function() {
+				bookStep2.submit();
+			});
+		});
+		
+		var fareName = 'high';
+		
+		var bookStep2 = {
+			submit: function(){//flightNumber
+				$('#bookStepFrm').find('#nm_fromjkey').val($('#bookStepFrm').find('#divDeparture').find('input:radio:checked').parent('label').parent('td').parent('tr').attr('id'));
+				var departTime = ($('#bookStepFrm').find('#divDeparture').find('input:radio:checked').parent('label').parent('td').parent('tr').children(':nth-child(4)').text());
+				departTime = departTime.replace(/\s/g, "");
+				$('#bookStepFrm').find('#dt_fromstd').val(departTime.split("→")[0]);
+				$('#bookStepFrm').find('#dt_fromsta').val(departTime.split("→")[1]);
+				var departFlightNumber = ($('#bookStepFrm').find('#divDeparture').find('input:radio:checked').parent('label').parent('td').parent('tr').children(':nth-child(5)').text());
+				$('#bookStepFrm').find('#nm_fromfn').val(departFlightNumber);
+				//
+				if (validate.book.bookingStep2($('#bookStepFrm'))) {
+					if (!$('#chk_checkin').attr('checked')) {
+						alert('Please confirm the fare condition.');
+						return;
+					}
+					$('#bookStepFrm')
+						.attr('action', './bookAjax.ajax')
+						.submit();
+				}
+				$('#fareRuleConfirm').dialog('close');
+			},
+			totalPay: function() {
+				var money = 0;
+				$('#bookStepFrm').find('input:radio:checked').each(function(){
+					//money += (parseInt($(this).val().replace(/,/g,""),10)); 10 진수형
+					money += (Number($(this).val().replace(/,/g,""))); //
+				});
+				//$('div.total').find('div').text(commify((parseInt(person_m,10) + parseInt(person_p,10)) * money) + '원'); 10 진수형
+				var saleChildFare = 0;
+				if ($('#bookStepFrm').find('#nm_fromFareName').val() != 'low'
+					&& $('#bookStepFrm').find('#nm_fromfkey').val().substring(0, 1) == 'Y') {
+					saleChildFare += 5000;
+				}
+				//
+				var totalAdtMoney = Number(person_m) * money;
+				var totalChdMoney = Number(person_p) * (money - saleChildFare);
+				$('div.total').find('div').find('ul.reset').find('li.col-01').text(commify( totalAdtMoney + totalChdMoney) + 'KRW');
+				$('div.total').find('div').find('ul.reset').find('li.col-02').text(commify( totalAdtMoney + totalChdMoney + 8000) + 'KRW');
+			},
+			dataStdText: function(obj, std) {
+				// 상단 실시간 정보 갱신 . . 날짜영역
+				if ($(obj).attr('id') == "dt_from") {
+					$('div.booking-status-b').find('#str_fstd').text(std);
+				} else {
+					$('div.booking-status-b').find('#str_tstd').text(std);
+				}				
+			},
+			dataStdTextReset: function(obj) {
+				// 상단 실시간 정보 갱신 . . 날짜영역
+				if ($(obj).attr('id') == "dt_from") {
+					$('div.booking-status-b').find('#str_fstd').text('');
+				} else {
+					$('div.booking-status-b').find('#str_tstd').text('');
+				}				
+			},
+			dataBindingBefore: function(obj) {
+				// 상단 실시간 정보 갱신 . . 날짜영역
+				var selectDate = obj.val();
+				//selectDate = selectDate.replace('-','년 ');
+				//selectDate = selectDate.replace('-','월 ');
+				//selectDate = selectDate.replace(' (','일 (');
+
+				if ($(obj).attr('id') == "dt_from") {
+					$('div.booking-status-b').find('#str_fdate').text(selectDate);
+					$('div.booking-status-b').find('#str_fstd').text('');
+				} else {
+					$('div.booking-status-b').find('#str_tdate').text(selectDate);
+					$('div.booking-status-b').find('#str_tstd').text('');
+				}				
+				bookStep2.dataBinding(obj);
+			},
+			dataBinding: function(obj) {				
+				var divLayout = $(obj).attr('id') == "dt_from" ? $('#bookStepFrm').find('#divDeparture') : $('#bookStepFrm').find('#divArrival');
+				$(divLayout).find('table.table-plane tbody').children().remove();
+				// LOADER 로딩 바를 띄운다!
+				LOADER.show();
+				var fareNames = ['Special fares', 'Discounted fares', 'Normal fares'];
+				//
+				$.post('./bookAjax.ajax', 
+						{
+							method:'availability',
+							dt_date:$(obj).val(),
+							is_departure:$(obj).attr('id') == "dt_from" ? 'true' : false,
+							fromline:cd_fromline,
+							toline:cd_toline,
+							nmfromline:nm_fromline,
+							nmtoline:nm_toline,
+							dt_from:$('#bookStepFrm').find('#dt_from').val(),
+							dt_to:$('#bookStepFrm').find('#dt_to').val(),
+							cd_station:'DOM'
+						}, 
+						function(data){
+							if (data == null || $(data).find('event').text() == '0') {
+				        		alert($(data).find('msg').text());
+				        		location.href = './index.htm';
+				        	}else{
+							var name = $(obj).attr('id') == "dt_from" ? "nm_fromfare" : "nm_tofare";
+							var isDeparture = ($(obj).attr('id') == "dt_from");
+							var sevenDaysBar = $(divLayout).find('table.table-week tr');
+							$(sevenDaysBar).children(':nth-child(1)').find('img').attr("title", $.trim($(data).find('sevenDays1').text()));
+							$(sevenDaysBar).children(':nth-child(2)').find('a').attr("title", $.trim($(data).find('sevenDays2').text())).text(($.trim($(data).find('sevenDays2').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(3)').find('a').attr("title", $.trim($(data).find('sevenDays3').text())).text(($.trim($(data).find('sevenDays3').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(4)').find('a').attr("title", $.trim($(data).find('sevenDays4').text())).text(($.trim($(data).find('sevenDays4').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(5)').find('a').attr("title", $.trim($(data).find('sevenDays5').text())).text(($.trim($(data).find('sevenDays5').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(6)').find('a').attr("title", $.trim($(data).find('sevenDays6').text())).text(($.trim($(data).find('sevenDays6').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(7)').find('a').attr("title", $.trim($(data).find('sevenDays7').text())).text(($.trim($(data).find('sevenDays7').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(8)').find('a').attr("title", $.trim($(data).find('sevenDays8').text())).text(($.trim($(data).find('sevenDays8').text())).substring(5).replace("-","/"));
+							$(sevenDaysBar).children(':nth-child(9)').find('img').attr("title", $.trim($(data).find('sevenDays9').text()));
+							var person = (Number(person_m) + Number(person_p));
+							
+							$(data).find('list').each(function(){
+								var _this = $(this);
+								var isRun = $.trim($(_this).find('isRun').text()) == 'true' ? true : false;
+								var tr = $('<tr class="first-child" id="'+$.trim($(_this).find('journeyKey').text())+'"></tr>');
+								if ($.trim($(_this).find('lowFare').find('amountView').text()) == "" || $.trim($(_this).find('lowFare').find('amountView').text()) == "0") {
+									$('<td class="sale"></td>').append('<label><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/icon_noseat3.gif" align="top" alt="좌석이없습니다."/></label>').appendTo(tr);
+								} else {
+									$('<td class="sale"'+(isRun ? 'title="' + fareNames[0] + '"' : '')+'></td>')
+										.append($('<label></label>').append(isRun ? '￦'+$.trim($(_this).find('lowFare').find('amountView').text()) : '')
+											.prepend(isRun ? $('<input type="radio" class="radio" name="'+name+'" value="'+$.trim($(_this).find('lowFare').find('amountView').text())+'" />')
+												.click(function() {
+													$(divLayout).find('table.table-plane tbody').find('tr').css('background','#ffffff');
+													//
+													/*
+													alert('초특가 운임을 선택하셨습니다.\
+비회원은 통상/할인 운임만 가능합니다.');
+													*/
+													$('#div_nologonSaleFare').dialog('open');
+													$(this).attr('checked' , false);
+													bookStep2.dataStdTextReset(obj);
+													bookStep2.totalPay();
+													return;													
+													//
+													//
+													
+													$(this).parent('label').parent('td').parent('tr').css('background','#cad6d8');
+													bookStep2.dataStdText(obj, $(_this).find('std').text());
+													if (isDeparture) {
+														$('#bookStepFrm').find('#nm_fromfkey').val($(_this).find('lowFare').find('fareSellKey').text());
+														$('#bookStepFrm').find('#nm_fromFareName').val(getFareName($(_this).find('lowFare').find('clsssOfService').text(), "dom",$(data).find("isNewCFG").text()));
+													} else {
+														$('#bookStepFrm').find('#nm_tofkey').val($(_this).find('lowFare').find('fareSellKey').text());
+														$('#bookStepFrm').find('#nm_toFareName').val(getFareName($(_this).find('lowFare').find('clsssOfService').text(), "dom",$(data).find("isNewCFG").text()));
+													}
+													// 예상운임을 구한다
+													bookStep2.totalPay();													
+												}) : '<label><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/icon_noseat4.gif" align="top" alt="인터넷 예매마감"/></label>')
+											).appendTo(tr);
+								}
+								if ($.trim($(_this).find('secondaryLowFare').find('amountView').text()) == "" || $.trim($(_this).find('secondaryLowFare').find('amountView').text()) == "0") {
+									$('<td class="price"></td>').append('<label><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/icon_noseat3.gif" align="top" alt="좌석이없습니다."/></label>').appendTo(tr);
+								} else {
+									var isNormalFare = $.trim($(_this).find('secondaryLowFare').find('normalFare').text()) == 'true';
+									$('<td class="price"' + (isRun ?' title="'+(isNormalFare ? fareNames[2] : fareNames[1])+'"' : '')+'></td>')
+									.append($('<label></label>').append(isRun ? '￦'+$.trim($(_this).find('secondaryLowFare').find('amountView').text()) : '')
+										.prepend(isRun ? $('<input type="radio" class="radio" name="'+name+'" value="'+$.trim($(_this).find('secondaryLowFare').find('amountView').text())+'" />')
+											.click(function(){
+												$(divLayout).find('table.table-plane tbody').find('tr').css('background','#ffffff');
+												$(this).parent('label').parent('td').parent('tr').css('background','#cad6d8');
+												bookStep2.dataStdText(obj, $(_this).find('std').text());
+												if (isDeparture) {
+													$('#bookStepFrm').find('#nm_fromfkey').val($(_this).find('secondaryLowFare').find('fareSellKey').text());
+													$('#bookStepFrm').find('#nm_fromFareName').val(getFareName($(_this).find('secondaryLowFare').find('clsssOfService').text(), "dom",$(data).find("isNewCFG").text()));
+												} else {
+													$('#bookStepFrm').find('#nm_tofkey').val($(_this).find('secondaryLowFare').find('fareSellKey').text());
+													$('#bookStepFrm').find('#nm_toFareName').val(getFareName($(_this).find('secondaryLowFare').find('clsssOfService').text(), "dom",$(data).find("isNewCFG").text()));
+												}
+												// 예상운임을 구한다
+												bookStep2.totalPay();												
+											}) : '<label><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/icon_noseat4.gif" align="top" alt="인터넷 예매마감"/></label>')
+										).appendTo(tr);
+								} 
+								if ($.trim($(_this).find('highFare').find('amountView').text()) == "" || $.trim($(_this).find('highFare').find('amountView').text()) == "0") {
+									$('<td class="high"></td>').append($('<label><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/icon_noseat3.gif" align="top" alt="좌석이없습니다."/></label>')).hide().appendTo(tr);
+								} else {
+									
+									$('<td class="high"'+ (isRun ? ' title="' + fareNames[2] +'"':'')+'></td>')
+									.append($('<label></label>').append(isRun ? '￦'+$.trim($(_this).find('highFare').find('amountView').text()) : '')
+										.prepend(isRun ? $('<input type="radio" class="radio" name="'+name+'" value="'+$.trim($(_this).find('highFare').find('amountView').text())+'" />')
+											.click(function(){
+												$(divLayout).find('table.table-plane tbody').find('tr').css('background','#ffffff');
+												$(this).parent('label').parent('td').parent('tr').css('background','#cad6d8');
+												bookStep2.dataStdText(obj, $(_this).find('std').text());
+												if (isDeparture) {
+													$('#bookStepFrm').find('#nm_fromfkey').val($(_this).find('highFare').find('fareSellKey').text());
+													$('#bookStepFrm').find('#nm_fromFareName').val(getFareName($(_this).find('highFare').find('clsssOfService').text(), "dom",$(data).find("isNewCFG").text()));
+												} else {
+													$('#bookStepFrm').find('#nm_tofkey').val($(_this).find('highFare').find('fareSellKey').text());
+													$('#bookStepFrm').find('#nm_toFareName').val(getFareName($(_this).find('highFare').find('clsssOfService').text(), "dom",$(data).find("isNewCFG").text()));
+												}
+												// 예상운임을 구한다
+												bookStep2.totalPay();												
+											}) : '<label><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/icon_noseat4.gif" align="top" alt="인터넷 예매마감"/></label>')
+										)
+										.hide()
+										.appendTo(tr);
+								}
+								$('<td class="time">' + $.trim($(_this).find('std').text()) + ' → <span style="font-weight:normal;color:##959595;font-size:12px;">' + $.trim($(_this).find('sta').text()) + '</span></td>').appendTo(tr);
+								$('<td class="name">' + $.trim($(_this).find('flightNumber').text()) + '</td>').appendTo(tr);
+//								$('<td class="type" rel="./bookAjax.ajax?method=tooltipAircraftType&aircraftType=' + $.trim($(_this).find('aircraftType').text()) + '">' + $.trim($(_this).find('aircraftType').text()) + '</td>').appendTo(tr);
+								if($.trim($(_this).find('aircraftType').text()) == "B737-800A"){
+									$('<td class="type">' + $.trim($(_this).find('aircraftType').text()) + '</td>').appendTo(tr);
+								}else if($.trim($(_this).find('aircraftType').text()) == "B737-800"){
+									$('<td class="type">' + $.trim($(_this).find('aircraftType').text()) + '</td>').appendTo(tr);
+								}else{
+									$('<td class="type" title="aircraftType">' + $.trim($(_this).find('aircraftType').text()) + '</td>').appendTo(tr);
+								}
+								$(divLayout).find('table.table-plane tbody').append(tr);
+
+								$(tr).find('td.sale,td.price,td.high').cluetip({
+									width: '180px',
+									showTitle: false,
+									positionBy: 'mouse',
+									tracking: true,
+									clickEvent:true//,
+									//arrows: true
+					       		});
+								$(tr).find('td.type').cluetip({
+									width: '384px',
+									height: '167px',
+									showTitle: false,
+									//positionBy: 'mouse',
+									tracking: true,
+									clickEvent:true//,
+									//arrows: true
+					       		});
+					       		
+							});
+							// LOADER 로딩 바를 감춘다!
+							LOADER.hide();
+				        	}
+						});
+			}
+		};
+
+		function nologonSaleFare(val) {
+			if (val == 1) {
+				commonAct.href('./login.htm');
+			} else {
+				$('#div_nologonSaleFare').dialog('close');
+			}
+		}
+
+		function nologonSaleFare2(val) {
+			if (val == 1) {
+				location.href = "./login.htm" + "?return_url=" + escape("./book.htm?method=bookingStep3");
+			} else {
+				location.href = "./book.htm?method=bookingStep3";
+			}
+		}		
+
+		function joinCustomer()
+		{
+			location.href = './join.htm';
+		}
+		
+		
+		$(document).ready(function(){
+			var now = '20160623';
+			var time = '20130711';
+ 			$(document).delegate("tr.first-child td","mouseenter", function(){
+ 				$('#tooltip').css({"top":$(this).offset().top,"left":$(this).offset().left+$(this).outerWidth()});
+				var title = $(this).attr('title');
+				if(now >= time){
+					if(title == 'Special fares'){
+						$('#balloon h3').text('Special fares');
+						$('#newlow').css({'padding':'5px 5px 5px 5px;'});
+						$('#newlow').show();
+						$('#tooltip').show();
+					}else if(title == 'Discounted fares'){
+						$('#balloon h3').text('Discounted fares');
+						$('#newsecondaryLow').css({'padding':'5px 5px 5px 5px;'});
+						$('#newsecondaryLow').show();
+						$('#tooltip').show();
+					}else if(title == 'Normal fares'){
+						$('#balloon h3').text('Normal fares');
+						$('#newhigh').css({'padding':'5px 5px 5px 5px;'});
+						$('#newhigh').show();
+						$('#tooltip').show();
+					}
+				}else{
+					if(title == 'Special fares'){
+						$('#balloon h3').text('Special fares');
+						$('#oldlow').css({'padding':'5px 5px 5px 5px;'});
+						$('#oldlow').show();
+						$('#tooltip').show();
+					}else if(title == 'Discounted fares'){
+						$('#balloon h3').text('Discounted fares');
+						$('#oldsecondaryLow').css({'padding':'5px 5px 5px 5px;'});
+						$('#oldsecondaryLow').show();
+						$('#tooltip').show();
+					}else if(title == 'Normal fares'){
+						$('#balloon h3').text('Normal fares');
+						$('#oldhigh').css({'padding':'5px 5px 5px 5px;'});
+						$('#oldhigh').show();
+						$('#tooltip').show();
+					}
+				}
+				if(title == 'aircraftType'){
+					$('#tooltipAircraft').css({"top":$(this).offset().top+30,"left":$(this).offset().left-382});
+					if($(this).text() == "B737-600"){
+						$('#600').show();
+						$('#tooltipAircraft').show();
+					}else if($(this).text() == "B737-700"){
+						$('#700').show();
+						$('#tooltipAircraft').show();						
+					}else if($(this).text() == "B737-800"){
+						$('#800').show();
+						$('#tooltipAircraft').show();						
+					}else if($(this).text() == "B737-800A"){
+						
+					}else if($(this).text() == "B737-800B"){
+						
+					}
+				}
+			}).delegate("tr.first-child td","mouseleave", function(){
+				$('#newlow, #newsecondaryLow, #newhigh, #tooltip, #oldlow, #oldsecondaryLow, #oldhigh').hide();
+				$('#600, #700, #800, #tooltipAircraft').hide();
+			});
+		});		
+	</script>
+</head>
+<body>
+	<div id="skipNav" class="reader"><!-- skip navigation -->
+		<a href="#contents">컨텐츠 바로가기</a>
+	</div><!-- // skip navigation -->
+	<div id="container"><!-- container --> 
+	
+
+		<script type="text/javascript" src="http://image.eastarjet.com/eastarjet_common/js/swfobject.2.2.js" charset="utf-8"></script>
+		<script type="text/javascript" src="http://image.eastarjet.com/eastarjet_common/js/visual.js" charset="utf-8"></script>
+		<script type="text/javascript" src="http://image.eastarjet.com/eastarjet_common/js/skyscraper.xhtml.1.0.transitional.js" charset="utf-8"></script>
+		<script language="javascript">AC_FL_RunContent = 0;</script>
+		<script src="http://image.eastarjet.com/eastarjet_common/js/AC_RunActiveContent.js" language="javascript"></script>
+		<script type="text/javascript">
+		<!-- //
+		$(window).load(function() {
+			var flashvars = {};
+				flashvars.depth = "depth0_0_0"; // 플래쉬 메뉴 활성화 변수
+			var params = {}
+				params.bgcolor = "#000000";
+				params.allowscriptaccess = "always";
+				params.allownetworking = "all";
+				params.scale = "noscale";
+				params.salign = "ct";
+				params.wmode = "transparent";
+				params.base = 'http://image.eastarjet.com/eastarjet_common/swf/en/';
+			var attributes = {};
+				attributes.align = "middle";
+				attributes.id = "gnbmovie";
+			swfobject.embedSWF('http://image.eastarjet.com/eastarjet_common/swf/en/gnb.swf', "gnbspacer", "100%", "288", "9.0.0", 'http://image.eastarjet.com/eastarjet_common/swf/en/expressInstall.swf', flashvars, params, attributes);
+			var attributes = {};
+				attributes.align = "middle";
+				attributes.id = "lnbmovie";
+			swfobject.embedSWF('http://image.eastarjet.com/eastarjet_common/swf/en/lnb.swf', "lnbspacer", "182", "260", "9.0.0", 'http://image.eastarjet.com/eastarjet_common/swf/en/expressInstall.swf', flashvars, params, attributes);
+
+			var attributes = {};
+			attributes.align = "middle";
+			attributes.id = "frontmovie";
+			swfobject.embedSWF('http://image.eastarjet.com/eastarjet_common/swf/en/mainBanner.swf', "frontmovie", "397", "638", "9.0.0", 'http://image.eastarjet.com/eastarjet_common/swf/en/expressInstall.swf', flashvars, params, attributes);
+
+			var attributes = {};
+			attributes.align = "middle";
+			attributes.id = "pricemovie";
+			swfobject.embedSWF('http://www.eastarjet.com/eastarjet_common/swf/price.swf', "pricemovie", "253", "110", "9.0.0", 'http://www.eastarjet.com/eastarjet_common/swf/expressInstall.swf', flashvars, params, attributes);
+			
+			
+			//initMoving(document.getElementById("skyscraper"), 260, 50, 50);
+			
+			
+		}); 
+		$(function() {
+			
+			$('#skyscraper').css('top', 260);	
+			
+			var skyTop = $('#skyscraper').offset().top;
+			$(window).scroll(function() {
+				$('#skyscraper').stop();
+				$('#skyscraper').animate({'top': $(document).scrollTop() + skyTop}, 500);
+			});
+		});		
+
+		function getFlashObject( id ) {
+		    var obj = document.getElementById( id );
+		    if( typeof obj != 'object' &&navigator.userAgent.indexOf("Safari") == -1 ) obj = obj.getElementsByTagName( 'object' )[0];
+		    return obj;
+		}
+		
+		function updown(_choice){
+			var obj = getFlashObject( "lnbmovie" );
+			obj.style.height = (parseInt(_choice, 10) + 60) +"px";
+		}
+		// -->
+		</script>
+		<div id="header"><!-- header -->
+	
+			<div id="gnb" class="fold"><!-- gnb -->
+				<span id="gnbspacer"></span>
+				<!-- img src="http://image.eastarjet.com/eastarjet_common/img/en/common/@gnb.jpg" align="absmiddle"/ -->
+			</div><!-- // gnb -->
+	
+			<div id="utility"><!-- utility -->
+				<ul class="tab">
+					<li><a href="http://www.eastarjet.com/book/index.htm?lang=en"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/util_01.gif" align="absmiddle" alt="HOME"/></a></li>
+					
+						
+					    
+					        <li><a href="javascript:commonAct.href('http://www.eastarjet.com/book/login.htm');"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/util_02.gif" align="absmiddle" alt="LOGIN"/></a></li>
+							<li><a href="javascript:commonAct.href('http://www.eastarjet.com/book/join.htm');"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/util_03.gif" align="absmiddle" alt="회원가입"/></a></li>
+					    
+										
+					<li><a href="http://www.eastarjet.com/community/customer.htm?method=noticeList"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/util_04.gif" align="absmiddle" alt="고객센터"/></a></li>
+					<li><a href="http://www.eastarjet.com/main/eastarjet.htm?method=sitemap"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/util_05.gif" align="absmiddle" alt="사이트맵"/></a></li>
+					<li style="padding: 8px 0px 10px 4px;" ><a href="http://www.eastarjet.com/book/index.htm?lang=ko"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/kr_on.gif" alt="KOREAN" /></a></li>
+	                <li style="padding: 8px 0px 10px 4px;" ><a href="#"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/us_on.gif" alt="ENGLISH" /></a></li>
+	                <li style="padding: 8px 0px 10px 4px;" ><a href="http://www.eastarjet.com/book/index.htm?lang=ja"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/jp_on.gif" alt="JAPNESE" /></a></li>
+	                <li style="padding: 8px 0px 10px 4px;" ><a href="http://www.eastarjet.com.tw/"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/ty_on.gif" alt="Taiwan" /></a></li>
+	                <li style="padding: 8px 0px 10px 4px;" ><a href="#"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/cn_off.gif" alt="CHINESE" /></a></li>
+				</ul>
+				
+			</div><!-- // utility -->
+	
+		</div><!-- // header -->
+
+<!-- 이스타항공 일본어 사이트의 웹 로그 분석용  2011/11/16 START -->		
+<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+	try{
+		var pageTracker = _gat._getTracker("UA-27036020-1");
+		pageTracker._trackPageview();
+	} catch(err) {}
+</script>
+<!-- 이스타항공 일본어 사이트의 웹 로그 분석용  2011/11/16 END -->		
+	
+		<div id="wrapper"><!-- wrapper -->
+		
+
+			<div id="aside"><!-- aside -->
+	
+				<div class="inner"><!-- aside inner -->
+	
+					<div id="lnb"><!-- lnb -->
+						<span id="lnbspacer"></span>
+						<!-- img src="http://image.eastarjet.com/eastarjet_common/img/en/common/@lnb.gif" align="absmiddle"/ -->
+					</div><!-- // lnb -->
+
+					<div id="phone"><!-- phone number -->
+						<div class="inner">
+							<img src="http://image.eastarjet.com/eastarjet_common/img/en/common/obj_telnum.gif" align="absmiddle" alt="예매관련 문의 1544-0080,&#13;단체예매 문의 070-8660-8000" />
+						</div>
+					</div><!-- // phone number -->
+	
+				</div><!-- // aside inner -->
+	
+			</div><!-- // aside -->
+				
+			<div id="contents"><!-- contents -->
+	
+				<div class="body"><!-- body -->
+
+					<div id="scrumb"><!-- breadcrumb -->
+						<div class="inner">
+							<img src="http://image.eastarjet.com/eastarjet_common/img/en/common/ico_home.gif" align="top" alt="홈"/>
+							<a href="#">Home</a>
+							&gt;
+							<a href="#">Book a flight</a>
+							&gt;
+							<a href="#">Reserve a ticket</a>
+							&gt;
+							<strong>Domestic flights</strong>
+						</div>
+					</div><!-- // breadcrumb -->
+	
+					<div id="content"><!-- 내용 시작 ////////////////////////// -->
+						<form id="bookStepFrm" name="bookStepFrm" method="post" action="./book.htm">
+						<input type="hidden" id="method" name="method" value="bookingStep2" />
+						<input type="hidden" id="dt_fromstd" name="dt_fromstd" />
+						<input type="hidden" id="dt_fromsta" name="dt_fromsta" />
+						<input type="hidden" id="nm_fromfn" name="nm_fromfn" />
+						<input type="hidden" id="dt_tostd" name="dt_tostd" />
+						<input type="hidden" id="dt_tosta" name="dt_tosta" />
+						<input type="hidden" id="nm_tofn" name="nm_tofn" />
+						<input type="hidden" id="nm_fromjkey" name="nm_fromjkey" />
+						<input type="hidden" id="nm_tojkey" name="nm_tojkey" />
+						<input type="hidden" id="nm_fromfkey" name="nm_fromfkey" />
+						<input type="hidden" id="nm_tofkey" name="nm_tofkey" />
+						<input type="hidden" id="nm_fromFareName" name="nm_fromFareName" value="high" />
+						<input type="hidden" id="nm_toFareName" name="nm_toFareName" value="high" />
+						
+						<h3 class="tit"><img src="http://image.eastarjet.com/eastarjet_common/img/en/custom/@h3_tit.gif" align="middle" alt="국내선 예매"/><span>국내선 예매</span></h3>
+						
+						<div>
+							<img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/btn_login_please.gif" align="middle" alt="로그인하시면 초특가로 예매하실 수 있습니다." usemap="#mapBtnLogin" />
+							<map name="mapBtnLogin">
+								<area shape="rect" coords="643,10,692,28" href="javascript:commonAct.href('./login.htm');" alt="로그인" />
+							</map>
+						</div>
+						
+	
+						<div class="section-tab" style="margin-top: 10px;">
+	
+							<!-- 탭 -->
+							<div>
+								<img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/tab_type_01.gif" align="middle" usemap="#mapType"/>
+								<map name="mapType">
+									<area shape="rect" coords="370,0,709,41" href="./book.htm?method=bookingStep&cd_station=INT" alt="국제선 예매"/>
+								</map>
+							</div>
+	
+							<!-- body -->
+							<div style="margin: 10px 10px;">
+	
+								<!-- 선택 예매 정보 -->
+								<div class="booking-status-b">
+	
+									<div class="total">
+										<div>
+											<ul class="reset">
+	                                    		<li class="col-01">0KRW</li>
+		                                    	<li>8,000KRW</li>
+		                                    	<li class="col-02">8,000KRW</li>
+	                                    	</ul>
+										</div>
+									</div>
+	
+									<div class="inner">
+										<table border="0" cellpadding="5" cellspacing="0">
+										<tr>
+											<td>
+				                                <strong id="str_fdepart">Gimpo(GMP)</strong> ~ <strong id="str_farrival">Jeju(CJU)</strong> <span id="str_fdate">2016-07-31 (Su)</span> <span id="str_fstd"></span>
+											</td>
+										</tr>
+										<tr>
+											<td> 
+				                                &nbsp;
+											</td>
+										</tr>
+										<tr>
+											<td>
+				                            	Adult <strong>2</strong>
+				                            	
+				                            	
+											</td>
+										</tr>
+										</table>
+									</div>
+	
+								</div>
+								<!-- // 선택 예매 정보 -->
+	
+								<!-- 안쪽 프레임 -->
+								<div class="frame-inside" style="margin-top: 10px;">
+	
+									<!-- 탭 -->
+									<div>
+										<img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/tab_type_03_02.gif" align="middle" usemap="#mapStep"/>
+										<map name="mapStep">
+											<area shape="rect" coords="0,0,137,30" href="./book.htm?method=bookingStep1&step=1" alt="일정 선택" style="cursor:pointer"/>
+											<area shape="rect" coords="139,0,278,30" href="#" alt="항공편 선택"/>
+											<area shape="rect" coords="278,0,418,30" href="#" alt="탑승자 정보 입력"/>
+											<area shape="rect" coords="420,0,558,30" href="#" alt="결제"/>
+											<area shape="rect" coords="560,0,689,30" href="#" alt="완료"/>
+										</map>
+									</div>
+									<!-- // 탭 -->
+	
+		
+									<!-- 가는 여정 ///////////////////////////////////// -->
+									<div id="divDeparture" style="margin: 10px 15px 0px;">
+	
+										<!-- 가는 여정 -->
+										<div class="section-go">
+											<strong>Gimpo(GMP)</strong>
+											→
+											<strong>Jeju(CJU)</strong>
+										</div>
+										<!-- // 가는 여정 -->
+	
+										<div style="margin-top: 12px;">
+											<div class="fleft">
+												<img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/txt_12.gif" align="absmiddle" usemap="" alt="가는 날짜"/>
+												<input type="text" id="dt_from" name="dt_from" class="txt datepicker"/>
+												<!-- img src="http://image.eastarjet.com/eastarjet_common/img/en/common/btn_calendar.gif" align="absmiddle" usemap="" alt="날짜 선택" -->
+												<!-- 정상운임가:
+												<strong class="strong">58,000원</strong -->
+											</div>
+											<div class="fright">
+												<a><img id="btn_fareRule1" src="http://image.eastarjet.com/eastarjet_common/img/en/booking/btn_rule.gif" align="absmiddle" usemap="" alt="운임규정보기"/></a>
+											</div>
+											<div class="clear"><!-- clear float --></div>
+										</div>
+	
+										<!-- 날짜 선택 탭 테이블 -->
+										<table class="table-week" border="0" cellpadding="0" cellspacing="0">
+										<tr>
+											<td><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/table_week_01.gif" align="absmiddle" usemap="#mapPrev"/></td>
+											
+											<th ><a>loading</a></th>
+											
+											<th ><a>loading</a></th>
+											
+											<th ><a>loading</a></th>
+											
+											<th class="current"><a>loading</a></th>
+											
+											<th ><a>loading</a></th>
+											
+											<th ><a>loading</a></th>
+											
+											<th ><a>loading</a></th>
+											
+											<td><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/table_week_09.gif" align="absmiddle" usemap="#mapNext" title=""/></td>
+										</tr>
+										</table>
+	
+										<map name="mapPrev">
+											<area shape="rect" coords="0,8,18,29" alt="이전"/>
+										</map>
+										<map name="mapNext">
+											<area shape="rect" coords="15,8,33,29" alt="다음"/>
+										</map>
+										<!-- // 날짜 선택 탭 테이블 -->
+	
+										<!-- 항공편 선택 프레임 -->
+										<div class="frame-plane">
+	
+											<!-- 항공편 선택 테이블 -->
+											<table id="table_departJourney" class="table-plane" border="0" cellpadding="0" cellspacing="0">
+											<thead>
+												<tr>
+													<td>
+														
+															
+															
+																<img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/th_01.gif" align="absmiddle" alt="초특가운임"/>
+															
+														
+													</td>
+													<td>
+														
+															
+															
+																<img id="tab_departure02"  src="http://image.eastarjet.com/eastarjet_common/img/en/booking/th_02.gif" align="absmiddle" alt="할인/통상운임" style="cursor:pointer;"/>
+															
+														
+													</td>
+													<td><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/th_03.gif" align="absmiddle" alt="출/도착시간"/></td>
+													<td><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/th_04.gif" align="absmiddle" alt="편명"/></td>
+													<td><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/th_05.gif" align="absmiddle" alt="기종"/></td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="first-child"><!-- 첫번째 행 -->
+													<td class="sale">
+														<label>-</label>
+													</td>
+													<td class="price">
+														<label>-</label>
+													</td>
+													<td class="time">
+														- → -
+													</td>
+													<td class="name">
+														-
+													</td>
+													<td class="type">
+														-
+													</td>
+												</tr>
+											</tbody>
+											</table>
+	
+											<div class="journeyReference" style="text-align: left;padding-left:20px;"><img src="http://image.eastarjet.com/eastarjet_common/img/en/booking/2_reference.gif" align="middle" alt="운임 및 잔여석은 실시간 변동되며, 운항 스케줄은 불가피한 사유로 예고없이 변경될 수 있습니다."/></div>
+											<div class="frame-plane-foot"><!-- foot --></div>
+										</div>
+										<!-- // 항공편 선택 프레임 -->
+	
+									</div>
+									<!-- ///////////////////////////////////// 가는 여정 -->
+	
+	
+	
+									
+	
+	
+	
+									<!-- 안쪽 프레임 하단 배경 -->
+									<div class="frame-inside-foot"><!-- spacer --></div>
+	
+								</div>
+								<!-- // 안쪽 프레임 끝 -->
+								
+								<!-- 선택 예매 정보 -->
+								<div class="booking-status-b">
+	
+									<div class="total">
+										<div>
+											<ul class="reset">
+	                                    		<li class="col-01">0KRW</li>
+		                                    	<li>8,000KRW</li>
+		                                    	<li class="col-02">8,000KRW</li>
+	                                    	</ul>
+										</div>
+									</div>
+	
+									<div class="inner">
+										<table border="0" cellpadding="5" cellspacing="0">
+										<tr>
+											<td>
+				                                <strong id="str_fdepart">Gimpo(GMP)</strong> ~ <strong id="str_farrival">Jeju(CJU)</strong> <span id="str_fdate">2016-07-31 (Su)</span> <span id="str_fstd"></span>
+											</td>
+										</tr>
+										<tr>
+											<td> 
+				                                &nbsp;
+											</td>
+										</tr>
+										<tr>
+											<td>
+				                            	Adult <strong>2</strong>
+				                            	
+				                            	
+											</td>
+										</tr>
+										</table>
+									</div>
+	
+								</div>
+								
+							</div>
+							<!-- // 바깥 프레임 body -->
+	
+							<!-- 이전 다음 버튼 -->
+							<div style="margin: 10px 10px 0px;">
+								<div class="fleft">
+									<a href="./book.htm?method=bookingStep1&step=1"><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/btn_prev_step.gif" align="middle" alt="이전 단계로"/></a>
+									&nbsp;
+								</div>
+								<div class="fright">
+									&nbsp;
+									<a ><img id="btn_submit" src="http://image.eastarjet.com/eastarjet_common/img/en/common/btn_next_step.gif" align="middle" alt="다음 단계로"/></a>
+								</div>
+								<div class="clear"><!-- clear float --></div>
+							</div>
+	
+							<div class="section-tab-foot"><!-- foot-section --></div>
+	
+						</div>
+						<!-- // 프레임 끝 -->
+						</form>
+					</div><!-- ///////////////////////////////////////// 내용 끝 -->
+	
+				</div><!-- // body -->
+	
+			</div>
+	
+			<div class="clear"><!-- clear float --></div>
+	
+		</div><!-- // wrapper -->	
+	
+	</div><!-- // container -->		
+	
+<style type="text/css">
+	#loader { width: 280px; height: 90px; padding: 0.5em; position: absolute; top:300px; left: 400px; z-index: 20;}
+	#loader p { text-align: center; margin: 0; }
+	
+	#paymentLoader { width: 400px; height: 100px; padding: 0; position: absolute; top:400px; left: 400px; z-index: 20;}
+	#paymentLoader p { text-align: center; margin: 0; }
+	#paymentModal {width:100%;height:100%;display:none;position:absolute;top:0;left;filter:alpha(opacity=40);opacity:0.4;-moz-opacity:0.4;background: #666;z-index:20;}
+	
+</style>
+<script type="text/javascript">
+	$(function() {
+		$('#footerPopup5').find('#ul_conditions').find('li').click(function() {
+			var idx = $('#footerPopup5').find('#ul_conditions').find('li').index(this);
+			$('#footerPopup5').find('#ul_conditions').find('li a').removeClass('current');
+			$(this).find('a').addClass('current');
+
+			if (idx == 0) {
+				$('#footerPopup5 .clause-table').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_passenger_traffic.txt'); 
+			} else {
+				$('#footerPopup5 .clause-table').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_passenger_traffic_int.txt'); 
+			}
+			
+		});
+	});
+	var LOADER = {
+		show: function(val) {
+			if (val) $("#loader").show(val);
+			else $("#loader").show();
+			$("#loader").css({'top':($(document).scrollTop()+(($(window).height() - 45)/2)), 'left':($(window).width() / 2 -100)});
+		}
+		,hide: function(val) {
+			if (val) $("#loader").hide(val);
+			else $("#loader").hide();
+		}		
+	};
+	var PAYMENT_LOADER = {
+		show: function() {
+			$("#paymentLoader").show(); 
+			$("#paymentLoader").css({'top':($(document).scrollTop()+(($(window).height() - 50)/2)), 'left':($(window).width() / 2 -100)});
+			$('#paymentModal').show();
+			$('#paymentModal').css({'height': (document.documentElement.scrollHeight)});
+		}
+		,hide: function() {
+			$("#paymentLoader").hide();
+			$('#paymentModal').hide();
+		}		
+	};
+	$(function(){
+		$("#loader").draggable();
+		LOADER.hide();
+		//LOADER.show();
+		
+		$('#footerPopup1').dialog({
+			width: 550, height: 490,
+			resizable: false, modal: false, autoOpen: false, bgiframe: true
+		});	
+		$('#footerPopup2').dialog({
+			width: 510, height: 440,
+			resizable: false, modal: false, autoOpen: false, bgiframe: true,
+			close: function() {$(this).find('.section-modify-track_02').html('');}
+		});	
+		$('#footerPopup3').dialog({
+			width: 580, height: 190,
+			resizable: false, modal: false, autoOpen: false, bgiframe: true,
+			close: function() {$(this).find('.bg_25').html('');}
+		});	
+		$('#footerPopup4,#footerPopup5').dialog({
+			width: 600, height: 400,
+			resizable: false, modal: false, autoOpen: false, bgiframe: true,
+			close: function() {$(this).find('.clause-table').html('');}
+		});		
+
+		$('a.terms').live('click', function() {
+			var termsNum = $(this).attr("id");
+			$('#footerPopup2').dialog('open');
+			if(termsNum == 0){
+				$('#footerPopup2 .section-modify-track_02').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_customer_privacy.txt');
+			}else if(termsNum == 1){
+				$('#footerPopup2 .section-modify-track_02').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_customer_privacy_bak.txt');	
+			}else{
+				$('#footerPopup2 .section-modify-track_02').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_customer_privacy_bak'+termsNum+'.txt');	
+			}
+		});
+	});
+	function footerPopup(val) {
+		if (val == 1) {
+			$('#footerPopup1').dialog('open');
+		} else if (val == 2) {
+			$('#footerPopup2').dialog('open');
+			$('#footerPopup2 .section-modify-track_02').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_customer_privacy.txt'); 
+		} else if (val == 3) {
+			$('#footerPopup3').dialog('open');	
+			$('#footerPopup3 .bg_25').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_email_refusal.txt'); 
+		} else if (val == 4) { 
+			$('#footerPopup4').dialog('open');
+			$('#footerPopup4 .clause-table').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_customer_utilization.txt'); 
+		} else if (val == 5) {
+			$('#footerPopup5').dialog('open');
+			$('#footerPopup5 .clause-table').load('http://www.eastarjet.com/eastarjet_common/terms/en/terms_passenger_traffic.txt'); 
+		}
+	}
+</script> 
+	
+	<div id="footer" ><!-- footer -->
+		<div class="copyrights"><!-- copyrights -->
+			<img src="http://image.eastarjet.com/eastarjet_common/img/en/common/copyrights.gif" align="absmiddle" usemap="#mapFooter" >
+			<map name="mapFooter">
+				<!-- area shape="rect" coords="6,8,136,47" href="#top" alt="페이지 처음으로"-->
+				<area shape="rect" coords="157,4,239,23" href="javascript:footerPopup(2);" alt="Privacy Policy">
+				<area shape="rect" coords="249,4,323,23" href="javascript:footerPopup(4);" alt="Terms of use">
+				<area shape="rect" coords="334,4,498,25" href="javascript:footerPopup(5);" alt="General conditions of carriage">
+				<!-- <area shape="rect" coords="394,2,482,25" href="javascript:footerPopup(4);" alt="이용약관">
+				<area shape="rect" coords="441,2,520,27" href="javascript:footerPopup(5);" alt="국내운송여객약관">
+				<area shape="rect" coords="520,4,564,27" href="https://recruit.eastarjet.com/Index.do" alt="채용안내" target="_blank">
+				<area shape="rect" coords="564,4,623,27" href="http://www.eastarjet.com/community/customer.htm?method=propose" alt="고객의 말씀"> -->
+				<area shape="rect" coords="596,22,714,44" href="mailto:reservation@eastarjet.com" target="_blank" alt="reservation@eastarjet.com">
+				<area shape="rect" coords="157,24,556,54" alt="Call center 1544-0080, Eastarjet">
+			</map>
+		</div>	
+	</div><!-- // footer -->
+	
+	<div id="skyscraper"><!-- skyscraper -->
+		
+	</div><!-- // skyscraper -->
+	
+	<div id="footerPopup1" title="E-Agency 안내" class="popnone pop-eagency" style="display:none;">
+		<div style="padding: 15px 15px 0px 15px;">
+		  <img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/eagency_info1.gif" align="absmiddle" title="" alt="E-Agency란? 이스타항공 홈페이지에 등록 된 여행사로서 여행사 전용 페이지에서 예약 및 결제를 할 수 있으며 판매실적에 따른 혜택이 제공됩니다."/>
+		</div>
+	    <div style="padding: 0px 15px 0px 15px;">
+		  <img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/eagency_info2.gif" align="absmiddle" title="" alt="이스타항공 홈페이지에서 E-Agency 회원가입절차에 따라 Web상으로 등록을 하시고 구비서류를 FAX로 발송하시면 됩니다. 구비서류:사업자등록증사본 1통, 여행사 연락망(실무담당자포함)1부. 팩스번호 : 02-2665-7470. 문의:070-8660-8153 권혁재"/>
+		</div>
+	    <div style="padding: 0px 15px 0px 15px;">
+		  <img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/eagency_info3.gif" align="absmiddle" title="" alt="혜택안내 - 판매실적에 따른 제주왕복 무료항공원이 제공됩니다."/>
+		</div>    
+	</div>
+	
+	<div id="footerPopup2" title="Pivacy Policy" class="popnone pop-modify-track_03">
+		<div style="margin: 10px;">	
+			<div style="padding:5px 0 10px 0;">
+				<img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/title_23.gif" align="absmiddle" alt="Eastar Jet Pivacy Policy"/>
+			</div>
+			
+			<!-- 여정 정보 변경 -->
+			<div class="section-modify-track_02">				
+			</div>	
+		</div>	
+	</div>
+	
+	<div id="footerPopup3" title="이메일 집단 수신거부" class="popnone pop-modify-track_04">
+		<div class="bg_25">
+		</div>
+	</div>
+
+	<div id="footerPopup4" title="Terms of Use" class="popnone pop-clause">
+		<div style="margin: 10px;">
+			<span style="padding:5px 0 10px 0;"><img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/title_21.gif" align="absmiddle" alt="Terms of Use" /></span>
+	      	<div class="clause-table">
+	      	</div>
+	    </div>
+	</div>
+	<div id="footerPopup5" title="General Conditions of Carriage" class="popnone pop-clause">
+		<div style="margin: 10px;">
+			<ul id="ul_conditions" class="tab tab-c">
+				<li><a class="current">Domestic</a></li>
+				<li><a>International</a></li>
+			</ul>
+	      	<div class="clause-table">
+	      	</div>
+	    </div>
+	</div>
+	
+	<!-- loading Layer -->
+	<div id="paymentModal"></div>
+	
+	<div id="loader" class="ui-widget-content" style="display:none;">
+		<p><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/loading3.gif" /></p>
+		<!-- p><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/loading5.gif" /></p-->
+	</div>
+	
+	<div id="paymentLoader" class="ui-widget-content" style="display:none;">
+		<p><img src="http://image.eastarjet.com/eastarjet_common/img/en/common/pay_l_loading.gif" /></p>
+	</div>
+	<!-- Calendar Layer -->
+	
+	<!-- Statistics -->
+	<script type="text/javascript"> 
+	<!--
+	var a_vars = Array();
+	var pagename='';
+	 
+	var phpmyvisitesSite = 2;
+	var phpmyvisitesURL = 'http://image.eastarjet.com/statistics/statistics.php';
+	//-->
+	$(document).ready(function(){
+		/* var url = 'http://10.223.121.157/eastarjet_common/scraper/en/skyscraper.html';
+		var httpsUrl = 'https://10.223.121.157/eastarjet_common/scraper/en/skyscraper.html'; */
+ 		var url = 'http://www.eastarjet.com/eastarjet_common/scraper/en/skyscraper.html';
+		var httpsUrl = 'https://www.eastarjet.com/eastarjet_common/scraper/en/skyscraper.html';
+		var protocol = 'http://';
+		var change = false;
+		if(protocol == 'https://'){
+			change = true;
+			url = httpsUrl;
+		}
+		$.get(url,function(data){
+			var scraper = data.split('\n');
+			var html = '';
+			for(var i=0; i<scraper.length; i++){
+				if(change){
+					html += scraper[i].replace('http://image','https://image');
+				}else{
+					html += scraper[i];
+				}
+			}
+			$('#skyscraper').append(html);
+		});
+	});	
+	</script>
+	<!-- script language="javascript" src='http://image.eastarjet.com/statistics/statistics.js' type="text/javascript"></script -->
+
+	<div id="fareRuleInfo" title="Fare policy info">
+		<div class="popnone pop-premember_06">
+			<div style="margin: 15px 15px 0 15px;">							
+				<ul class="tab tab-c">
+				
+					
+					
+					<li><a>Special fares</a></li>
+					<li><a>Discounted fares</a></li>
+					
+				
+				<li><a>Normal fares</a></li>	
+				</ul>
+			</div>
+			<div>	
+			
+			</div>
+					
+		</div>
+	</div>
+	<div id="fareRuleConfirm" title="Fare policy info">
+		<div class="popnone pop-premember_05">
+			
+			<div style="margin: 10px;">
+				<div class="fleft">
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td>
+						<img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/e_img_04_01.gif" align="absmiddle" alt="가는 여정"/>
+						<img src="http://image.eastarjet.com/eastarjet_common/img/en/common/ico_front_01.gif" align="absmiddle" alt=""/>
+						<img id="img_fromRule" src="http://image.eastarjet.com/eastarjet_common/img/en/booking/layer_t1.gif" align="absmiddle" alt="초특가운임규정"/>
+						</td>
+					</tr>
+					<tr>
+						<td id="td_fromFare">
+							
+						</td>
+					</tr>
+				</table>				
+				</div>
+				
+				
+				<div class="clear"></div>
+				
+				<p><label><input id="chk_checkin" type="checkbox"/> <strong class="strong">I agree to the ticket purchase conditions.</strong></label></p>
+				
+			</div>
+		
+			<div align="center"><a ><img id="btn_checkin" src="http://image.eastarjet.com/eastarjet_common/img/en/pop/btn_submit_02.gif" align="absmiddle" alt="확인"/></a></div>
+		
+		</div>
+	</div>
+	
+	<div id="div_hiddenFares" style="display:none;">
+		<div id="div_earlyBirdFare" align="center">
+			<iframe src='http://www.eastarjet.com/eastarjet_common/rule/en/fareRule_event_EARLYBIRD_dom_en.html' width="500" height="670" frameborder="0" scrolling="no"></iframe>
+		</div>
+		<div id="div_lowFare">
+			<iframe src='http://www.eastarjet.com/eastarjet_common/rule/en/fareRule_event_dom_en.html' width="500" height="670" frameborder="0" scrolling="no"></iframe>
+		</div>
+		<div id="div_secondaryLowFare">
+			<iframe src='http://www.eastarjet.com/eastarjet_common/rule/en/fareRule_discount_dom_en.html' width="500" height="670" frameborder="0" scrolling="no"></iframe>
+		</div>
+		<div id="div_highFare" >
+			<iframe src='http://www.eastarjet.com/eastarjet_common/rule/en/fareRule_normal_dom_en.html' width="500" height="670" frameborder="0" scrolling="no"></iframe>
+		</div>
+	</div>
+	
+	<div id="div_nologonSaleFare" title="Login" class="popnone pop-nosoap">
+		<div style="margin: 15px;">
+			<img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/layer_nosoap.gif" align="absmiddle" alt="초특가 운임은 이스타항공 회원만 사용 할 수 있습니다. 초특가 운임을 사용하시려면 로그인을 해주시고 아직 회원이 아니시면 회원가입을 해주시기 바랍니다."/>
+		</div>
+	
+		<div align="center" style="margin:15px;">
+			<a href="javascript:nologonSaleFare(1);"><img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/btn_login.gif" align="absmiddle" alt="로그인"/></a>
+			<a href="javascript:joinCustomer();"><img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/btn_premember_01.gif" align="absmiddle" alt="회원가입"/></a>
+		</div>
+			
+	</div>
+	<div id="div_nologonSaleFare2" title="Login " class="popnone pop-nosoap">
+		<div style="margin: 15px;">
+			<img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/layer_login.gif" align="absmiddle" alt="회원인 경우에는 로그인 아이디와 비밀번호를 입력후 예매를 진행하시기 바랍니다."/>
+		</div>
+	
+		<div align="center" style="margin:15px;">
+			<a href="javascript:nologonSaleFare2(1);"><img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/btn_login.gif" align="absmiddle" alt="로그인"/></a>
+			<a href="javascript:nologonSaleFare2(2);"><img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/btn_premember_02.gif" align="absmiddle" alt="비회원으로예매계속하기"/></a>
+			<a href="javascript:joinCustomer();"><img src="http://image.eastarjet.com/eastarjet_common/img/en/pop/btn_premember_01.gif" align="absmiddle" alt="회원가입"/></a>
+		</div>			
+	</div>
+	<div id="tooltip" style="display:none; position: absolute; border: solid 1px; border-color: red;" >
+		<div id="balloon" >
+			<h3 style="margin:0 0 5px;padding:8px 10px 4px;font-size:1.1em;font-weight:bold;
+			background:url(http://image.eastarjet.com/eastarjet_common/js/jquery/cluetip/images/h1_msg.gif) left top repeat-x;cursor: default;color: #fff">운임</h3>
+			<div class="show-tooltip-txt"></div>
+		</div>
+		<div id="newlow" style="display:none; background-color: white; line-height: 1.5; color: #8c8c8c;">
+			<strong class="dark">Non refundable</strong><label style='color:#8C8C8C'>(See the penalty rules for changes and cancellations applicable to this fare)</label><br/>
+			<strong class="dark">No other discounts are valid with this offer</strong><br/>
+			<strong class="dark">Name changes are not allowed</strong><br/>
+			<strong class="dark">Itinerary changes are allowed</strong><label style='color:#8C8C8C'>(fees are charged)</label>
+		</div>	
+		<div id="newsecondaryLow" style="display:none; background-color: white; line-height: 1.5; color: #8c8c8c; padding:5px 5px 5px 5px;">
+			<strong class="dark">Refundable</strong><br/>
+			<strong class="dark">Fees for cancellation are applied</strong><br/>
+			<strong class="dark">No other discounts are valid with this offer</strong><br/>
+			<strong class="dark">Name changes are allowed</strong> <label style='color:#8C8C8C'>(fees are charged)</label><br/>
+			<strong class="dark">Itinerary changes are allowed</strong><label style='color:#8C8C8C'>(fees are charged)</label>
+		</div>
+		<div id="newhigh" style="display:none; background-color: white; line-height: 1.5; color: #8c8c8c; padding:5px 5px 5px 5px;">
+			<strong class="dark">Refundable</strong><br/>
+			<strong class="dark">Fees for cancellation are applied</strong><br/>
+			<strong class="dark">Name changes are allowed </strong> <label style='color:#8C8C8C'>(fees are charged)</label><br/>
+			<strong class="dark">Itinerary changes are allowed</strong>
+		</div>
+		<div id="oldlow" style="display:none; background-color: white; line-height: 1.5; color: #8c8c8c;">
+			<strong class="dark">Non refundable</strong><label style='color:#8C8C8C'>(See the penalty rules for changes and cancellations applicable to this fare)</label><br/>
+			<strong class="dark">No other discounts are valid with this offer</strong><br/>
+			<strong class="dark">Name changes are not allowed</strong><br/>
+			<strong class="dark">Itinerary changes are allowed</strong><label style='color:#8C8C8C'>(fees are charged)</label>
+		</div>	
+		<div id="oldsecondaryLow" style="display:none; background-color: white; line-height: 1.5; color: #8c8c8c; padding:5px 5px 5px 5px;">
+			<strong class="dark">Refundable</strong><br/>
+			<strong class="dark">Fees for cancellation are applied</strong><br/>
+			<strong class="dark">No other discounts are valid with this offer</strong><br/>
+			<strong class="dark">Name changes are allowed</strong> <label style='color:#8C8C8C'>(fees are charged)</label><br/>
+			<strong class="dark">Itinerary changes are allowed</strong><label style='color:#8C8C8C'>(fees are charged)</label>
+		</div>
+		<div id="oldhigh" style="display:none; background-color: white; line-height: 1.5; color: #8c8c8c; padding:5px 5px 5px 5px;">
+			<strong class="dark">Refundable</strong><br/>
+			<strong class="dark">Fees for cancellation are applied</strong><br/>
+			<strong class="dark">Name changes are allowed </strong> <label style='color:#8C8C8C'>(fees are charged)</label><br/>
+			<strong class="dark">Itinerary changes are allowed</strong>
+		</div>		
+	</div>
+	<div id="tooltipAircraft" style="display: none; position: absolute; border: solid 1px; border-color: red;">
+		<img id="600" src="http://www.eastarjet.com/eastarjet_common/img/en/common/B737-600.gif" style="display: none;" alt="B707-600"/>
+		<img id="700" src="http://www.eastarjet.com/eastarjet_common/img/en/common/B737-700.gif" style="display: none;" alt="B707-700"/>
+		<img id="800" src="http://www.eastarjet.com/eastarjet_commonimg/en/common/B737-800.gif" style="display: none;" alt="B707-800"/>
+	</div>	
+</body>
+</html>

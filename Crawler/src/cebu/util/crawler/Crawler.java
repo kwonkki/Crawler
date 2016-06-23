@@ -257,6 +257,41 @@ public abstract class Crawler {
 			this.free(response, httpClient);
 		}
 	}
+	
+	/**
+	 * 保存post提交之后重定向的网页到本地文件，传入cookieStore参数
+	 * @param postUrl 	post提交url
+	 * @param formParams	post表单参数
+	 * @param savePath	保存路径
+	 * @param cookieStore cookieStore参数
+	 */
+	public  void savePostResponseHtmlByParamsWithCookie(String postUrl, FormParams formParams, String savePath, CookieStore cookieStore) {
+		// 获取FormParams中的参数
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+		// 设置HttpPost文件头
+		HttpPost httpPost = new HttpPost(postUrl);
+		this.setHttpPostHeader(httpPost);
+		// 设置实体
+		httpPost.setEntity(formEntity);
+
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).setDefaultCookieStore(cookieStore).build();
+			HttpClientContext context = HttpClientContext.create();
+			response = httpClient.execute(httpPost, context);
+			
+			System.out.println("response code : " + response.getStatusLine().getStatusCode());	// 状态码
+			this.saveHtmlByResponse(response, savePath);	// 保存到本地文件
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			this.free(response, httpClient);
+		}
+	}
 
 	/**
 	 * 获取post提交之后重定向的网页字符串
@@ -320,6 +355,43 @@ public abstract class Crawler {
 			
 			// 设置cookie
 			cookieStores[0] = context.getCookieStore();
+			
+			// 获取response中的信息
+			html = this.getHtmlByResponse(response);
+		} catch (Exception e) {
+			System.out.println("访问[ " + postUrl + " ]出现异常!");
+			e.printStackTrace();
+		} finally {
+			this.free(response, httpClient);
+		}
+		return html;
+	}
+	
+	/**
+	 * 获取post提交之后重定向的网页字符串，传入CookieStore参数
+	 * @param postUrl	提交post的url
+	 * @param formParams	表单变量
+	 * @param cookieStores	传入CokieStore
+	 * @return
+	 */
+	public  String getPostResponseHtmlByParamsWithCookie(String postUrl, FormParams formParams, CookieStore cookieStore) {
+		// 获取FormParams中的参数
+		UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(formParams.getFormParams(), Consts.UTF_8);
+		// 设置HttpPost文件头
+		HttpPost httpPost = new HttpPost(postUrl);
+		this.setHttpPostHeader(httpPost);
+		// 设置实体
+		httpPost.setEntity(formEntity);
+		
+		CloseableHttpClient httpClient = null;
+		CloseableHttpResponse response = null;
+		String html = null;
+
+		try {
+			// 处理post之后的重定向
+			httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).setDefaultCookieStore(cookieStore).build();
+			HttpClientContext context = HttpClientContext.create();
+			response = httpClient.execute(httpPost, context);
 			
 			// 获取response中的信息
 			html = this.getHtmlByResponse(response);
