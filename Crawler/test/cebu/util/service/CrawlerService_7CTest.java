@@ -15,7 +15,7 @@ public class CrawlerService_7CTest {
 	
 	@Test
 	public void test_getTickets() {
-		ArrayList<Ticket> tickets = service.getTickets("WEH", "ICN", "2016-06-30", "", 2);
+		ArrayList<Ticket> tickets = service.getTickets("TAO", "ICN", "2016-07-19", "", 2);
 		System.out.println(tickets);
 	}
 

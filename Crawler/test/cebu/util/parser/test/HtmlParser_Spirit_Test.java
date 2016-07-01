@@ -16,7 +16,7 @@ public class HtmlParser_Spirit_Test {
 	
 	@Test
 	public void test_parseTicket() {
-		String html = CommonUtil.readHtmlFromFile(new File(savePath));
+		String html = CommonUtil.readStrFromFile(new File(savePath));
 		System.out.println(parser.parseTicket(html));
 	}
 

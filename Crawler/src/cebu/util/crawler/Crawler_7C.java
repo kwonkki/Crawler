@@ -39,9 +39,10 @@ public class Crawler_7C extends Crawler{
 	 * 根据ticket构造第二次post得到价格信息的表单
 	 * 单程
 	 * @param ticket
+	 * @param fareBasis 每个航班的fareBasis不一定相同
 	 * @return
 	 */
-	public List<NameValuePair> buildParamsForPricePostOw(Ticket ticket) {
+	public List<NameValuePair> buildParamsForPricePostOw(Ticket ticket, String fareBasis) {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("ReqType", "Price"));
 		params.add(new BasicNameValuePair("TripType", "OW"));
@@ -53,8 +54,8 @@ public class Crawler_7C extends Crawler{
 		params.add(new BasicNameValuePair("DepDate", ticket.getdepTime()));
 		params.add(new BasicNameValuePair("ArrDate", ticket.getarrTime()));
 		params.add(new BasicNameValuePair("FltNo", ticket.getflightNumber().split(" ")[1]));
-		params.add(new BasicNameValuePair("RBD", "O"));
-		params.add(new BasicNameValuePair("FareBasis", "OOW1CN"));
+		params.add(new BasicNameValuePair("RBD", String.valueOf(fareBasis.charAt(0))));
+		params.add(new BasicNameValuePair("FareBasis", fareBasis));
 		params.add(new BasicNameValuePair("DepDate2", ""));
 		params.add(new BasicNameValuePair("ArrDate2", ""));
 		params.add(new BasicNameValuePair("DepStn2", ""));

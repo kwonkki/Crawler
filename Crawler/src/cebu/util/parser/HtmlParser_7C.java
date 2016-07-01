@@ -1,6 +1,7 @@
 package cebu.util.parser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -64,7 +65,7 @@ public class HtmlParser_7C {
 		ticketPrice.setAdultPrice(adultPrice);
 		ticketPrice.setAdultTax(adultTax);
 		ticketPrice.setCurrency(currency);
-		
+
 		return ticketPrice;
 	}
 	
@@ -127,6 +128,51 @@ public class HtmlParser_7C {
 			tickets.add(ticket);
 		}
 		return tickets;
+	}
+
+	/**
+	 * 从json中解析航班的fareBasis信息
+	 * @param jsonStr
+	 * @return fareBasis 列表
+	 */
+	public List<String> parseFareBasis(String jsonStr) {
+		List<String> list = new ArrayList<String>();
+		if (CommonUtil.checkStrNullOrEmpty(jsonStr)) {
+			CommonUtil.log(HtmlParser_7C.class, "json 字符串为空");
+			return list;
+		}
+		
+		JSONParser jsonParser = new JSONParser();
+		JSONObject jsonObj = null;
+		try {
+			jsonObj = (JSONObject) jsonParser.parse(jsonStr);
+		} catch (ParseException e) {
+			CommonUtil.log(HtmlParser_7C.class, "解析json出错");
+		}
+
+		JSONObject resultObj = (JSONObject) jsonObj.get("Result");
+		JSONObject dataObj = (JSONObject) resultObj.get("data");
+		JSONArray availDataArr = (JSONArray) dataObj.get("availData");
+		// 多个航班
+		for(Object obj : availDataArr) {
+			JSONObject flightObj = (JSONObject) obj;
+			String specialEquivFareBasis = (String) flightObj.get("specialEquivFareBasis");
+			String discountEquivFareBasis = (String) flightObj.get("discountEquivFareBasis");
+			String normalEquivFareBasis = (String) flightObj.get("normalEquivFareBasis");
+			
+			// 从左到右，优先选择存在的第一个
+			if (!CommonUtil.checkStrNullOrEmpty(specialEquivFareBasis)) {
+				list.add(specialEquivFareBasis);
+				continue;
+			} else if (!CommonUtil.checkStrNullOrEmpty(discountEquivFareBasis)) {
+				list.add(discountEquivFareBasis);
+				continue;
+			} else if (!CommonUtil.checkStrNullOrEmpty(normalEquivFareBasis)) {
+				list.add(normalEquivFareBasis);
+				continue;
+			}
+		}
+		return list;
 	}
 	
 }

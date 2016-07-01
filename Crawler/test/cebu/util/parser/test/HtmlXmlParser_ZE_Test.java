@@ -17,7 +17,7 @@ public class HtmlXmlParser_ZE_Test {
 	
 	@Test
 	public void test_parseTicket() {
-		String xml = CommonUtil.readHtmlFromFile(new File(savePath));
+		String xml = CommonUtil.readStrFromFile(new File(savePath));
 		System.out.println(parser.parseTicketPartly(xml));
 	}
 

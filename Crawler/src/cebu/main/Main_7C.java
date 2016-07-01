@@ -21,11 +21,14 @@ public class Main_7C {
 		// 获取Ticket信息
 		System.out.println("-------------- one way ----------------");
 		CrawlerService_7C service = CrawlerService_7C.getInstance();
-		ArrayList<Ticket> tickets = service.getTickets("WEH", "ICN", "2016-06-30", "", 2);
-		System.out.println(tickets);
 		
-		
-		
+		for(int i = 10; i <= 31; i++) {
+			String time = "2016-07-" + i;
+			ArrayList<Ticket> tickets = service.getTickets("WEH", "ICN", time, "", 2);
+			System.out.println("-------------- " + time +" ----------------");
+			System.out.println(tickets);
+		}
+
 		// 往返模式，尚未完成
 /*		System.out.println("-------------- return ----------------");
 		service = CrawlerService_7C.getInstance();

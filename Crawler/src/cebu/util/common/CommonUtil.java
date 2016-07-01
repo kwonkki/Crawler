@@ -55,7 +55,7 @@ public class CommonUtil {
 	 * @param filePath	本地文件路径
 	 * @return
 	 */
-	public static String readHtmlFromFile(File file) {
+	public static String readStrFromFile(File file) {
 		if (!check(file))
 			return null;
 
@@ -81,6 +81,30 @@ public class CommonUtil {
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * 保存String到本地文件
+	 * @param str
+	 * @param savePath
+	 */
+	public static void saveStrFromFile(String str, String savePath) {
+		BufferedWriter bw = null;
+		try {
+			bw = new BufferedWriter(new FileWriter(savePath));
+			bw.write(str);;
+		} catch (UnsupportedOperationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null)
+					bw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

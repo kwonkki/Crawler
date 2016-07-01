@@ -71,13 +71,18 @@ public class CrawlerService_7C implements ICrawlerService {
 		// 获取response json，解析Ticket信息，不包括价格信息
 		String jsonStr = crawler.getPostResponseHtmlByParams(this.postUrl, formParams);
 		ArrayList<Ticket> tickets = parser.parseTicketPartly(jsonStr);
+		List<String> fareBasisList = parser.parseFareBasis(jsonStr);	// 每个航班的fareBasis
 		
 		// 遍历获取价格信息
-		for(Ticket ticket : tickets) {
-			// 根据ticket类构建params
-			List<NameValuePair> params = crawler.buildParamsForPricePostOw(ticket);
+		for(int i = 0; i < tickets.size(); i++) {
+			Ticket ticket = tickets.get(i);
+			String fareBasis = fareBasisList.get(i);
+			// 根据ticket类和fareBasis构建params
+			List<NameValuePair> params = crawler.buildParamsForPricePostOw(ticket, fareBasis);
+
 			// 第二次post，获取价格和税收信息
 			String priceStr = crawler.getPostResponseJsonByParams(this.postUrl_Price, params);
+			
 			TicketPrice ticketPrice = parser.parseTicketPrice(priceStr);	// 解析为TicketPrice类
 			
 			// 更新价格信息
