@@ -1,6 +1,6 @@
 package cebu.main;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ public class Main_7C {
 		
 		for(int i = 10; i <= 31; i++) {
 			String time = "2016-07-" + i;
-			ArrayList<Ticket> tickets = service.getTickets("WEH", "ICN", time, "", 2);
+			List<Ticket> tickets = service.getTickets("WEH", "ICN", time, "", 2);
 			System.out.println("-------------- " + time +" ----------------");
 			System.out.println(tickets);
 		}

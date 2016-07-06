@@ -44,7 +44,7 @@ public class CrawlerService_7C implements ICrawlerService {
 	private final String postUrl_Price = "https://www.jejuair.net/jejuair/com/jeju/ibe/searchFare.do";
 	
 	@Override
-	public ArrayList<Ticket> getTickets(String depAirport, String arrAirport, String depTime, String retTime,
+	public List<Ticket> getTickets(String depAirport, String arrAirport, String depTime, String retTime,
 			int adultNum) {
 		if (CommonUtil.checkStrNullOrEmpty(retTime)) {
 			// 返程时间为空或者null，使用单程
@@ -59,7 +59,7 @@ public class CrawlerService_7C implements ICrawlerService {
 	 * 单程
 	 */
 	@Override
-	public ArrayList<Ticket> getInfoOw(String depAirport, String arrAirport, String depTime, int adultNum) {
+	public List<Ticket> getInfoOw(String depAirport, String arrAirport, String depTime, int adultNum) {
 		// 设置表单变量
 		FormParams_7C formParams = new FormParams_7C();
 		formParams.setDepAirport(depAirport)
@@ -101,7 +101,7 @@ public class CrawlerService_7C implements ICrawlerService {
 	 * 尚未完成
 	 */
 	@Override
-	public ArrayList<Ticket> getInfoRt(String depAirport, String arrAirport, String depTime, String retTime,
+	public List<Ticket> getInfoRt(String depAirport, String arrAirport, String depTime, String retTime,
 			int adultNum) {
 		return null;
 	}

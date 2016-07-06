@@ -1,8 +1,7 @@
 package cebu.util.service;
 
-import static org.junit.Assert.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -15,7 +14,7 @@ public class CrawlerService_7CTest {
 	
 	@Test
 	public void test_getTickets() {
-		ArrayList<Ticket> tickets = service.getTickets("TAO", "ICN", "2016-07-19", "", 2);
+		List<Ticket> tickets = service.getTickets("TAO", "ICN", "2016-07-19", "", 2);
 		System.out.println(tickets);
 	}
 
