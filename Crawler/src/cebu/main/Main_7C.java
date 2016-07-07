@@ -10,9 +10,17 @@ import cebu.util.service.CrawlerService_7C;
 public class Main_7C {
 	
 	public static void main(String[] args) {
-		Main_7C main = new Main_7C();
+		
+		// 获取Ticket信息
+		System.out.println("-------------- one way ----------------");
+		CrawlerService_7C service = CrawlerService_7C.getInstance();
+		List<Ticket> tickets = service.getTickets("ICN", "SPN", "2016-07-31", "", 2);
+		System.out.println(tickets);
+				
+				
+/*		Main_7C main = new Main_7C();
 		main.getTickets();
-		System.out.println("done");
+		System.out.println("done");*/
 	}
 	
 	@Test

@@ -11,7 +11,8 @@
 	<sevenDays8>2016-08-03 (We)</sevenDays8>
 	<sevenDays9>2016-08-07 (Su)</sevenDays9>
 	<bean>
-<isNewCFG>true</isNewCFG>		<list>
+		<isNewCFG>true</isNewCFG>		
+		<list>
 			<isRun>true</isRun>
 			<aircraftType>B737-700</aircraftType>
 			<arrivalStation>CJU</arrivalStation>

@@ -15,8 +15,8 @@ public class Ticket {
 	private int seats = 2;	// 2
 	
 	private String flytime;	// 飞行时间？
-	private int childprice;
-	private int childtax;
+	private String childprice;
+	private String childtax;
 	
 	
 	
@@ -100,19 +100,19 @@ public class Ticket {
 		this.adulttax = adulttax;
 	}
 
-	public int getchildPrice() {
+	public String getchildPrice() {
 		return childprice;
 	}
 
-	public void setchildPrice(int childprice) {
+	public void setchildPrice(String childprice) {
 		this.childprice = childprice;
 	}
 
-	public int getchildTax() {
+	public String getchildTax() {
 		return childtax;
 	}
 
-	public void setchildTax(int childtax) {
+	public void setchildTax(String childtax) {
 		this.childtax = childtax;
 	}
 

@@ -12,19 +12,19 @@ import org.apache.http.client.methods.HttpPost;
  */
 
 
-public class Crawler_Spirit extends Crawler{
+public class Crawler_NK extends Crawler{
 	
 	/** 单例模式 **/
-	private Crawler_Spirit() {
+	private Crawler_NK() {
 
 	}
 
 	private static class CrawlerInstanceHolder {
-		private static Crawler_Spirit Crawler_Spirit = new Crawler_Spirit();
+		private static Crawler_NK Crawler_NK = new Crawler_NK();
 	}
 
-	public static Crawler_Spirit getInstance() {
-		return CrawlerInstanceHolder.Crawler_Spirit;
+	public static Crawler_NK getInstance() {
+		return CrawlerInstanceHolder.Crawler_NK;
 	}
 
 	

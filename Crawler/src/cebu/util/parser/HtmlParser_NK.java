@@ -24,19 +24,19 @@ import cebu.util.common.CommonUtil;
  */
 
 
-public class HtmlParser_Spirit {
+public class HtmlParser_NK {
 	
 	/** 单例模式 **/
-	private HtmlParser_Spirit() {
+	private HtmlParser_NK() {
 
 	}
 
 	private static class HtmlParser_7CInstanceHolder {
-		private static HtmlParser_Spirit HtmlParser_Spirit = new HtmlParser_Spirit();
+		private static HtmlParser_NK HtmlParser_NK = new HtmlParser_NK();
 	}
 
-	public static HtmlParser_Spirit getInstance() {
-		return HtmlParser_7CInstanceHolder.HtmlParser_Spirit;
+	public static HtmlParser_NK getInstance() {
+		return HtmlParser_7CInstanceHolder.HtmlParser_NK;
 	}
 	
 	
@@ -117,6 +117,7 @@ public class HtmlParser_Spirit {
 			if (fuelStr.equals("FREE"))
 				fuelStr = "0";
 			String taxStr = tr.select("li.standardTaxes").first().select(">span").first().attr("data-price");
+
 			// tax汇总
 			double fuel = Double.valueOf(fuelStr.trim());
 			double tax = Double.valueOf(taxStr.trim());

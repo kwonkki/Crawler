@@ -2,35 +2,35 @@ package cebu.util.service;
 
 import java.util.List;
 
-import cebu.model.FormParams_Spirit;
+import cebu.model.FormParams_NK;
 import cebu.model.Ticket;
 import cebu.util.common.CommonUtil;
-import cebu.util.crawler.Crawler_Spirit;
-import cebu.util.parser.HtmlParser_Spirit;
+import cebu.util.crawler.Crawler_NK;
+import cebu.util.parser.HtmlParser_NK;
 /**
  * 7C的service类，相关操作的主调入口
  * @author Administrator
  *
  */
 
-public class CrawlerService_Spirit implements ICrawlerService {
+public class CrawlerService_NK implements ICrawlerService {
 	
 	/** 单例模式 **/
-	private CrawlerService_Spirit() {
+	private CrawlerService_NK() {
 
 	}
 
 	private static class InstanceHolder {
-		private static CrawlerService_Spirit CrawlerService_Spirit = new CrawlerService_Spirit();
+		private static CrawlerService_NK CrawlerService_NK = new CrawlerService_NK();
 	}
 
-	public static CrawlerService_Spirit getInstance() {
-		return InstanceHolder.CrawlerService_Spirit;
+	public static CrawlerService_NK getInstance() {
+		return InstanceHolder.CrawlerService_NK;
 	}
 
 	// 爬虫类和解析类
-	private Crawler_Spirit crawler = Crawler_Spirit.getInstance();	
-	private HtmlParser_Spirit parser = HtmlParser_Spirit.getInstance();
+	private Crawler_NK crawler = Crawler_NK.getInstance();	
+	private HtmlParser_NK parser = HtmlParser_NK.getInstance();
 	
 	// 第一次post得到航班列表，第二次post得到航班价格（主要是税）
 	private final String postUrl = "https://www.spirit.com/Default.aspx?action=search";
@@ -51,7 +51,7 @@ public class CrawlerService_Spirit implements ICrawlerService {
 	 */
 	public List<Ticket> getInfoOw(String depAirport, String arrAirport, String depTime, int adultNum) {
 		// 设置表单变量
-		FormParams_Spirit formParams = new FormParams_Spirit();
+		FormParams_NK formParams = new FormParams_NK();
 		formParams.setDepAirport(depAirport)
 			.setArrAirport(arrAirport)
 			.setDepTime(depTime)

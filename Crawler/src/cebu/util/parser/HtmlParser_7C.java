@@ -170,6 +170,8 @@ public class HtmlParser_7C {
 			} else if (!CommonUtil.checkStrNullOrEmpty(normalEquivFareBasis)) {
 				list.add(normalEquivFareBasis);
 				continue;
+			} else {
+				list.add("");
 			}
 		}
 		return list;

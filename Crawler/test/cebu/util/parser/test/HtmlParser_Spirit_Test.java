@@ -5,12 +5,12 @@ import java.io.File;
 import org.junit.Test;
 
 import cebu.util.common.CommonUtil;
-import cebu.util.parser.HtmlParser_Spirit;
+import cebu.util.parser.HtmlParser_NK;
 
 
 public class HtmlParser_Spirit_Test {
 
-	HtmlParser_Spirit parser = HtmlParser_Spirit.getInstance();
+	HtmlParser_NK parser = HtmlParser_NK.getInstance();
 	String savePath = "D:/Documents/Github/DataCrawl/Data/save.html";
 	
 	

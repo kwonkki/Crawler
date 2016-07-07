@@ -5,7 +5,7 @@ import java.io.File;
 import org.junit.Test;
 
 import cebu.util.common.CommonUtil;
-import cebu.util.parser.HtmlParser_Spirit;
+import cebu.util.parser.HtmlParser_NK;
 import cebu.util.parser.HtmlXmlParser_ZE;
 
 

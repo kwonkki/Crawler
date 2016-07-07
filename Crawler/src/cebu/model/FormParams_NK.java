@@ -13,7 +13,7 @@ import cebu.util.common.CommonUtil;
  *
  */
 
-public class FormParams_Spirit extends FormParams {
+public class FormParams_NK extends FormParams {
 
 	
 	/**
